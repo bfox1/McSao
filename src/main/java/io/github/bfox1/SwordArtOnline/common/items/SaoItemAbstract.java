@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public class SaoItemAbstract extends Item
+public abstract class SaoItemAbstract extends Item
 {
     public SaoItemAbstract()
     {
