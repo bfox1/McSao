@@ -12,5 +12,5 @@ public abstract class SaoSwordItemAbstract extends SaoItemAbstract
     private int abilityTimeLimit;
     private boolean cooldown;
     private boolean canUse;
-    
+
 }
