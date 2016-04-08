@@ -1,7 +1,15 @@
 package io.github.bfox1.SwordArtOnline.common;
 
+import java.io.IOException;
+
 import io.github.bfox1.SwordArtOnline.common.proxy.SaoProxy;
+import io.github.bfox1.SwordArtOnline.common.util.Models;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.init.ItemInit;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -29,7 +37,6 @@ public class SwordArtOnline
     public void preInit(FMLPreInitializationEvent event)
     {
         proxy.preInit(event);
-
     }
 
     @Mod.EventHandler

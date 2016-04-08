@@ -1,13 +1,17 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.common.blocks.SaoBlockVariationAbstract;
+import io.github.bfox1.SwordArtOnline.common.util.Models;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
+import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -23,7 +27,11 @@ public class ClientProxy extends CommonProxy
     public void preInit(FMLPreInitializationEvent event)
     {
         super.preInit(event);
+        OBJLoader.instance.addDomain(Reference.MODID);
 
+        ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
+        ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);
+        ModelLoader.setCustomModelResourceLocation(ItemInit.teleportCrystal, 0, Models.crystalTeleport);
     }
 
     @Override
@@ -31,6 +39,7 @@ public class ClientProxy extends CommonProxy
     {
         super.init(event);
         blockRenderRegister(BlockInit.aincradCobbleVariation);
+        
     }
 
     /**
@@ -75,6 +84,4 @@ public class ClientProxy extends CommonProxy
     {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MODID + ":" + file, "inventory"));
     }
-
-
 }
