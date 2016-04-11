@@ -25,6 +25,16 @@
                     "translation": [-0.03, -0.23, 0.0],
 					"rotation": [ { "y": 135}, {"x": -25}, {"z": 0} ],
                     "scale": 0.37
+                },
+				"ground": {
+                    "translation": [-0.2, 0, 0],
+                    "rotation": [ { "y": 180}, {"x": 0}, {"z": 0} ],
+                    "scale": 0.7
+                },
+				"fixed": {
+                    "translation": [-0.205, -0.4, -0.48],
+                    "rotation": [ { "y": 180}, {"x": 0}, {"z": 0} ],
+                    "scale": 0.7
                 }
             }
         }]
