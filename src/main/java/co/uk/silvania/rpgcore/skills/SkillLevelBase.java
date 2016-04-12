@@ -24,6 +24,8 @@ public abstract class SkillLevelBase {
 	public ArrayList<String> incompatibleSkills = new ArrayList<String>();
 	public ArrayList<String> requiredSkills = new ArrayList<String>();
 	
+	public ArrayList<String> equipIssues = new ArrayList<String>();
+	
 	public int firstReqSkillLevel = -1;
 	public int secondReqSkillLevel = -1;
 	public int thirdReqSkillLevel = -1;
@@ -208,7 +210,7 @@ public abstract class SkillLevelBase {
 	
 	public boolean isSkillUnlocked(EntityPlayer player) {
 		GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
-		if (glevel.getLevel() >= unlockedLevel()) {
+		if (glevel.getLevel() >= unlockedLevel() && skillUnlocked()) {
 			for (int i = 0; i < requiredSkills.size(); i++) {
 				String requiredSkillId = requiredSkills.get(i);
 				SkillLevelBase skill = (SkillLevelBase) SkillLevelBase.get(player, requiredSkillId);
@@ -226,12 +228,16 @@ public abstract class SkillLevelBase {
 		return true;
 	}
 	
+	/**
+	 * True if skill can be equipped, false if not.
+	 * Remember to call super if you override, else it won't check for skill requirements or unlock level.
+	 * Use "equipIssues.add("");" to show on the skill list tooltip WHY they can't equip the skill - if you want.
+	 * You could always keep it a secret!
+	 * @param player
+	 * @return
+	 */
 	public boolean canSkillBeEquipped(EntityPlayer player) {
-		if (!isSkillUnlocked(player)) {
-			return false;
-		}
-		
-		if (hasUnequippedRequirements(player)) {
+		if (!isSkillUnlocked(player) || hasUnequippedRequirements(player)) {
 			return false;
 		}
 		
@@ -260,6 +266,15 @@ public abstract class SkillLevelBase {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Should this skill be totally hidden from the skill list until it's unlocked?
+	 * (EG Kirito's Dual Blades skill from SAO)
+	 * @return whether or not skill is hidden.
+	 */
+	public boolean secretSkill() {
+		return false;
 	}
 	
     /**

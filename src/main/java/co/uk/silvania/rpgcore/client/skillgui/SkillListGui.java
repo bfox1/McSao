@@ -21,6 +21,7 @@ public class SkillListGui extends GuiScreen {
 	
 	public static final ResourceLocation skillListTexture  = new ResourceLocation(RPGCore.MODID, "textures/gui/skilllist.png");
 	ArrayList<SkillLevelBase> skillList = RegisterSkill.skillList;
+	ArrayList<SkillLevelBase> skillsForDisplay = new ArrayList<SkillLevelBase>();
 	
 	int xSize = 256;
 	int ySize = 256;
@@ -52,11 +53,7 @@ public class SkillListGui extends GuiScreen {
 		}
 		
 		super.drawScreen(mouseX, mouseZ, partialTick);
-		
-		//TODO: This currently continues tooltip outside of GUI.
-		//Check if mouse is within the list's frame before rendering tooltip.
-		
-		SkillLevelBase skillBase = skillList.get(list.hoverElement);
+		SkillLevelBase skillBase = skillsForDisplay.get(list.hoverElement);
 		SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
 		if (mouseX >= left+10 && mouseX <= left+51 && mouseZ >= top+48 && mouseZ <= top+212) {
 			if (skill != null && skill.description != null) {
@@ -106,7 +103,20 @@ public class SkillListGui extends GuiScreen {
 	
 	@Override
 	public void initGui() {
-		System.out.println("initGui");		
+		//Clone the list for displaying skills only
+		for (int i = 0; i < skillList.size(); i++) {
+			skillsForDisplay.add(skillList.get(i));
+		}
+		
+		//Remove any locked skills which should be hidden from display.
+		for (int i = 0; i < skillsForDisplay.size(); i++) {
+			SkillLevelBase skillBase = skillsForDisplay.get(i);
+			SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
+			if (!skill.isSkillUnlocked(mc.thePlayer) && skill.secretSkill()) {
+				skillsForDisplay.remove(i);
+			}
+		}
+		
 		int left = (this.width - this.xSize) / 2;
 		int top  = (this.height - this.ySize) / 2;
 		

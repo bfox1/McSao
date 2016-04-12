@@ -1,6 +1,7 @@
 package co.uk.silvania.rpgcore.client.skillgui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.lwjgl.opengl.GL11;
 
@@ -27,6 +28,8 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 	
 	SkillListGui parent;
 	ArrayList<SkillLevelBase> skillList = RegisterSkill.skillList;
+	ArrayList<SkillLevelBase> skillsForDisplay = new ArrayList<SkillLevelBase>();
+	
 	int selectedIndex = -1;
 	Minecraft mc = Minecraft.getMinecraft();
 
@@ -42,21 +45,35 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 		this.ySize = ySize;
 		
 		this.parent = parent;
+		cloneSkillList();
+	}
+	
+	private void cloneSkillList() {
+		for (int i = 0; i < skillList.size(); i++) {
+			skillsForDisplay.add(skillList.get(i));
+		}
 	}
 	
 	@Override
 	protected int getSize() {
-		return skillList.size();
+		for (int i = 0; i < skillsForDisplay.size(); i++) {
+			SkillLevelBase skillBase = skillsForDisplay.get(i);
+			SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
+			if (!skill.isSkillUnlocked(mc.thePlayer) && skill.secretSkill()) {
+				skillsForDisplay.remove(i);
+			}
+		}
+		return skillsForDisplay.size();
 	}
 
 	@Override
 	protected void elementClicked(int index, boolean doubleClick) {
 		if (doubleClick) {
-			RPGCore.network.sendToServer(new EquipNewSkillPacket(SkillSelectGui.slotClicked, skillList.get(index).skillId));
+			RPGCore.network.sendToServer(new EquipNewSkillPacket(SkillSelectGui.slotClicked, skillsForDisplay.get(index).skillId));
 			RPGCore.network.sendToServer(new OpenGuiPacket(0));
 		}
 		
-		SkillLevelBase skillBase = skillList.get(index);
+		SkillLevelBase skillBase = skillsForDisplay.get(index);
 		SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
 		
 		if (skill.canSkillBeEquipped(mc.thePlayer)) {
@@ -79,8 +96,9 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
         GL11.glDisable(GL11.GL_FOG);
         GL11.glColor4f(1,1,1,1);
         
-        SkillLevelBase skillBase = skillList.get(listIndex);
+        SkillLevelBase skillBase = skillsForDisplay.get(listIndex);
 		SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
+
 		EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get((EntityPlayer) mc.thePlayer);
         
         int offset = 0;
@@ -146,7 +164,6 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 				
 			}
 			GL11.glScalef(2.0f, 2.0f, 2.0f);
-
 		}
 	}
 }

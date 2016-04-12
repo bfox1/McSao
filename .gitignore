@@ -20,6 +20,10 @@ build
 # other
 eclipse
 run
+config
+crash-reports
+logs
+saves
 
 gradle/wrapper/gradle-wrapper.properties
 CREDITS-fml.txt
@@ -31,3 +35,6 @@ Paulscode IBXM Library License.txt
 gradle/wrapper/gradle-wrapper.jar
 MinecraftForge-License.txt
 Paulscode SoundSystem CodecIBXM License.txt
+options.txt
+usercache.json
+usernamecache.json

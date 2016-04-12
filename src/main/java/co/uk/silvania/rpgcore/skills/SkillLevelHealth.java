@@ -75,6 +75,11 @@ public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityP
 		description.add("Experience earned by taking damage.");
 		description.add("Different damage sources give different XP.");		
 	}
+	
+	@Override
+	public boolean secretSkill() {
+		return true;
+	}
 
 	@Override
 	public double levelMultiplier() {
