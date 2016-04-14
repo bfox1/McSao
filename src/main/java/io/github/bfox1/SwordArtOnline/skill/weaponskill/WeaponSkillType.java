@@ -1,6 +1,7 @@
 package io.github.bfox1.SwordArtOnline.skill.weaponskill;
 
 import io.github.bfox1.SwordArtOnline.skill.ISubSkillTypeIdentifier;
+import io.github.bfox1.SwordArtOnline.skill.PrimarySkillType;
 
 /**
  * Created by bfox1 on 4/6/2016.
@@ -20,11 +21,13 @@ public enum WeaponSkillType implements ISubSkillTypeIdentifier
 
     private int id;
     private String name;
+    private final PrimarySkillType type;
 
      WeaponSkillType(int id, String name)
     {
         this.id = id;
         this.name = name;
+        this.type = PrimarySkillType.WEAPON;
     }
 
     public int getId() {
@@ -34,4 +37,6 @@ public enum WeaponSkillType implements ISubSkillTypeIdentifier
     public String getName() {
         return name;
     }
+
+    public PrimarySkillType getPrimarySkillType() {return type;}
 }
