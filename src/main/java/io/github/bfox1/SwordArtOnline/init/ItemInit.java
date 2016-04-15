@@ -18,19 +18,19 @@ public class ItemInit
 
 	public static final SaoSwordItem[] saoSwordItem =
 			{
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Anneal Blade"),
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Dark Repulser"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("AnnealBlade"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("DarkRepulser"),
 					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Elucidator"),
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Guilty Thorn"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("GuiltyThorn"),
 					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("KagemitsuG45"),
 					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Karakurenai"),
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Lambent Light"),
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Liberator Sword"),
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("Object Eraser"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("LambentLight"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("LiberatorSword"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_SWORD).setUnlocalizedName("ObjectEraser"),
 
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_AXE).setUnlocalizedName("Mate Chopper"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_AXE).setUnlocalizedName("MateChopper"),
 
-					new SaoSwordItem(WeaponSkillType.ONE_HANDED_DAGGER).setUnlocalizedName("Ebon Dagger"),
+					new SaoSwordItem(WeaponSkillType.ONE_HANDED_DAGGER).setUnlocalizedName("EbonDagger"),
 			};
 	static
 	{
