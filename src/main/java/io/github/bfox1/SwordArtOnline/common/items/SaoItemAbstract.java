@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.items;
 
+import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
 import net.minecraft.item.Item;
 
 /**
@@ -12,5 +13,6 @@ public abstract class SaoItemAbstract extends Item
     public SaoItemAbstract()
     {
         super();
+        this.setCreativeTab(SaoTabsManager.SaoItems);
     }
 }
