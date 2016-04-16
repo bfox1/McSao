@@ -24,37 +24,6 @@ public class HandlerOfEvents {
 		((SkillLevelBase) SkillLevelBase.get(event.entityPlayer, SkillLevelBase.staticId)).copy((SkillLevelBase) SkillLevelBase.get(event.original, SkillLevelBase.staticId));
 	}
 	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onRender(RenderGameOverlayEvent.Pre event) {
-		Minecraft mc = Minecraft.getMinecraft();
-		
-		if (mc.thePlayer != null) {
-			int totalEquipped = 0;
-	
-			GlobalLevel glevel = (GlobalLevel) GlobalLevel.get((EntityPlayer) mc.thePlayer);
-			if (glevel != null) {
-				mc.fontRendererObj.drawString("Global Level: " + (int) glevel.getLevel() + ", XP: " + (int) glevel.getXPGlobal(), 2, 2, 16777215);
-			}		
-			for (int i = 0; i < RegisterSkill.skillList.size(); i++) {
-				SkillLevelBase skillBase = RegisterSkill.skillList.get(i);
-				SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
-				EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get((EntityPlayer) Minecraft.getMinecraft().thePlayer);
-				
-				if (skill != null) {
-					if (equippedSkills.isSkillEquipped(skill.skillId)) {
-						int slot = equippedSkills.findSkillSlot(skill.skillId);
-						
-						if (config.getShowXp(slot)) {
-							mc.fontRendererObj.drawString("Name: " + skill.skillName() + ", XP: " + (int) skill.getXP(), 2, ((totalEquipped)*10)+12, 16777215);
-							totalEquipped++;
-						}
-					}
-				}
-			}
-		}
-	}
-	
 	@SubscribeEvent
 	public void onPlayerLoginClient(PlayerLoggedInEvent event) {
 		if (event.player != null) {
