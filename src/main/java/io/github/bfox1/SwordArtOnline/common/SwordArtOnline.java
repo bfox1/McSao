@@ -41,7 +41,7 @@ public class SwordArtOnline
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
-
+    	proxy.postInit(event);
     }
 
     @Mod.EventHandler

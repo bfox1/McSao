@@ -9,6 +9,7 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /**
@@ -31,6 +32,12 @@ public class ClientProxy extends CommonProxy
     {
         super.init(event);
         blockRenderRegister(BlockInit.aincradCobbleVariation);
+    }
+    
+    @Override
+    public void postInit(FMLPostInitializationEvent event)
+    {
+    	super.postInit(event);
     }
 
     /**
