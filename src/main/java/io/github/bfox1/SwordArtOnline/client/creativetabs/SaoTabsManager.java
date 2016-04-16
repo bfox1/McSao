@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.client.creativetabs;
 
+import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -19,7 +20,7 @@ public class SaoTabsManager extends CreativeTabs
         super(label);
     }
 
-    public static final SaoTabsManager SaoBlocks = new SaoTabsManager("Sao Blocks").setItem(null);
+    public static final SaoTabsManager SaoBlocks = new SaoTabsManager("Sao Blocks").setItem(Item.getItemFromBlock(BlockInit.aincradCobbleVariation));
     public static final SaoTabsManager SaoItems = new SaoTabsManager("Sao Items").setItem(null);
 
     /**

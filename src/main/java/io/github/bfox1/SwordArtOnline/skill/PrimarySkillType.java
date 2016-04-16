@@ -4,6 +4,10 @@ package io.github.bfox1.SwordArtOnline.skill;
  * Created by bfox1 on 4/5/2016.
  * Deuteronomy 8:18
  * 1 Peter 4:10
+ *
+ * These are the Primary Skill Types. Uses for identification between Skills.
+ * A Skill can either have one of the 3 Skill Types. Support, Combat or Weapon.
+ * Each Primary Skill Type has its own unique set of Sub Skill Types.
  */
 public enum PrimarySkillType
 {
