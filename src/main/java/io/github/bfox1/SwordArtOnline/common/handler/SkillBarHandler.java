@@ -1,14 +1,9 @@
-package io.github.bfox1.SwordArtOnline.common.eventhandlers;
+package io.github.bfox1.SwordArtOnline.common.handler;
 
 //code referenced from https://github.com/kulttuuri/quick-hotbar-mod/blob/1.8.9/src/main/java/com/kulttuuri/quickhotbar/QuickHotbarEventHandler.java#L270
 
 import io.github.bfox1.SwordArtOnline.common.SwordArtOnline;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -21,8 +16,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientConnectedToServerEvent;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class SkillBarHandler {
 	private static final ResourceLocation WIDGETS = new ResourceLocation("textures/gui/widgets.png");
@@ -137,7 +134,7 @@ public class SkillBarHandler {
 	 * @param gui
 	 * @param width
 	 * @param height
-	 * @param partialTicks
+
 	 * @since 1.7.2
 	 */
 	private void renderHotbar(GuiIngame gui, int width, int height) {

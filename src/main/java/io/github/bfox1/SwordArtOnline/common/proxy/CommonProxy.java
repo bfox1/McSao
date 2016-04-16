@@ -2,12 +2,11 @@ package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
-import io.github.bfox1.SwordArtOnline.common.eventhandlers.SkillBarHandler;
+import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
+import io.github.bfox1.SwordArtOnline.common.handler.SkillBarHandler;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.client.Minecraft;
-
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -15,8 +14,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bfox1 on 4/2/2016.
@@ -25,8 +22,8 @@ import java.util.Map;
  */
 public class CommonProxy implements SaoProxy
 {
+    public static final SaoHUD saoHud = new SaoHUD(Minecraft.getMinecraft());
 
-    private static final Map<String, NBTTagCompound> extendedEntityData = new HashMap<String, NBTTagCompound>();
 
     @Override
     public void initClientConfig(File file)
@@ -50,7 +47,7 @@ public class CommonProxy implements SaoProxy
     public void registerEventHandlers()
     {
     	MinecraftForge.EVENT_BUS.register(new SkillBarHandler());
-    	MinecraftForge.EVENT_BUS.register(new SaoHUD(Minecraft.getMinecraft()));
+        MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
 
     }
 
