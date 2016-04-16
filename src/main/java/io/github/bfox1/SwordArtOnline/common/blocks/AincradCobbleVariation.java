@@ -10,9 +10,9 @@ import net.minecraft.block.material.Material;
 public class AincradCobbleVariation extends SaoBlockVariationAbstract
 {
 
-    public AincradCobbleVariation(Material p_i46399_1_, int subTypes)
+    public AincradCobbleVariation(Material material, int subTypes)
     {
-        super(p_i46399_1_, subTypes);
+        super(material, subTypes);
     }
 
 
