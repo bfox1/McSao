@@ -40,7 +40,7 @@ public class ForgeEventHandler
 		if(e.player.dimension != Reference.saoDimensionId) {
 			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 			playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
-			playerMP.setPositionAndUpdate(0, 5, 0);
+			playerMP.setPositionAndUpdate(0, 60, 0);
 		}
 	}
     
