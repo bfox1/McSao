@@ -3,6 +3,7 @@ package co.uk.silvania.rpgcore.exampleskills;
 import co.uk.silvania.rpgcore.RPGCore;
 import co.uk.silvania.rpgcore.skills.SkillLevelBase;
 import co.uk.silvania.rpgcore.skills.SkillLevelStrength;
+import io.github.bfox1.SwordArtOnline.skill.ISubSkillTypeIdentifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,7 +14,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class SkillLevelPunch extends SkillLevelBase implements IExtendedEntityProperties {
+public class SkillLevelPunch extends SkillLevelBase implements IExtendedEntityProperties, ISubSkillTypeIdentifier {
 	
 	//SkillLevelPunch is very similar to Jump but I've not documented it.
 	//If you want to see how the mod works and how to create a skill, see SkillLevelJump

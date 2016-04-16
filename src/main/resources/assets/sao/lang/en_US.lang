@@ -1,6 +1,25 @@
 # Blocks
 ########################################
 
-tile.AincradCobble.block_one.name=AincradCobble
-tile.AincradCobble.block_two.name=AincradCobbleBrick
-tile.AincradCobble.block_three.name=AincradCobbleChisel
+tile.AincradCobble.block_one.name=Aincrad Cobble
+tile.AincradCobble.block_two.name=Aincrad Cobble Brick
+tile.AincradCobble.block_three.name=Aincrad Cobble Chisel
+
+item.HealingCrystal.name=Healing Crystal
+item.AntidoteCrystal.name=Antidote Crystal
+item.TeleportCrystal.name=Teleport Crystal
+item.AnnealBlade.name=Anneal Blade
+item.DarkRepulser.name=Dark repulser
+item.Elucidator.name=Elucidator
+item.GuiltyThorn.name=Guilty Thorn
+item.Karakurenai.name=Karakurenai
+item.LambentLight.name=Lambent Light
+item.LiberatorSword.name=Liberator Sword
+item.ObjectEraser.name=Object Eraser
+item.MateChopper.name=Mate Chopper
+item.EbonDagger.name=Ebon Dagger
+
+key.skillBar=Skill Bar
+
+itemGroup.Sao Blocks=MCSAO Blocks
+itemGroup.Sao Items=MCSAO Items

@@ -36,6 +36,7 @@ public abstract class SkillLevelBase {
 	RPGCoreConfig config = new RPGCoreConfig();
 	
 	public SkillLevelBase(String skillID) {
+		super();
 		this.xp = 0;
 		this.skillId = skillID;
 		this.staticId = skillID;

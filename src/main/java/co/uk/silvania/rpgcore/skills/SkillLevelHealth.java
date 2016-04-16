@@ -1,6 +1,7 @@
 package co.uk.silvania.rpgcore.skills;
 
 import co.uk.silvania.rpgcore.RPGCore;
+import io.github.bfox1.SwordArtOnline.skill.ISubSkillTypeIdentifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,9 +11,9 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityProperties {
+public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityProperties, ISubSkillTypeIdentifier {
 	
-	public static String staticSkillId; 
+	public static String staticSkillId;
 	
 	public SkillLevelHealth(EntityPlayer player, String skillID) {
 		super(skillID);

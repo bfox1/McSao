@@ -2,6 +2,7 @@ package co.uk.silvania.rpgcore.exampleskills;
 
 import co.uk.silvania.rpgcore.RPGCore;
 import co.uk.silvania.rpgcore.skills.SkillLevelBase;
+import io.github.bfox1.SwordArtOnline.skill.ISubSkillTypeIdentifier;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,7 +12,7 @@ import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class SkillLevelSwords extends SkillLevelBase implements IExtendedEntityProperties {
+public class SkillLevelSwords extends SkillLevelBase implements IExtendedEntityProperties, ISubSkillTypeIdentifier {
 	
 	public static String staticSkillId;
 	
