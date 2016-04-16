@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import co.uk.silvania.rpgcore.RPGCore;
+import co.uk.silvania.rpgcore.RPGCoreConfig;
 import co.uk.silvania.rpgcore.RegisterSkill;
 import co.uk.silvania.rpgcore.network.EquippedSkillsPacket;
 import co.uk.silvania.rpgcore.network.LevelPacket;
@@ -17,7 +18,7 @@ public abstract class SkillLevelBase {
 	
 	public float xp;
 	public int level;
-	
+
 	public static String staticId;
 	public String skillId;
 	
@@ -32,6 +33,8 @@ public abstract class SkillLevelBase {
 	
 	public List description = new ArrayList();
 	
+	RPGCoreConfig config = new RPGCoreConfig();
+	
 	public SkillLevelBase(String skillID) {
 		this.xp = 0;
 		this.skillId = skillID;
@@ -41,8 +44,14 @@ public abstract class SkillLevelBase {
 		addDescription();
 	}
 	
+	/**
+	* Add's XP to the skill. Checks if cainGainXP() is true, the skill is equipped, and that it's not conflicting with armour before adding the XP.
+	* Doesn't notify the client; if needed use addXPWithUpdate for that (But only if you need to!)
+	* @param xpAdd
+	* @param player
+	*/
 	public void addXP(float xpAdd, EntityPlayer player) {
-		if (canGainXP()) {
+		if (canGainXP() && !player.capabilities.isCreativeMode) {
 			EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get(player);
 			//We check on your behalf to make sure the skill is equipped before allowing the XP to be added.
 			if (isSkillEquipped(player, skillId)) {
@@ -54,12 +63,37 @@ public abstract class SkillLevelBase {
 					GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
 					glevel.xpGlobal += (xpAdd/10.0);
 					
-					xpGained(skillId);
+					xpGained(skillId, xpAdd, player);
 				}
 			}
 		}
 	}
+
+	/**
+	* Add XP, and send a packet to the client telling them XP was added.
+	* Use for any event checks etc where the client doesn't know (eg generic Block Breaking)
+	* @param xpAdd
+	* @param player
+	*/
+	public void addXPWithUpdate(float xpAdd, EntityPlayer player) {
+		addXP(xpAdd, player);
+		RPGCore.network.sendTo(new LevelPacket(getXP(), skillId), (EntityPlayerMP) player);
+	}
 	
+	/**
+	* Force a levelup on the skill - Simply gets XP to next level, and then adds it.
+	* Does NOT check for equip - mainly used for skill points on STR/AGI.
+	*/
+	public void forceLevelUp(String skillId, EntityPlayer player) {
+
+	}
+	
+	/**
+	* Checks if the skill is currently equipped.
+	* @param player
+	* @param skillId
+	* @return true if equipped, false if not.
+	*/
 	public boolean isSkillEquipped(EntityPlayer player, String skillId) {
 		EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get(player);
 		if (equippedSkills.isSkillEquipped(skillId)) {
@@ -68,12 +102,24 @@ public abstract class SkillLevelBase {
 		return false;
 	}
 	
+	/**
+	* Force XP adding, even if the skill is not equipped or even unlocked.
+	* @param xpAdd
+	*/
 	public void forceAddXP(int xpAdd) {
 		xp += xpAdd;
 	}
 	
+	/**
+	* Add XP to the specified skill. Forces addition even if skill isn't equipped/unlocked.
+	* Used by command currently; could be good for quest rewards etc.
+	* @param xpAdd
+	* @param player
+	* @param skillId
+	* @return String to be shown to player, if applicable, confirming whether or not XP was added.
+	*/
 	public static String addXPToSkill(int xpAdd, EntityPlayer player, String skillId) {
-		SkillLevelBase skill = getSkillFromId(skillId, player);
+		SkillLevelBase skill = getSkillByID(skillId, player);
 		if (skill != null) {
 			skill.forceAddXP(xpAdd);
 			RPGCore.network.sendTo(new LevelPacket(skill.getXP(), skill.skillId), (EntityPlayerMP) player);
@@ -85,12 +131,19 @@ public abstract class SkillLevelBase {
 			return "\u00A7aAdded " + xpAdd + " xp to global level.";
 		}
 		return "\u00A7cFailed to add xp!";
-	}	
+	}
 	
-	public static SkillLevelBase getSkillFromId(String skillId, EntityPlayer player) {
+	/**
+	* Checks if there is a registered skill with the provided skillId
+	* @param skillId
+	* @param player
+	* @return the SkillLevelBase of the skill, or null.
+	*/
+	public static SkillLevelBase getSkillByID(String skillId, EntityPlayer player) {
 		for (int i = 0; i < RegisterSkill.skillList.size(); i++) {
 			SkillLevelBase skillBase = RegisterSkill.skillList.get(i);
-			SkillLevelBase skill = (SkillLevelBase) skillBase.get(player, skillId);
+			SkillLevelBase skill = (SkillLevelBase) skillBase.get(player, skillBase.skillId);
+			
 			if (skill != null && skill.skillId.equals(skillId)) {
 				return skill;
 			}
@@ -98,6 +151,14 @@ public abstract class SkillLevelBase {
 		return null;
 	}
 	
+	/**
+	* Checks if equipped skill is in a slot shared with armour. Called in various places, as there's no "onArmourEquipped" event.
+	* If there's a conflict, the skill is removed instantly.
+	* @param equippedSkills
+	* @param skillId
+	* @param player
+	* @return true if there's a conflict and it was resolved. False otherwise.
+	*/
 	public boolean skillArmourConflict(EquippedSkills equippedSkills, String skillId, EntityPlayer player) {
 		int slot = equippedSkills.findSkillSlot(skillId);
 		boolean removedSkill = false;
@@ -127,22 +188,34 @@ public abstract class SkillLevelBase {
 		return removedSkill;
 	}
 	
+	/**
+	* @return how much XP this skill has.
+	*/
 	public float getXP() {
 		return xp;
 	}
 	
+	/**
+	* Gets an integer version of XP (Rounded down) as a fraction of the XP for the next level.
+	* Used anywhere you want to show XP relative to next level.
+	* @return string with XP/XP for next level
+	*/
 	public String getXPForPrint() {
 		return (int) getXP() + " / " + getXpForLevel(getLevel()+1);
 	}
 	
+	/**
+	* Calculates a level based on how much XP the player has.
+	* @return level, as an integer
+	*/
 	public int getLevel() {
-		int base = 83;
-		int previousXp = 83;
+		int base = config.baseXp;
+		int previousXp = config.baseXp;
 		int level = 1;
 		
 		while (xp >= previousXp) {
 			//Level curve algorithm
-			//Takes the base value (83; XP required to reach level 2)
+			//Takes the base value (83 by default; XP required to reach level 2)
 			//Then adds a percentage based on the skill multiplier and their current level.
 			//The last part (level/10*10) plays well with the fact it's an integer.
 			//Dividing int by int will only give a whole number; so 1-10 / 10 will always give 0,
@@ -165,9 +238,13 @@ public abstract class SkillLevelBase {
 		
 	}
 	
+	/**
+	* @param level
+	* @return how much XP is required for the given level.
+	*/
 	public int getXpForLevel(int level) {
-		int base = 83;
-		int xpForLevel = 83;
+		int base = config.baseXp;
+		int xpForLevel = config.baseXp;
 		
 		for (int i = 1; i < level; i++) {
 			xpForLevel += base + ((base / 100.0) * ((i*levelMultiplier()) * (35 + ((i/10)*10))));
@@ -175,39 +252,47 @@ public abstract class SkillLevelBase {
 		return xpForLevel;
 	}
 	
+	/**
+	* @return how much experience to the next level-up.
+	*/
 	public float xpToNextLevel() {		
 		return (getXpForLevel(getLevel())) - getXP();
 	}
 	
-	public void setLevel() {
-		level = (int) Math.round(levelMultiplier() * Math.sqrt(xp));
-		System.out.println("Level: " + level);
-	}
-	
+	/**
+	* Sets the experience to the given amount, regardless of what it currently is.
+	* Should very rarely be used, if ever - maybe only for resetting skills to zero.
+	* @param xpSet
+	*/
 	public void setXP(float xpSet) {
 		xp = xpSet;
 	}
 	
+	/**
+	* Gets the IEEP of the provided skillId. Used to get the actual skill you're working with, instead of just SkillLevelBase.
+	* @param player
+	* @param skillId
+	* @return
+	*/
 	public static IExtendedEntityProperties get(EntityPlayer player, String skillId) {
 		return player.getExtendedProperties(skillId);
 	}
 	
+	/**
+	* Clones the skill's properties, used on player death etc to persist skills through death.
+	* Should be overriden if you save anything more than XP in your skill (eg cooldowns)
+	* @param properties
+	*/
 	public void copy(SkillLevelBase properties) {
 		xp = properties.xp;
 	}
 	
-	public static SkillLevelBase getSkillByID(String skillId, EntityPlayer player) {
-		for (int i = 0; i < RegisterSkill.skillList.size(); i++) {
-			SkillLevelBase skillBase = RegisterSkill.skillList.get(i);
-			SkillLevelBase skill = (SkillLevelBase) skillBase.get(player, skillBase.skillId);
-			
-			if (skill != null && skill.skillId.equals(skillId)) {
-				return skill;
-			}
-		}
-		return null;
-	}
-	
+	/**
+	* Checks if the skill is unlocked, based off the global level.
+	* If you want custom skill requirements, override skillUnlocked() instead!
+	* @param player
+	* @return			
+	*/
 	public boolean isSkillUnlocked(EntityPlayer player) {
 		GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
 		if (glevel.getLevel() >= unlockedLevel() && skillUnlocked()) {
@@ -244,6 +329,12 @@ public abstract class SkillLevelBase {
 		return true;
 	}
 	
+	/**
+	* Check if the skill has requirements which the player doesn't have.
+	* Doesn't tell you WHAT those requirements are, just that they're a thing.
+	* @param player
+	* @return true if they have unequipped requirements, false if everything is OK.
+	*/
 	public boolean hasUnequippedRequirements(EntityPlayer player) {
 		for (int i = 0; i < requiredSkills.size(); i++) {
 			String requiredSkillId = requiredSkills.get(i);
@@ -256,6 +347,11 @@ public abstract class SkillLevelBase {
 		return false;
 	}
 	
+	/**
+	* Checks the skill is compatible with all currently equipped skills.
+	* @param player
+	* @return true if compatible, false if not.
+	*/
 	public boolean isSkillCompatable(EntityPlayer player) {
 		for (int i = 0; i < incompatibleSkills.size(); i++) {
 			String requiredSkillId = incompatibleSkills.get(i);
@@ -385,9 +481,9 @@ public abstract class SkillLevelBase {
 	/**
 	 * Called when XP is gained on -ANY- equipped skill!
 	 * Useful to check if a required skill gained XP, or maybe if you want a global addition where this skill gains XP when anything else does.
-	 * @param skillId - the skillId of the skill that gained XP
+	 * @param skillId, xp added, player
 	 */
-	public void xpGained(String skillId) {}
+	public void xpGained(String skillId, float xpAdd, EntityPlayer player) {}
 	
 	/**
      * The resource location of the file with your icons in. File should be 256x256 (or a double of).
