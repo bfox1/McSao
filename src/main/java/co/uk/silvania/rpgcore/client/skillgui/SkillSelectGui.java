@@ -34,7 +34,7 @@ public class SkillSelectGui extends GuiContainer {
 	
 	public static int slotClicked = -1;
 	
-	public MultiLineButton buttonConfig;
+	//public MultiLineButton buttonConfig;
 	public GuiButton buttonParty;
 	public GuiButton buttonGuild;
 	
@@ -53,9 +53,9 @@ public class SkillSelectGui extends GuiContainer {
 		int left = (this.width - this.xSize) / 2;
 		int top  = (this.height - this.ySize) / 2;
 
-		buttonConfig = new MultiLineButton(1, left+257, top+206, 72, 22, "Configure#Player");
+		//buttonConfig = new MultiLineButton(1, left+257, top+206, 72, 22, "Configure#Player");
 		
-		buttonList.add(buttonConfig);
+		//buttonList.add(buttonConfig);
 	}
 	
 	public void mouseClicked(int mouseX, int mouseZ, int buttonId) {

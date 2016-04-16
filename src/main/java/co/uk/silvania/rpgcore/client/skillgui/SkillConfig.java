@@ -206,63 +206,64 @@ public class SkillConfig extends GuiScreen {
 		ResourceLocation icon;
 		int iconX;
 		int iconZ;
-		
-		if (skill.skillIcon() != null) {
-			icon = skill.skillIcon();
-			iconX = skill.iconX();
-			iconZ = skill.iconZ();
-		} else {
-			icon = skillIcons;
-			iconX = 0;
-			iconZ = 220;
-		}
-		
-		mc.fontRendererObj.drawString("Name: " + skill.skillName(), left + 43, top + 11, 16777215);
-		mc.fontRendererObj.drawString("Lvl: " + skill.getLevel(), left + 43, top + 21, 16777215);
-		mc.fontRendererObj.drawString("XP: " + skill.getXPForPrint(), left + 43, top + 30, 16777215);
-		
-		if (showXPBar) {
-			this.mc.getTextureManager().bindTexture(xpBars);
-			int barStyle = xpBarStyle.getValueInt();
-			int barWidth = xpBarWidth.getValueInt();
-			int leftPos = left+(xSize/2)-(barWidth/2);
-			int barX = 0;
-			int barY = 0;
-			int iconBarX = 0;
-			int iconBarY = 295;
+		if (skill != null) {
+			if (skill.skillIcon() != null) {
+				icon = skill.skillIcon();
+				iconX = skill.iconX();
+				iconZ = skill.iconZ();
+			} else {
+				icon = skillIcons;
+				iconX = 0;
+				iconZ = 220;
+			}
 			
-			if (barStyle == 2 || barStyle == 4 || barStyle == 6 || barStyle == 8 || barStyle == 10 || barStyle == 12) { barX = 131; }
+			mc.fontRendererObj.drawString("Name: " + skill.skillName(), left + 43, top + 11, 16777215);
+			mc.fontRendererObj.drawString("Lvl: " + skill.getLevel(), left + 43, top + 21, 16777215);
+			mc.fontRendererObj.drawString("XP: " + skill.getXPForPrint(), left + 43, top + 30, 16777215);
 			
-			if (barStyle == 3 || barStyle == 4)   { barY = 13; }
-			if (barStyle == 5 || barStyle == 6)   { barY = 26; }
-			if (barStyle == 7 || barStyle == 8)   { barY = 39; }
-			if (barStyle == 9 || barStyle == 10)  { barY = 52; }
-			if (barStyle == 11 || barStyle == 12) { barY = 65; }
-			if (barStyle == 13)   				  { barY = 78; }
-			
-			if (barStyle == 1 || barStyle == 3 || barStyle == 5 || barStyle == 7) { iconBarX = leftPos - 6; }
-			if (barStyle == 2 || barStyle == 4 || barStyle == 6 || barStyle == 8) { iconBarX = (leftPos) + (barWidth) - 6; }
-			if (barStyle >= 9 && barStyle <= 13) { iconBarX = (leftPos) + (barWidth/2) - 6 + 34; }
-			
-			this.drawTexturedModalRect(leftPos,   top+149, barX, barY, 11, 12); //Bar Left
-			this.drawTexturedModalRect(leftPos+11, top+149, barX+11, barY, barWidth-22, 12); //Bar
-			this.drawTexturedModalRect(leftPos+barWidth-11, top+149, barX+114, barY, 11, 12); //Bar Right
-			
-			GL11.glScalef(0.5F, 0.5F, 0.5F);
-			int h2 = height*2;
-			int w2 = width*2;
-			mc.getTextureManager().bindTexture(skillIcons);
-			drawTexturedModalRect((((this.width*2) - (xSize*2) - 30) / 2) + 0 - 1, (((this.height*2) - (ySize*2)) / 2) + iconBarY - 1, 60, 220, 32, 32);
-			
-			this.mc.getTextureManager().bindTexture(icon);
-			drawTexturedModalRect((((this.width*2) - (xSize*2) - 30) / 2) + 0, (((this.height*2) - (ySize*2)) / 2) + iconBarY, skill.iconX(), skill.iconZ(), 30, 30);
-			
-			GL11.glScalef(2F, 2F, 2F);
-			
-			drawTexturedModalRect(((this.width - xSize) / 2) + 8, ((this.height - ySize) / 2) + 8, skill.iconX(), skill.iconZ(), 30, 30);
-		} else {
-			this.mc.getTextureManager().bindTexture(icon);
-			drawTexturedModalRect(((this.width - xSize) / 2) + 8, ((this.height - ySize) / 2) + 8, skill.iconX(), skill.iconZ(), 30, 30);
+			if (showXPBar) {
+				this.mc.getTextureManager().bindTexture(xpBars);
+				int barStyle = xpBarStyle.getValueInt();
+				int barWidth = xpBarWidth.getValueInt();
+				int leftPos = left+(xSize/2)-(barWidth/2);
+				int barX = 0;
+				int barY = 0;
+				int iconBarX = 0;
+				int iconBarY = 295;
+				
+				if (barStyle == 2 || barStyle == 4 || barStyle == 6 || barStyle == 8 || barStyle == 10 || barStyle == 12) { barX = 131; }
+				
+				if (barStyle == 3 || barStyle == 4)   { barY = 13; }
+				if (barStyle == 5 || barStyle == 6)   { barY = 26; }
+				if (barStyle == 7 || barStyle == 8)   { barY = 39; }
+				if (barStyle == 9 || barStyle == 10)  { barY = 52; }
+				if (barStyle == 11 || barStyle == 12) { barY = 65; }
+				if (barStyle == 13)   				  { barY = 78; }
+				
+				if (barStyle == 1 || barStyle == 3 || barStyle == 5 || barStyle == 7) { iconBarX = leftPos - 6; }
+				if (barStyle == 2 || barStyle == 4 || barStyle == 6 || barStyle == 8) { iconBarX = (leftPos) + (barWidth) - 6; }
+				if (barStyle >= 9 && barStyle <= 13) { iconBarX = (leftPos) + (barWidth/2) - 6 + 34; }
+				
+				this.drawTexturedModalRect(leftPos,   top+149, barX, barY, 11, 12); //Bar Left
+				this.drawTexturedModalRect(leftPos+11, top+149, barX+11, barY, barWidth-22, 12); //Bar
+				this.drawTexturedModalRect(leftPos+barWidth-11, top+149, barX+114, barY, 11, 12); //Bar Right
+				
+				GL11.glScalef(0.5F, 0.5F, 0.5F);
+				int h2 = height*2;
+				int w2 = width*2;
+				mc.getTextureManager().bindTexture(skillIcons);
+				drawTexturedModalRect((((this.width*2) - (xSize*2) - 30) / 2) + 0 - 1, (((this.height*2) - (ySize*2)) / 2) + iconBarY - 1, 60, 220, 32, 32);
+				
+				this.mc.getTextureManager().bindTexture(icon);
+				drawTexturedModalRect((((this.width*2) - (xSize*2) - 30) / 2) + 0, (((this.height*2) - (ySize*2)) / 2) + iconBarY, skill.iconX(), skill.iconZ(), 30, 30);
+				
+				GL11.glScalef(2F, 2F, 2F);
+				
+				drawTexturedModalRect(((this.width - xSize) / 2) + 8, ((this.height - ySize) / 2) + 8, skill.iconX(), skill.iconZ(), 30, 30);
+			} else {
+				this.mc.getTextureManager().bindTexture(icon);
+				drawTexturedModalRect(((this.width - xSize) / 2) + 8, ((this.height - ySize) / 2) + 8, skill.iconX(), skill.iconZ(), 30, 30);
+			}
 		}
 		
 		super.drawScreen(mouseX, mouseZ, par3);

@@ -32,7 +32,7 @@ public class SkillListGui extends GuiScreen {
 	public MultiLineButton buttonConfirm;
 	public MultiLineButton buttonDetails;
 	public MultiLineButton buttonClear;
-	public MultiLineButton buttonConfig;
+	//public MultiLineButton buttonConfig;
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseZ, float partialTick) {	
@@ -126,16 +126,16 @@ public class SkillListGui extends GuiScreen {
 		buttonConfirm = new MultiLineButton(2, left+23, top+221, 60, 24, "Confirm#Selection");
 		buttonDetails = new MultiLineButton(3, left+98, top+221, 60, 24, "Skill#Details");
 		buttonClear = new MultiLineButton(4, left+209, top+12, 40, 24, "Clear#Slot");
-		buttonConfig = new MultiLineButton(5, left+145, top+12, 60, 24, "Configure#Slot");
+		//buttonConfig = new MultiLineButton(5, left+145, top+12, 60, 24, "Configure#Slot");
 		
 		buttonList.add(buttonCancel);
 		buttonList.add(buttonConfirm);
 		buttonList.add(buttonDetails);
 		buttonList.add(buttonClear);
-		buttonList.add(buttonConfig);
+		//buttonList.add(buttonConfig);
 		
 		buttonDetails.enabled = false;
-		buttonConfig.enabled = equippedSkills.getSkillInSlot(SkillSelectGui.slotClicked).length() > 3;
+		//buttonConfig.enabled = equippedSkills.getSkillInSlot(SkillSelectGui.slotClicked).length() > 3;
 		buttonClear.enabled = equippedSkills.getSkillInSlot(SkillSelectGui.slotClicked).length() > 3;
 		
 		this.list = new SkillListScrollable(this, this.width, this.height, 256, 256);
