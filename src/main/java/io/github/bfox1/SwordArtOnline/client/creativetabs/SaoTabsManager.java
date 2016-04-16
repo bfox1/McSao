@@ -1,7 +1,6 @@
 package io.github.bfox1.SwordArtOnline.client.creativetabs;
 
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
-import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -22,7 +21,7 @@ public class SaoTabsManager extends CreativeTabs
     }
 
     public static final SaoTabsManager SaoBlocks = new SaoTabsManager("Sao Blocks").setItem(Item.getItemFromBlock(BlockInit.aincradCobbleVariation));
-    public static final SaoTabsManager SaoItems = new SaoTabsManager("Sao Items").setItem(ItemInit.healingCrystal);
+    public static final SaoTabsManager SaoItems = new SaoTabsManager("Sao Items").setItem(null);
 
     /**
      * This method is used for setting TabIcon for creative Tab for Sao.
