@@ -8,6 +8,7 @@ import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import io.github.bfox1.SwordArtOnline.world.SAOWorldProvider;
+import io.github.bfox1.SwordArtOnline.world.SAOWorldType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldProviderEnd;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.io.File;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class CommonProxy implements SaoProxy
 {
 	
 	public static final SaoHUD saoHud = new SaoHUD(Minecraft.getMinecraft());
+	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
 
     @Override
     public void initClientConfig(File file)

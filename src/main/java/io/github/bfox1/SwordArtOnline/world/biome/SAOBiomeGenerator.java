@@ -156,7 +156,7 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		        IBlockState aincradGrass = this.topBlock;
 		        IBlockState aincradDirt = this.fillerBlock;
 		        		        
-		        int blockMaxHeight = 59;
+		        int blockMaxHeight = 60;
 		        
 		        for (int blockHeight = 255; blockHeight >= 0; --blockHeight) {
 		        	if(blockHeight == blockMaxHeight) {

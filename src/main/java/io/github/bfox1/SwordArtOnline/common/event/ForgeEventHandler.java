@@ -1,8 +1,8 @@
 package io.github.bfox1.SwordArtOnline.common.event;
 
-import io.github.bfox1.SwordArtOnline.common.blocks.SAOTeleporter;
 import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.world.SAOTeleporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -37,17 +37,22 @@ public class ForgeEventHandler
     
     @SubscribeEvent
 	public void onLog(PlayerLoggedInEvent e) {
-		if(e.player.dimension != Reference.saoDimensionId) {
-			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-			playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
-			playerMP.setPositionAndUpdate(0, 60, 0);
+		if(mc.theWorld.getWorldType() == CommonProxy.saoWorld) {
+			if(e.player.dimension != Reference.saoDimensionId) {
+				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
+				playerMP.setPositionAndUpdate(0, 61, 0);
+			}
 		}
 	}
     
     @SubscribeEvent
     public void onPlayerRespawn(PlayerRespawnEvent e) {
-    	if(e.player.dimension == Reference.saoDimensionId) {
-    		e.player.setPosition(0, 60, 0);
+    	if(mc.theWorld.getWorldType() == CommonProxy.saoWorld) {
+    		if(e.player.dimension == Reference.saoDimensionId) {
+    			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+    			playerMP.setPositionAndUpdate(0, 61, 0);
+    		}
     	}
     }
 }
