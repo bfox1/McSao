@@ -13,7 +13,7 @@ import java.io.File;
  */
 public interface SaoProxy
 {
-     void initClientConfig(File file);
+    void initClientConfig(File file);
 
     void registerTileEntities();
 
