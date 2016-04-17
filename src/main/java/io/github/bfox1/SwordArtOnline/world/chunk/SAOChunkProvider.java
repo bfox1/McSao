@@ -166,18 +166,18 @@ public class SAOChunkProvider implements IChunkProvider {
 		}
 	}
 	
-	public void replaceBlocksForBiome(int chunkX, int chunkY, ChunkPrimer primer, BiomeGenBase[] biomes){
-        net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks event = new net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks(this, chunkX, chunkY, primer, this.worldObj);
+	public void replaceBlocksForBiome(int chunkZCoord, int chunkXCoord, ChunkPrimer primer, BiomeGenBase[] biomes){
+        net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks event = new net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks(this, chunkZCoord, chunkXCoord, primer, this.worldObj);
 		MinecraftForge.EVENT_BUS.post(event);
         if(event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY) return;
 
 		double d0 = 0.03125D;
-        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkY * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkZCoord * 16), (double)(chunkXCoord * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
 
         for(int i = 0; i < 16; ++i) {
             for(int j = 0; j < 16; ++j) {
                 BiomeGenBase biomegenbase = biomes[j + i * 16];
-                biomegenbase.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + i, chunkY * 16 + j, this.stoneNoise[j + i * 16]);
+                biomegenbase.genTerrainBlocks(this.worldObj, this.rand, primer, chunkXCoord * 16 + i, chunkZCoord * 16 + j, this.stoneNoise[j + i * 16]);
             }
         }
 	}
