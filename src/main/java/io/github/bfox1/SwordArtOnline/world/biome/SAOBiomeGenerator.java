@@ -145,19 +145,20 @@ public class SAOBiomeGenerator extends BiomeGenBase
 
 			int noiseGenRand = (int)Math.pow(noiseGenSeed/3.0D + 3.0D, currentFloor.getFloorAmplitude());
 
-	        if(distance <= wallEnd && distance > wallStart)
+
+			if(distance <= wallEnd && distance > wallStart)
 			{
 				int wallTop = ((wallThickness-(wallEnd - distance)) * wallSegmentHeight)+40;
 
 	        	int wallBottom = wallTop-wallSegmentHeight;
-	        	
+				System.out.println("\n Set wall up here.");
 				for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
 				{
 					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;
 
 		        	if(blockHeight <= wallTop && blockHeight >= wallBottom)
 					{
-		        		primer.setBlockState(chunkX, blockHeight, chunkZ, this.wallBlock);
+		        		primer.setBlockState(blockIndex, this.wallBlock);
 		        	}
 
 		        }
@@ -168,7 +169,7 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		        IBlockState aincradDirt = this.fillerBlock;
 		        		        
 		        int blockMaxHeight = noiseGenRand + 40;
-		        
+				//System.out.println("\n Placing blocks.");
 		        for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
 				{
 					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;
