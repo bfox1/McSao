@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "type=block_one":{"model":"sao:AincradGrass_block_one"},
+    "type=block_two":{"model":"sao:AincradGrass_block_two"},
+    "type=block_three":{"model":"sao:AincradGrass_block_three"},
+    "type=block_four":{"model":"sao:AincradGrass_block_four"}
+  }
+}

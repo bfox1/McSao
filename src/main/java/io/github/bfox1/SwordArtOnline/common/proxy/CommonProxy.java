@@ -10,23 +10,15 @@ import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import io.github.bfox1.SwordArtOnline.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.world.SAOWorldType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.WorldProviderEnd;
 import net.minecraft.world.WorldType;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bfox1 on 4/2/2016.
