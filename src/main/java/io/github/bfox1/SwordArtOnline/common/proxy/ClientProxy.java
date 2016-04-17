@@ -1,12 +1,15 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
+import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
 import io.github.bfox1.SwordArtOnline.common.blocks.SaoBlockVariationAbstract;
 import io.github.bfox1.SwordArtOnline.common.util.Models;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.util.RegisterUtility;
+import io.github.bfox1.SwordArtOnline.common.util.Settings;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -20,13 +23,15 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public class ClientProxy extends CommonProxy
 {
-
+    public static final SaoHUD saoHud = new SaoHUD(Minecraft.getMinecraft());
+    public static Settings settings;
 
 
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
         super.preInit(event);
+        settings = new Settings(event);
         OBJLoader.instance.addDomain(Reference.MODID);
 
         ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);

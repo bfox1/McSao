@@ -2,13 +2,14 @@ package io.github.bfox1.SwordArtOnline.common;
 
 import io.github.bfox1.SwordArtOnline.common.proxy.SaoProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.common.util.Settings;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 /**
  * Created by bfox1 on 4/2/2016.
@@ -20,8 +21,8 @@ public class SwordArtOnline
 {
     @Mod.Instance(Reference.MODID)
     public static SwordArtOnline instance;
+    public static final SimpleNetworkWrapper NETWORK_WRAPPER = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
 
-    public static Settings settings;
     
     public static int modGuiIndex = 0;
 
@@ -31,7 +32,6 @@ public class SwordArtOnline
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-    	settings = new Settings(event);
         proxy.preInit(event);
     }
 

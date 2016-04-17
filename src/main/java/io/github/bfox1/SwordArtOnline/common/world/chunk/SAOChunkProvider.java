@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.world.chunk;
+package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;

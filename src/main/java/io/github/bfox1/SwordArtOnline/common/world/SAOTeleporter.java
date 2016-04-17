@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.world;
+package io.github.bfox1.SwordArtOnline.common.world;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,17 +7,10 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.init.BlockInit;
-import net.minecraft.block.BlockPortal;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockPattern;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 

@@ -1,19 +1,12 @@
-package io.github.bfox1.SwordArtOnline.world;
+package io.github.bfox1.SwordArtOnline.common.world;
 
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.world.biome.SAOBiomeGenerator;
-import io.github.bfox1.SwordArtOnline.world.chunk.SAOChunkProvider;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import io.github.bfox1.SwordArtOnline.common.world.biome.SAOBiomeGenerator;
+import io.github.bfox1.SwordArtOnline.common.world.chunk.SAOChunkProvider;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.Height;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.ChunkProviderEnd;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Created by Earbuds on 4/12/2016.

@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.world;
+package io.github.bfox1.SwordArtOnline.common.world;
 
 import net.minecraft.world.WorldType;
 

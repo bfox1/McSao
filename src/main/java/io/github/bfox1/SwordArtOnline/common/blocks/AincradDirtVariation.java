@@ -9,6 +9,6 @@ import net.minecraft.block.material.Material;
  */
 public class AincradDirtVariation extends SaoBlockVariationAbstract {
     public AincradDirtVariation(Material p_i46399_1_, int subTypes) {
-        super(p_i46399_1_, subTypes);
+        super(p_i46399_1_, subTypes, 5.0F);
     }
 }

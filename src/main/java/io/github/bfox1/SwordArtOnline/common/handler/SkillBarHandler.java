@@ -2,7 +2,7 @@ package io.github.bfox1.SwordArtOnline.common.handler;
 
 //code referenced from https://github.com/kulttuuri/quick-hotbar-mod/blob/1.8.9/src/main/java/com/kulttuuri/quickhotbar/QuickHotbarEventHandler.java#L270
 
-import io.github.bfox1.SwordArtOnline.common.SwordArtOnline;
+import io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -63,12 +63,12 @@ public class SkillBarHandler {
 		if (Minecraft.getMinecraft().currentScreen != null)
 			return;
 
-		if (!SwordArtOnline.settings.SKILL_BAR_KEY.isKeyDown())
+		if (!ClientProxy.settings.SKILL_BAR_KEY.isKeyDown())
 			isSkillBarButtonDown = false;
 		if (getNumberKeyIsDown() == 0)
 			isNumberKeyDown = false;
 		
-		if(!isSkillBarButtonDown && SwordArtOnline.settings.SKILL_BAR_KEY.isKeyDown())
+		if(!isSkillBarButtonDown && ClientProxy.settings.SKILL_BAR_KEY.isKeyDown())
 		{
 			isSkillBarButtonDown = true;
 		}
@@ -109,7 +109,7 @@ public class SkillBarHandler {
 	@SubscribeEvent
 	public void handleGameUpdate(RenderGameOverlayEvent.Pre event) {
 		//if (!SwordArtOnline.settings.SKILL_BAR_TOGGLE) {
-			if (SwordArtOnline.settings.SKILL_BAR_KEY.isKeyDown()) {
+			if (ClientProxy.settings.SKILL_BAR_KEY.isKeyDown()) {
 				if (Minecraft.getMinecraft().ingameGUI == null || !Minecraft.getMinecraft().inGameHasFocus)
 					return;
 				Minecraft mc = Minecraft.getMinecraft();
@@ -120,7 +120,7 @@ public class SkillBarHandler {
 				int height = res.getScaledHeight();
 				renderHotbar(mc.ingameGUI, width, height);
 				
-			} else if (!SwordArtOnline.settings.SKILL_BAR_KEY.isKeyDown()) {
+			} else if (!ClientProxy.settings.SKILL_BAR_KEY.isKeyDown()) {
 				Minecraft.getMinecraft().gameSettings.heldItemTooltips = true;
 			}
 		//} else {

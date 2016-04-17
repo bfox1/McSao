@@ -1,15 +1,16 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
-import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
+import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
 import io.github.bfox1.SwordArtOnline.common.handler.SkillBarHandler;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
+import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
-import io.github.bfox1.SwordArtOnline.world.SAOWorldProvider;
-import io.github.bfox1.SwordArtOnline.world.SAOWorldType;
-import net.minecraft.client.Minecraft;
+import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
+import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,9 +28,10 @@ import java.io.File;
  */
 public class CommonProxy implements SaoProxy
 {
-	
-	public static final SaoHUD saoHud = new SaoHUD(Minecraft.getMinecraft());
+
+
 	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
+    public static final SaoExtendedProperty saoIEEP= new SaoExtendedProperty(new WorldFunction(), new PlayerInformation());
 
     @Override
     public void initClientConfig(File file)

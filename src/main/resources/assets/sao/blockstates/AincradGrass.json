@@ -1,7 +1,12 @@
 {
   "variants":
   {
-    "type=block_one":{"model":"sao:AincradGrass_block_one"},
+    "type=block_one":
+    [
+      {"model":"sao:AincradGrass_block_one"},
+    {"model":"sao:AincradGrass_block_one", "y" : 90},
+    {"model":"sao:AincradGrass_block_one", "y" : 180},
+      {"model":"sao:AincradGrass_block_one", "y" : 270}],
     "type=block_two":{"model":"sao:AincradGrass_block_two"},
     "type=block_three":{"model":"sao:AincradGrass_block_three"},
     "type=block_four":{"model":"sao:AincradGrass_block_four"}

@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.world.biome;
+package io.github.bfox1.SwordArtOnline.common.world.biome;
 
 import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
