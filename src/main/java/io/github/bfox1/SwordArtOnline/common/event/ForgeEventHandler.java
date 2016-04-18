@@ -9,6 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -54,12 +56,15 @@ public class ForgeEventHandler
      */
     @SubscribeEvent
 	public void onPlayerLog(PlayerLoggedInEvent e) {
-       // Minecraft mc = Minecraft.getMinecraft();
 		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
 			if(e.player.dimension != Reference.saoDimensionId) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
+                int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
+                playerMP.setPositionAndUpdate(0, y, 0);
+				
 				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
-				playerMP.setPositionAndUpdate(0, 61, 0);
+				
+				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 			}
 		}
 	}
@@ -74,7 +79,9 @@ public class ForgeEventHandler
     	if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
     		if(e.player.dimension == Reference.saoDimensionId) {
     			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-    			playerMP.setPositionAndUpdate(0, 61, 0);
+				
+				BlockPos p = playerMP.worldObj.getSpawnPoint();
+				playerMP.setPosition(p.getX(), p.getY(), p.getZ());
     		}
     	}
     }

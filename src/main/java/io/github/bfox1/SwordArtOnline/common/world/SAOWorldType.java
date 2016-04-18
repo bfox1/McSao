@@ -7,5 +7,4 @@ public class SAOWorldType extends WorldType {
 	public SAOWorldType(String name) {
 		super(name);
 	}
-
 }

@@ -75,6 +75,10 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		return centerPoints;
 	}
 	
+	public FloorPoint getFloorPointAtIndex(int index) {
+		return floorCenters.get(index);
+	}
+	
 	private void setFloorPointSize(int floorNumber, int radius, int wallThickness) {
 		if(floorNumber <= 0 || floorNumber >= 100) return;
 		FloorPoint floor = floorCenters.get(floorNumber-1);
@@ -151,7 +155,7 @@ public class SAOBiomeGenerator extends BiomeGenBase
 				int wallTop = ((wallThickness-(wallEnd - distance)) * wallSegmentHeight)+40;
 
 	        	int wallBottom = wallTop-wallSegmentHeight;
-				System.out.println("\n Set wall up here.");
+				//System.out.println("\n Set wall up here.");
 				for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
 				{
 					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;
@@ -169,7 +173,6 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		        IBlockState aincradDirt = this.fillerBlock;
 		        		        
 		        int blockMaxHeight = noiseGenRand + 40;
-				//System.out.println("\n Placing blocks.");
 		        for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
 				{
 					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;

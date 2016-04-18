@@ -17,6 +17,8 @@ import net.minecraft.world.WorldServer;
 /**
  * Created by Earbuds on 4/13/2016.
  */
+
+
 public class SAOTeleporter extends Teleporter {
     private final WorldServer worldServerInstance;
     private final Random random;
