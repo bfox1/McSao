@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
  */
 public class ForgeEventHandler
 {
-    private Minecraft mc = Minecraft.getMinecraft();
+
 
     public ForgeEventHandler()
     {
@@ -44,6 +44,7 @@ public class ForgeEventHandler
         {
             event.setCanceled(true);
             ClientProxy.saoHud.drawBase();
+            Minecraft mc = Minecraft.getMinecraft();
             ClientProxy.saoHud.drawBar(mc.thePlayer.getHealth() / mc.thePlayer.getMaxHealth());
         }
     }
@@ -53,7 +54,8 @@ public class ForgeEventHandler
      */
     @SubscribeEvent
 	public void onPlayerLog(PlayerLoggedInEvent e) {
-		if(mc.theWorld.getWorldType() == CommonProxy.saoWorld) {
+       // Minecraft mc = Minecraft.getMinecraft();
+		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
 			if(e.player.dimension != Reference.saoDimensionId) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
@@ -66,8 +68,10 @@ public class ForgeEventHandler
      * @param e McForge event.
      */
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerRespawnEvent e) {
-    	if(mc.theWorld.getWorldType() == CommonProxy.saoWorld) {
+    public void onPlayerRespawn(PlayerRespawnEvent e)
+    {
+
+    	if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
     		if(e.player.dimension == Reference.saoDimensionId) {
     			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
     			playerMP.setPositionAndUpdate(0, 61, 0);

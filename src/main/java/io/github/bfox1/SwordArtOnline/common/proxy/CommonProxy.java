@@ -3,7 +3,6 @@ package io.github.bfox1.SwordArtOnline.common.proxy;
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
 import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
-import io.github.bfox1.SwordArtOnline.common.handler.SkillBarHandler;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
@@ -54,7 +53,7 @@ public class CommonProxy implements SaoProxy
     @Override
     public void registerEventHandlers()
     {
-    	MinecraftForge.EVENT_BUS.register(new SkillBarHandler());
+    	//MinecraftForge.EVENT_BUS.register(new SkillBarHandler());
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
     }
 
