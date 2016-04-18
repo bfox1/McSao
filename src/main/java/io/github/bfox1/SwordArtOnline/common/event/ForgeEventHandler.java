@@ -41,11 +41,12 @@ public class ForgeEventHandler
 		if(mc.theWorld.getWorldType() == CommonProxy.saoWorld) {
 			if(e.player.dimension != Reference.saoDimensionId) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-				playerMP.setPositionAndUpdate(0, 49, 0);
+                int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
+                playerMP.setPositionAndUpdate(0, y, 0);
 				
 				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				
-				mc.theWorld.setSpawnPoint(new BlockPos(0, 49, 0));
+				mc.theWorld.setSpawnPoint(new BlockPos(0, y, 0));
 			}
 		}
 	}
