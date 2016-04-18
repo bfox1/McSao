@@ -1,6 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
-import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
+import io.github.bfox1.SwordArtOnline.client.overlay.SaoOverlay;
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
 import io.github.bfox1.SwordArtOnline.common.eventhandlers.SkillBarHandler;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
@@ -50,7 +50,7 @@ public class CommonProxy implements SaoProxy
     public void registerEventHandlers()
     {
     	MinecraftForge.EVENT_BUS.register(new SkillBarHandler());
-    	MinecraftForge.EVENT_BUS.register(new SaoHUD(Minecraft.getMinecraft()));
+    	MinecraftForge.EVENT_BUS.register(new SaoOverlay(Minecraft.getMinecraft()));
 
     }
 

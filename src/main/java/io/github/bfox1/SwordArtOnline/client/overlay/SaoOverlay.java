@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.client.overlay;
 
+import io.github.bfox1.SwordArtOnline.client.font.CustomFont;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import org.lwjgl.opengl.GL11;
 
-public class SaoHUD extends Gui
+public class SaoOverlay extends Gui
 {
 	private static final ResourceLocation BACKGROUND = new ResourceLocation(Reference.MODID, "textures/hud/baseBackground.png");
 	private static final ResourceLocation FOREGROUND = new ResourceLocation(Reference.MODID, "textures/hud/baseForeground.png");
@@ -27,15 +28,17 @@ public class SaoHUD extends Gui
 	private static final double WIDTHFOR = 408 / SCALE;
 	private static final double HEIGHFOR = 34 / SCALE;
 	
+	private CustomFont saoFont;
+	
 	private double currentPercent;
 	
 	private Minecraft mc;
 	
-	public SaoHUD(Minecraft mc)
+	public SaoOverlay(Minecraft mc)
 	{
 		super();
-		
 		this.mc = mc;
+		saoFont = new CustomFont(mc, new ResourceLocation(Reference.MODID, "textures/gui/font/SAOUITT-Regular.ttf"), 24);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -66,6 +69,7 @@ public class SaoHUD extends Gui
         w.pos(XPOS + 241 / SCALE + (WIDTHFOR * currentPercent), YPOS + 27 / SCALE, this.zLevel).tex(currentPercent, 0).endVertex();
         t.draw();
         
+        saoFont.drawString(this, "Hello World", 20, 20, 0xFFFFFFFF);
         
         GL11.glColor3f(255, 255, 255);
         GL11.glPopMatrix();
