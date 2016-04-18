@@ -51,40 +51,25 @@ public class ForgeEventHandler
         }
     }
     /**
-     * Annotated SusbribeEvent onPlayerLog adds the Health bar Hud and removes the Default health hud.
-     * @param e McForge event.
+     * Annotated SusbribeEvent onPlayerLog checks for the Aincrad WorldType to be selected and any dimension apart from
+     * Aincrad to be in before executing first-time code.
+     * 
+     * @param event McForge event.
      */
     @SubscribeEvent
-	public void onPlayerLog(PlayerLoggedInEvent e) {
-		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
-			if(e.player.dimension != Reference.saoDimensionId) {
-				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-                int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
-                playerMP.setPositionAndUpdate(0, y, 0);
+	public void onPlayerLog(PlayerLoggedInEvent event) {
+		if(event.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
+			if(event.player.dimension != Reference.saoDimensionId) {
+				EntityPlayerMP playerMP = (EntityPlayerMP) event.player;
+                playerMP.setPositionAndUpdate(0, 50, 0);
 				
 				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				
-				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
+				int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
+				playerMP.setSpawnChunk(new BlockPos(0, y, 0), true, Reference.saoDimensionId);
 			}
 		}
 	}
-    /**
-     * Annotated SusbribeEvent onPlayerRespawn adds the Health bar Hud and removes the Default health hud.
-     * @param e McForge event.
-     */
-    @SubscribeEvent
-    public void onPlayerRespawn(PlayerRespawnEvent e)
-    {
-
-    	if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
-    		if(e.player.dimension == Reference.saoDimensionId) {
-    			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
-				
-				BlockPos p = playerMP.worldObj.getSpawnPoint();
-				playerMP.setPosition(p.getX(), p.getY(), p.getZ());
-    		}
-    	}
-    }
 
     @SubscribeEvent
     public void onPlayerBreak(PlayerInteractEvent event)
