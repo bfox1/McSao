@@ -1,18 +1,19 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
+import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
 import io.github.bfox1.SwordArtOnline.common.blocks.SaoBlockVariationAbstract;
 import io.github.bfox1.SwordArtOnline.common.util.Models;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.common.util.RegisterUtility;
+import io.github.bfox1.SwordArtOnline.common.util.Settings;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 /**
@@ -22,16 +23,21 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
  */
 public class ClientProxy extends CommonProxy
 {
+    public static final SaoHUD saoHud = new SaoHUD(Minecraft.getMinecraft());
+    public static Settings settings;
+
 
     @Override
     public void preInit(FMLPreInitializationEvent event)
     {
         super.preInit(event);
+        settings = new Settings(event);
         OBJLoader.instance.addDomain(Reference.MODID);
 
         ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
         ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);
         ModelLoader.setCustomModelResourceLocation(ItemInit.teleportCrystal, 0, Models.crystalTeleport);
+
     }
 
     @Override
@@ -39,7 +45,13 @@ public class ClientProxy extends CommonProxy
     {
         super.init(event);
         blockRenderRegister(BlockInit.aincradCobbleVariation);
-        
+        ItemInit.register();
+    }
+    
+    @Override
+    public void postInit(FMLPostInitializationEvent event)
+    {
+    	super.postInit(event);
     }
 
     /**
@@ -48,9 +60,8 @@ public class ClientProxy extends CommonProxy
      */
     public void blockRenderRegister(Block block)
     {
-
         //registerBlockMetaItem(block, "sao:AincradCobble_block_one","sao:AincradCobble_block_two","sao:AincradCobble_block_three","sao:AincradCobble_block_four");
-        registerBlockMetaItem(block, ((SaoBlockVariationAbstract)block).getSubtypeArray());
+        RegisterUtility.registerBlockMetaItem(block, ((SaoBlockVariationAbstract)block).getSubtypeArray());
     }
 
     /**
@@ -59,29 +70,5 @@ public class ClientProxy extends CommonProxy
      * @param meta The id of the MEta. Should be left as 0, if anything else, use ClientProxy#registerBlockMetaItem
      * @param blockName The Blocks name.
      */
-    private  void registerBlockItem(Block block, int meta, String blockName)
-    {
-        ModelBakery.addVariantName(Item.getItemFromBlock(block), blockName);
 
-        regItem(block, meta, blockName);
-    }
-
-    /**
-     * Registers Blocks with different BlockStates or as they were called MetaData.
-     * @param block The Block to register and render.
-     * @param blockNames The Array of Stringed names of the Blocks.
-     */
-    private void registerBlockMetaItem(Block block, String... blockNames)
-    {
-        ModelBakery.addVariantName(Item.getItemFromBlock(block), blockNames);
-
-        for(int i = 0; i < blockNames.length; i++)
-        {
-            regItem(block, i, blockNames[i].replaceAll("sao:", ""));
-        }
-    }
-    private  void regItem(Block block , int meta, String file)
-    {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(block), meta, new ModelResourceLocation(Reference.MODID + ":" + file, "inventory"));
-    }
 }

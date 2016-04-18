@@ -13,11 +13,14 @@ public abstract class SaoBlockAbstract extends Block
 {
 
     private boolean canBreak;
+    private final float HARDNESS_VALUE;
 
-    public SaoBlockAbstract(Material p_i46399_1_)
+    public SaoBlockAbstract(Material p_i46399_1_, float hardnessValue)
     {
         super(p_i46399_1_);
         this.setCreativeTab(SaoTabsManager.SaoBlocks);
+        this.HARDNESS_VALUE = hardnessValue;
+        this.setBreakable(false);
     }
 
 
@@ -26,7 +29,17 @@ public abstract class SaoBlockAbstract extends Block
      * Setting Value to True will mean the Block can be broken.
      * @param value boolean value.
      */
-    public abstract void setBreakable(boolean value);
+    public void setBreakable(boolean value)
+    {
+        if(!value)
+        {
+            this.setBlockUnbreakable();
+        }
+        else
+        {
+            this.setHardness(HARDNESS_VALUE);
+        }
+    }
 
     /**
      * All this method does is returns SaoBlockAbstract instead of Block.

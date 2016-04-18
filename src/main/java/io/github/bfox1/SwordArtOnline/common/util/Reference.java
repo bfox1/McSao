@@ -15,4 +15,6 @@ public class Reference
     public static final String CLIENTPROXY = "io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy";
     public static final String SERVERPROXY = "io.github.bfox1.SwordArtOnline.common.proxy.ServerProxy";
     public static final String GUI_FACTORY = "io.github.bfox1.SwordArtOnline.client.gui.SaoGuiFactory";
+    
+    public static final int saoDimensionId = 4;
 }

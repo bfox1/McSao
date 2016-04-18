@@ -1,0 +1,13 @@
+{
+  "parent":"block/cube_all",
+  "textures":
+  {
+    "down":"sao:blocks/Aincraddirt",
+    "up":"sao:blocks/Aincradgrass_top",
+    "north":"sao:blocks/Aincradgrass_side",
+    "south":"sao:blocks/Aincradgrass_side",
+    "east":"sao:blocks/Aincradgrass_side",
+    "west":"sao:blocks/Aincradgrass_side"
+
+  }
+}

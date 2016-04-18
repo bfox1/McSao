@@ -20,12 +20,15 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "1.0"
-group= "io.github.bfox1" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "sao"
+version = "0.1.Dev"
+group= "io.github.TeamSao" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "SwordArtOnline"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 minecraft {
-    version = "1.8.9-11.15.1.1794"
+    version = "1.8.9-11.15.1.1808"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.

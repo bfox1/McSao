@@ -27,18 +27,14 @@ public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract impleme
     public static final PropertyEnum TYPE = PropertyEnum.create("type", SaoBlockVariationAbstract.EnumType.class);
     public final int subTypes;
     public final List<String> subTypeNamList;
-    public SaoBlockVariationAbstract(Material p_i46399_1_, int subTypes)
+    public SaoBlockVariationAbstract(Material p_i46399_1_, int subTypes, float hardness)
     {
-        super(p_i46399_1_);
+        super(p_i46399_1_, hardness);
         this.subTypes = subTypes;
         this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumType.BLOCK_ONE));
         this.subTypeNamList = new ArrayList<String>();
     }
 
-    @Override
-    public void setBreakable(boolean value) {
-
-    }
 
     @Override
     protected BlockState createBlockState()
