@@ -18,7 +18,12 @@ public class SaoHUD extends Gui
 	private static final double XPOS = 5;
 	private static final double YPOS = 5;
 	private static final double SCALE = 5;
-	private final double widthBack, heightBack, widthFor, heightFor;
+
+	private static final double WIDTHBACK = 700 / SCALE;
+	private static final double HEIGHTBACK = 122 / SCALE;
+	private static final double WIDTHFOR = 408 / SCALE;
+	private static final double HEIGHFOR = 34 / SCALE;
+
 	
 	private double currentPercent;
 	
@@ -30,11 +35,6 @@ public class SaoHUD extends Gui
 		super();
 		
 		this.mc = mc;
-		
-		widthBack = 700 / SCALE; // Change these to constants eventually
-		heightBack = 122 / SCALE;
-		widthFor = 408 / SCALE;
-		heightFor = 34 / SCALE;
 	}
 	
 	//@SubscribeEvent(priority = EventPriority.NORMAL)
@@ -60,9 +60,9 @@ public class SaoHUD extends Gui
 		WorldRenderer w = t.getWorldRenderer();
 		w.begin(7, DefaultVertexFormats.POSITION_TEX);
 		w.pos(XPOS + 241 / SCALE, YPOS + 27 / SCALE, this.zLevel).tex(0, 0).endVertex();;
-        w.pos(XPOS + 241 / SCALE, YPOS + 27 / SCALE + heightFor, this.zLevel).tex(0, 1).endVertex();;
-        w.pos(XPOS + 241 / SCALE + (widthFor * currentPercent), YPOS + 27 / SCALE + heightFor, this.zLevel).tex(currentPercent, 1).endVertex();;
-        w.pos(XPOS + 241 / SCALE + (widthFor * currentPercent), YPOS + 27 / SCALE, this.zLevel).tex(currentPercent, 0).endVertex();
+        w.pos(XPOS + 241 / SCALE, YPOS + 27 / SCALE + HEIGHFOR, this.zLevel).tex(0, 1).endVertex();;
+        w.pos(XPOS + 241 / SCALE + (WIDTHFOR * currentPercent), YPOS + 27 / SCALE + HEIGHFOR, this.zLevel).tex(currentPercent, 1).endVertex();;
+        w.pos(XPOS + 241 / SCALE + (WIDTHFOR * currentPercent), YPOS + 27 / SCALE, this.zLevel).tex(currentPercent, 0).endVertex();
         t.draw();
         
         
@@ -86,9 +86,9 @@ public class SaoHUD extends Gui
 		WorldRenderer w = t.getWorldRenderer();
 		w.begin(7, DefaultVertexFormats.POSITION_TEX);
 		w.pos(XPOS, YPOS, this.zLevel).tex(0, 0).endVertex();;
-        w.pos(XPOS, YPOS + heightBack, this.zLevel).tex(0, 1).endVertex();;
-        w.pos(XPOS + widthBack, YPOS + heightBack, this.zLevel).tex(1, 1).endVertex();;
-        w.pos(XPOS + widthBack, YPOS, this.zLevel).tex(1, 0).endVertex();
+        w.pos(XPOS, YPOS + HEIGHTBACK, this.zLevel).tex(0, 1).endVertex();;
+        w.pos(XPOS + WIDTHBACK, YPOS + HEIGHTBACK, this.zLevel).tex(1, 1).endVertex();;
+        w.pos(XPOS + WIDTHBACK, YPOS, this.zLevel).tex(1, 0).endVertex();
         t.draw();
         
         GL11.glPopMatrix();
