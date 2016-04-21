@@ -61,10 +61,10 @@ public class ForgeEventHandler
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
-				
+                ((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				
-				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
+				//((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 			}
 		}
 	}

@@ -57,4 +57,10 @@ public class ItemInit
 			RegisterUtility.registerItem(item, item.getUnlocalizedName().replaceAll("item.", ""));
 		}
 	}
+
+	public static void getSword(String name)
+	{
+
+	}
+
 }

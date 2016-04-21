@@ -1,11 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.world;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Lists;
-
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockPos;
@@ -13,6 +8,10 @@ import net.minecraft.util.LongHashMap;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Earbuds on 4/13/2016.
@@ -28,6 +27,9 @@ public class SAOTeleporter extends Teleporter {
     public SAOTeleporter(WorldServer world) {
     	super(world);
         this.worldServerInstance = world;
+        world.getWorldInfo().setSpawnX(0);
+        world.getWorldInfo().setSpawnZ(0);
+        world.getWorldInfo().setSpawnY(world.getChunkFromChunkCoords(0,0).getHeightValue(0,0));
         this.random = new Random(world.getSeed());
     }
 

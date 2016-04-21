@@ -2,6 +2,7 @@ package io.github.bfox1.SwordArtOnline.common;
 
 import io.github.bfox1.SwordArtOnline.common.proxy.SaoProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.quest.Quests;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -40,6 +41,7 @@ public class SwordArtOnline
     {
         proxy.init(event);
         proxy.registerEventHandlers();
+        new Quests("test").setTestQuest();
     }
 
     @Mod.EventHandler

@@ -1,6 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.util;
 
-import io.github.bfox1.SwordArtOnline.world.biome.SAOBiomeGenerator;
+import io.github.bfox1.SwordArtOnline.common.world.biome.SAOBiomeGenerator;
 import net.minecraft.world.biome.BiomeGenBase;
 
 /**
