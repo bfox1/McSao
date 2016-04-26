@@ -39,13 +39,6 @@ public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityP
 	public static final void register(EntityPlayer player) {
 		player.registerExtendedProperties(SkillLevelHealth.staticSkillId, new SkillLevelHealth(player, staticSkillId));
 	}
-	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new SkillLevelHealth((EntityPlayer)event.entity, skillId));
-		}
-	}
 
 	@Override
 	public boolean hasGui() {

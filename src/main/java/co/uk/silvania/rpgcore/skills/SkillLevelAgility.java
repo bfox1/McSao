@@ -40,13 +40,6 @@ public class SkillLevelAgility extends SkillLevelBase implements IExtendedEntity
 		player.registerExtendedProperties(SkillLevelAgility.staticSkillId, new SkillLevelAgility(player, staticSkillId));
 	}
 	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new SkillLevelAgility((EntityPlayer)event.entity, skillId));
-		}
-	}
-	
 	@Override
 	public boolean hasGui() {
 		return true;

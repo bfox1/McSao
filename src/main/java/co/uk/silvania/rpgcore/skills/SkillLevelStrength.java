@@ -40,13 +40,6 @@ public class SkillLevelStrength extends SkillLevelBase implements IExtendedEntit
 		player.registerExtendedProperties(SkillLevelStrength.staticSkillId, new SkillLevelStrength(player, staticSkillId));
 	}
 	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new SkillLevelStrength((EntityPlayer)event.entity, skillId));
-		}
-	}
-	
 	@Override
 	public boolean hasGui() {
 		return false;

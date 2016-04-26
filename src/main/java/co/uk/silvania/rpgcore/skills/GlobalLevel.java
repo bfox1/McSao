@@ -89,13 +89,6 @@ public class GlobalLevel extends SkillLevelBase implements IExtendedEntityProper
 		xpGlobal = xpSet;
 	}
 	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new GlobalLevel((EntityPlayer)event.entity, skillId));
-		}
-	}
-	
 	public static IExtendedEntityProperties get(EntityPlayer player) {
 		return player.getExtendedProperties(staticSkillId);
 	}
@@ -133,9 +126,5 @@ public class GlobalLevel extends SkillLevelBase implements IExtendedEntityProper
 		return 0;
 	}
 
-	@Override
-	public void activateSkill(EntityPlayer player, World world) {
-		// TODO Auto-generated method stub
-		
-	}	
+	@Override public void activateSkill(EntityPlayer player, World world) {}	
 }

@@ -84,15 +84,8 @@ public class RPGCore {
     	network.registerMessage(EquippedSkillsPacket.Handler.class, EquippedSkillsPacket.class, 2, Side.CLIENT);
     	network.registerMessage(EquipNewSkillPacket.Handler.class, EquipNewSkillPacket.class, 3, Side.SERVER);
     	
-    	//Don't name your event handler "EventHandler" said Forge...
-    	MinecraftForge.EVENT_BUS.register(new HandlerOfEvents());
-    	
-    	MinecraftForge.EVENT_BUS.register(new EquippedSkills());
-    	MinecraftForge.EVENT_BUS.register(new GlobalLevel(null, "globalLevel"));
-    	MinecraftForge.EVENT_BUS.register(new SkillLevelAgility(null, "skillAgility"));
+    	//Temporary, example skills which will be removed completely once some real skills exist.
     	MinecraftForge.EVENT_BUS.register(new SkillLevelSwords(null, "skillSwords"));
-    	MinecraftForge.EVENT_BUS.register(new SkillLevelStrength(null, "skillStrength"));
-    	MinecraftForge.EVENT_BUS.register(new SkillLevelHealth(null, "skillHealth"));
     	MinecraftForge.EVENT_BUS.register(new SkillLevelJump(null, "skillJump"));
     	MinecraftForge.EVENT_BUS.register(new SkillLevelPunch(null, "skillPunch"));
     }
