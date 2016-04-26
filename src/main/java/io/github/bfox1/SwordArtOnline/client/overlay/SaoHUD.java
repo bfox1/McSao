@@ -7,10 +7,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import org.lwjgl.opengl.GL11;
 
 public class SaoHUD extends Gui
@@ -22,14 +18,17 @@ public class SaoHUD extends Gui
 	private static final double XPOS = 5;
 	private static final double YPOS = 5;
 	private static final double SCALE = 5;
+
 	private static final double WIDTHBACK = 700 / SCALE;
 	private static final double HEIGHTBACK = 122 / SCALE;
 	private static final double WIDTHFOR = 408 / SCALE;
 	private static final double HEIGHFOR = 34 / SCALE;
+
 	
 	private double currentPercent;
 	
 	private Minecraft mc;
+	private ResourceLocation location = new ResourceLocation(Reference.MODID, "font/SwordArtOnline.otf");
 	
 	public SaoHUD(Minecraft mc)
 	{
@@ -38,18 +37,18 @@ public class SaoHUD extends Gui
 		this.mc = mc;
 	}
 	
-	@SubscribeEvent(priority = EventPriority.NORMAL)
-	public void onRenderHealthBar(RenderGameOverlayEvent.Pre event)
-	{
-		if(event.type.equals(RenderGameOverlayEvent.ElementType.HEALTH) && event.isCancelable() /*&& mc.thePlayer.worldObj.provider.getDimensionId() == Reference.DIMENSIONID*/)
-		{
-			event.setCanceled(true);
-			drawBase();
-			drawBar(mc.thePlayer.getHealth() / mc.thePlayer.getMaxHealth());
-		}
-	}
+	//@SubscribeEvent(priority = EventPriority.NORMAL)
+	//public void onRenderHealthBar(RenderGameOverlayEvent.Pre event)
+	//{
+	//	if(event.type.equals(RenderGameOverlayEvent.ElementType.HEALTH) && event.isCancelable() /*&& mc.thePlayer.worldObj.provider.getDimensionId() == Reference.DIMENSIONID*/)
+	//	{
+		//	event.setCanceled(true);
+	//		drawBase();
+	//		drawBar(mc.thePlayer.getHealth() / mc.thePlayer.getMaxHealth());
+	//	}
+	//}
 	
-	private void drawBar(double percent)
+	public final void drawBar(double percent)
 	{		
 		GL11.glPushMatrix();
 		mc.renderEngine.bindTexture(FOREGROUND);
@@ -76,7 +75,7 @@ public class SaoHUD extends Gui
         	currentPercent -= (double)(currentPercent - percent) / 15;
 	}
 	
-	private void drawBase()
+	public final void drawBase()
 	{		
 		GL11.glPushMatrix();
 		mc.renderEngine.bindTexture(BACKGROUND);
@@ -95,5 +94,8 @@ public class SaoHUD extends Gui
         GL11.glPopMatrix();
         
         mc.renderEngine.bindTexture(ORIGINAL);
+
 	}
+
+
 }

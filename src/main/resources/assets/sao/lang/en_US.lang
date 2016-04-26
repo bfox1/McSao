@@ -1,6 +1,15 @@
 # Blocks
 ########################################
 
+
+tile.AincradCobble.block_one.name=AincradCobble
+tile.AincradCobble.block_two.name=AincradCobbleBrick
+tile.AincradCobble.block_three.name=AincradCobbleChisel
+
+# Misc
+########################################
+generator.saoWorldType=Aincrad
+=======
 tile.AincradCobble.block_one.name=Aincrad Cobble
 tile.AincradCobble.block_two.name=Aincrad Cobble Brick
 tile.AincradCobble.block_three.name=Aincrad Cobble Chisel
