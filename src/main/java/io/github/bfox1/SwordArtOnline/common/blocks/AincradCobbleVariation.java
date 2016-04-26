@@ -12,7 +12,7 @@ public class AincradCobbleVariation extends SaoBlockVariationAbstract
 
     public AincradCobbleVariation(Material material, int subTypes)
     {
-        super(material, subTypes);
+        super(material, subTypes, 5.0F);
     }
 
 

@@ -12,6 +12,8 @@ public class SaoSwordItem extends SaoItemAbstract
 {
     private WeaponSkillType type;
 
+    private float attackDamage;
+
     public SaoSwordItem(WeaponSkillType type)
     {
         this.type = type;
