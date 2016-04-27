@@ -5,7 +5,9 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.silvania.rpgcore.RPGCore;
 import co.uk.silvania.rpgcore.client.guiparts.InvisibleButton;
+import io.github.bfox1.SwordArtOnline.client.font.CustomFont;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -22,7 +24,7 @@ public class MenuGui extends GuiScreen {
 	int scroll;
 	
 	public static final ResourceLocation menuIcons  = new ResourceLocation(RPGCore.MODID, "textures/gui/menuicons.png");
-	//CustomFont saoFont = new CustomFont(mc, new ResourceLocation(Reference.MODID, "textures/gui/font/SAOUITT-Regular.ttf"), 24);
+	private CustomFont saoFont;
 	
 	GuiScrollingList list;
 	
@@ -66,6 +68,13 @@ public class MenuGui extends GuiScreen {
 	int icon4 = mapsIcon;
 	int icon5 = settingsIcon;
 	
+	public MenuGui() {
+		super();
+		Minecraft mc = Minecraft.getMinecraft();
+		this.mc = mc;
+		saoFont = new CustomFont(mc, new ResourceLocation(Reference.MODID, "textures/gui/font/SAOUITT-Regular.ttf"), 24);
+	}
+	
 	@Override
 	public void drawScreen(int mouseX, int mouseZ, float partialTick) {
 		GL11.glEnable(GL11.GL_BLEND);
@@ -74,6 +83,7 @@ public class MenuGui extends GuiScreen {
      	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		//list.drawScreen(mouseX, mouseZ, partialTick);
 		super.drawScreen(mouseX, mouseZ, partialTick);
+		
 		mc.getTextureManager().bindTexture(menuIcons);
 		
 		int mouseMoveY = Mouse.getDY();
@@ -93,19 +103,19 @@ public class MenuGui extends GuiScreen {
 		this.drawTexturedModalRect(w - 18, h+142+scroll, button5Lit, icon5, 36, 36);
 		
 		if (slot1.equals(inv) && slotActive) {
-			draw3Buttons();
+			draw3Buttons("Items", "Skills", "Equipment");
 		}
 		if (slot1.equals(friends) && slotActive) {
-			draw3Buttons();
+			draw3Buttons("Party", "Friends", "Guild");
 		}
 		if (slot1.equals(comms) && slotActive) {
-			draw4Buttons();
+			draw4Buttons("Befriend", "Trade", "Duel", "Marriage");
 		}
 		if (slot1.equals(maps) && slotActive) {
-			draw3Buttons();
+			draw3Buttons("Field Map", "Dungeon Map", "Quest");
 		}
 		if (slot1.equals(settings) && slotActive) {
-			draw3Buttons();
+			draw3Buttons("Options", "Help", "Log Out");
 		}
 		
 		button1.yPosition = h-18+scroll;
@@ -115,10 +125,14 @@ public class MenuGui extends GuiScreen {
 		button5.yPosition = h+142+scroll;
 	}
 	
-	public void draw3Buttons() {
+	public void draw3Buttons(String str1, String str2, String str3) {
 		int button6Lit = subButton1.isMouseOver() ? 96 : 72;
 		int button7Lit = subButton2.isMouseOver() ? 96 : 72;
 		int button8Lit = subButton3.isMouseOver() ? 96 : 72;
+		
+		int icon1Lit = subButton1.isMouseOver() ? 16 : 0;
+		int icon2Lit = subButton2.isMouseOver() ? 16 : 0;
+		int icon3Lit = subButton3.isMouseOver() ? 16 : 0;
 		
 		subButton1.yPosition = h-38+scroll;
 		subButton2.yPosition = h-12+scroll;
@@ -130,13 +144,26 @@ public class MenuGui extends GuiScreen {
 		this.drawTexturedModalRect(w + 23, h-38+scroll, 72, button6Lit, 103, 24);
 		this.drawTexturedModalRect(w + 23, h-12+scroll, 72, button7Lit, 103, 24);
 		this.drawTexturedModalRect(w + 23, h+14+scroll, 72, button8Lit, 103, 24);
+		
+		this.drawTexturedModalRect(w + 39, h-34+scroll, iconX()+icon1Lit, iconZ(str1), 16, 16);
+		this.drawTexturedModalRect(w + 39, h-8+scroll,  iconX()+icon2Lit, iconZ(str2), 16, 16);
+		this.drawTexturedModalRect(w + 39, h+18+scroll, iconX()+icon3Lit, iconZ(str3), 16, 16);
+		
+		this.drawString(fontRendererObj, str1, w+59, h-30+scroll, 0xFFFFFFFF);
+		this.drawString(fontRendererObj, str2, w+59, h-4+scroll,  0xFFFFFFFF);
+		this.drawString(fontRendererObj, str3, w+59, h+22+scroll, 0xFFFFFFFF);
 	}
 	
-	public void draw4Buttons() {
+	public void draw4Buttons(String str1, String str2, String str3, String str4) {
 		int button6Lit = subButton1.isMouseOver() ? 96 : 72;
 		int button7Lit = subButton2.isMouseOver() ? 96 : 72;
 		int button8Lit = subButton3.isMouseOver() ? 96 : 72;
 		int button9Lit = subButton4.isMouseOver() ? 96 : 72;
+		
+		int icon1Lit = subButton1.isMouseOver() ? 16 : 0;
+		int icon2Lit = subButton2.isMouseOver() ? 16 : 0;
+		int icon3Lit = subButton3.isMouseOver() ? 16 : 0;
+		int icon4Lit = subButton4.isMouseOver() ? 16 : 0;
 		
 		subButton1.yPosition = h-51+scroll;
 		subButton2.yPosition = h-25+scroll;
@@ -147,6 +174,48 @@ public class MenuGui extends GuiScreen {
 		this.drawTexturedModalRect(w + 23, h-25+scroll, 72, button7Lit, 103, 24);
 		this.drawTexturedModalRect(w + 23, h+1+scroll,  72, button8Lit, 103, 24);
 		this.drawTexturedModalRect(w + 23, h+27+scroll, 72, button8Lit, 103, 24);
+		
+		this.drawTexturedModalRect(w + 39, h-47+scroll, iconX()+icon1Lit, iconZ(str1), 16, 16);
+		this.drawTexturedModalRect(w + 39, h-21+scroll, iconX()+icon2Lit, iconZ(str2), 16, 16);
+		this.drawTexturedModalRect(w + 39, h+5+scroll,  iconX()+icon3Lit, iconZ(str3), 16, 16);
+		this.drawTexturedModalRect(w + 39, h+31+scroll, iconX()+icon4Lit, iconZ(str4), 16, 16);
+		
+		this.drawString(fontRendererObj, str1, w+58, h-43+scroll, 0xFFFFFFFF);
+		this.drawString(fontRendererObj, str2, w+58, h-17+scroll, 0xFFFFFFFF);
+		this.drawString(fontRendererObj, str3, w+58, h+9+scroll,  0xFFFFFFFF);
+		this.drawString(fontRendererObj, str4, w+58, h+35+scroll, 0xFFFFFFFF);
+	}
+
+	public int iconX() {
+		if (slot1.equals(inv)) { return 144; }
+		if (slot1.equals(friends) || slot1.equals(maps)) { return 176; }
+		if (slot1.equals(comms) || slot1.equals(settings)) { return 208; }
+
+		return 0;
+	}
+	
+	public int iconZ(String str) {
+		if (str.equals("Items")) { return 0; }
+		if (str.equals("Skills")) { return 16; }
+		if (str.equals("Equipment")) { return 32; }
+		
+		if (str.equals("Party")) { return 0; }
+		if (str.equals("Friends")) { return 16; }
+		if (str.equals("Guild")) { return 32; }
+		
+		if (str.equals("Befriend")) { return 0; }
+		if (str.equals("Trade")) { return 16; }
+		if (str.equals("Duel")) { return 32; }
+		if (str.equals("Marriage")) { return 48; }
+		
+		if (str.equals("Field Map")) { return 64; }
+		if (str.equals("Dungeon Map")) { return 80; }
+		if (str.equals("Quest")) { return 96; }
+		
+		if (str.equals("Options")) { return 64; }
+		if (str.equals("Help")) { return 80; }
+		if (str.equals("Log Out")) { return 96; }
+		return 0;
 	}
 	
 	@Override
@@ -236,21 +305,21 @@ public class MenuGui extends GuiScreen {
     		break;
     		
     	case 6:
-    		if (slot1.equals(inv))      { equipment(); }
+    		if (slot1.equals(inv))      { items(); }
     		if (slot1.equals(friends))  { party(); }
     		if (slot1.equals(comms))    { befriend(); }
     		if (slot1.equals(maps))     { fieldMap(); }
     		if (slot1.equals(settings)) { options(); }
     		break;
     	case 7:
-    		if (slot1.equals(inv))      { items(); }
+    		if (slot1.equals(inv))      { skills(); }
     		if (slot1.equals(friends))  { friend(); }
     		if (slot1.equals(comms))    { trade(); }
     		if (slot1.equals(maps))     { dungeonMap(); }
     		if (slot1.equals(settings)) { help(); }
     		break;
     	case 8:
-    		if (slot1.equals(inv))      { skills(); }
+    		if (slot1.equals(inv))      { equipment(); }
     		if (slot1.equals(friends))  { guild(); }
     		if (slot1.equals(comms))    { duel(); }
     		if (slot1.equals(maps))     { quests(); }
