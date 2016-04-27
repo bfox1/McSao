@@ -7,9 +7,11 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.silvania.rpgcore.RPGCore;
 import co.uk.silvania.rpgcore.RegisterSkill;
+import co.uk.silvania.rpgcore.client.guiparts.GuiScrollingList_Mod;
 import co.uk.silvania.rpgcore.network.EquipNewSkillPacket;
 import co.uk.silvania.rpgcore.network.OpenGuiPacket;
 import co.uk.silvania.rpgcore.skills.EquippedSkills;
+import co.uk.silvania.rpgcore.skills.GlobalLevel;
 import co.uk.silvania.rpgcore.skills.SkillLevelBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -100,6 +102,7 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 		SkillLevelBase skill = (SkillLevelBase) skillBase.get((EntityPlayer) mc.thePlayer, skillBase.skillId);
 
 		EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get((EntityPlayer) mc.thePlayer);
+		GlobalLevel glevel = (GlobalLevel) GlobalLevel.get((EntityPlayer) mc.thePlayer);
         
         int offset = 0;
         boolean greenFrame = false;
@@ -134,9 +137,12 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 				gui.drawTexturedModalRect(((this.width - xSize) / 2) + 18, height + 7, 0, 220, 30, 30);
 			}
 			
-			mc.fontRendererObj.drawString("Name: " + skill.skillName(), ((this.width - xSize) / 2) + 56, height + 9, 16777215);
+			mc.fontRendererObj.drawString("Name: " + skill.nameFormat() + skill.skillName(), ((this.width - xSize) / 2) + 56, height + 9, 16777215);
 			mc.fontRendererObj.drawString("Lvl: " + skill.getLevel(), ((this.width - xSize) / 2) + 56, height + 18, 16777215);
-			mc.fontRendererObj.drawString("XP: " + skill.getXPForPrint(), ((this.width - xSize) / 2) + 56, height + 27, 16777215);
+			
+			if (skill.canGainXP()) {
+				mc.fontRendererObj.drawString("XP: " + skill.getXPTotalForPrint(), ((this.width - xSize) / 2) + 56, height + 27, 16777215);
+			}
 			
 			GL11.glScalef(0.5f, 0.5f, 0.5f);
 			int h2 = height*2;
@@ -144,9 +150,12 @@ public class SkillListScrollable extends GuiScrollingList_Mod {
 			
 			int stacker = 0; //Offset for new lines so everything always rests at the top without empty lines.
 			String unlocked = skill.unlockedLevel() + "";
-			if (!skill.isSkillUnlocked(mc.thePlayer)) {
+			if (!skill.isSkillUnlocked(mc.thePlayer) && skill.unlockedLevel() >= glevel.getLevel()) {
 				mc.fontRendererObj.drawString("Unlocked at Level " + skill.unlockedLevel(),  ((w2 - (xSize*2))) + 413 - (unlocked.length()*6), h2 + 9, 11796480);
 				stacker += 9;
+			} else if (!skill.isSkillCompatable(mc.thePlayer)) {
+				String str = "Skill locked, see details.";
+				mc.fontRendererObj.drawString(str, ((w2 - (xSize*2))) + 506 - mc.fontRendererObj.getStringWidth(str), h2 + 9, 11796480);
 			} else {
 				if (!skill.canSkillBeEquipped(mc.thePlayer)) {
 					mc.fontRendererObj.drawString("Requires currently unequipped skills." ,  ((w2 - (xSize*2))) + 318, h2 + 9 + stacker, 11796480);

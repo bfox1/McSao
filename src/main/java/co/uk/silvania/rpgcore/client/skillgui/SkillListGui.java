@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 
 import co.uk.silvania.rpgcore.RPGCore;
 import co.uk.silvania.rpgcore.RegisterSkill;
+import co.uk.silvania.rpgcore.client.guiparts.GuiScrollingList_Mod;
+import co.uk.silvania.rpgcore.client.guiparts.MultiLineButton;
 import co.uk.silvania.rpgcore.network.EquipNewSkillPacket;
 import co.uk.silvania.rpgcore.network.OpenGuiPacket;
 import co.uk.silvania.rpgcore.skills.EquippedSkills;
@@ -62,7 +64,7 @@ public class SkillListGui extends GuiScreen {
 		}
 		if (mouseX >= left+169 && mouseX <= left+240 && mouseZ >= top+48 && mouseZ <= top+212) {
 			if (skill != null) {
-				if ((!skill.incompatibleSkills.isEmpty() && !skill.isSkillCompatable(mc.thePlayer)) || skill.hasUnequippedRequirements(mc.thePlayer)) {
+				if ((!skill.incompatibleSkills.isEmpty() && !skill.isSkillCompatable(mc.thePlayer)) || skill.hasUnequippedRequirements(mc.thePlayer) || !skill.equipIssues.isEmpty()) {
 					List str = new ArrayList();
 					str.add("\u00A7nCurrent Skill Issues");
 					str.add(" ");
@@ -89,16 +91,18 @@ public class SkillListGui extends GuiScreen {
 							}
 						}
 					}
+					
+					if (!skill.equipIssues.isEmpty()) {
+						for (int i = 0; i < skill.equipIssues.size(); i++) {
+							if (i == 0) { str.add("\u00A7lMisc. Issues:"); }
+							str.add("\u00A7c" + skill.equipIssues.get(i));
+						}
+					}
 
 					drawHoveringText(str, mouseX, mouseZ, fontRendererObj);
 				}
 			}
 		}
-	}
-	
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
 	}
 	
 	@Override
@@ -126,16 +130,13 @@ public class SkillListGui extends GuiScreen {
 		buttonConfirm = new MultiLineButton(2, left+23, top+221, 60, 24, "Confirm#Selection");
 		buttonDetails = new MultiLineButton(3, left+98, top+221, 60, 24, "Skill#Details");
 		buttonClear = new MultiLineButton(4, left+209, top+12, 40, 24, "Clear#Slot");
-		//buttonConfig = new MultiLineButton(5, left+145, top+12, 60, 24, "Configure#Slot");
 		
 		buttonList.add(buttonCancel);
 		buttonList.add(buttonConfirm);
 		buttonList.add(buttonDetails);
 		buttonList.add(buttonClear);
-		//buttonList.add(buttonConfig);
 		
 		buttonDetails.enabled = false;
-		//buttonConfig.enabled = equippedSkills.getSkillInSlot(SkillSelectGui.slotClicked).length() > 3;
 		buttonClear.enabled = equippedSkills.getSkillInSlot(SkillSelectGui.slotClicked).length() > 3;
 		
 		this.list = new SkillListScrollable(this, this.width, this.height, 256, 256);
@@ -156,9 +157,6 @@ public class SkillListGui extends GuiScreen {
         }
         
         buttonDetails.enabled = selectedSkill.hasGui();
-        
-        System.out.println("Selected skill: " + selectedSkill.skillName());
-        //cachedLogo = null;
     }
 
     public boolean modIndexSelected(int index) {
@@ -190,5 +188,9 @@ public class SkillListGui extends GuiScreen {
     		break;
     	}
     }
-
+    
+    @Override
+    public boolean doesGuiPauseGame() {
+    	return false;
+    }
 }

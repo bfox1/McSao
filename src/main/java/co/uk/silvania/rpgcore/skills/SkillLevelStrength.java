@@ -31,13 +31,20 @@ public class SkillLevelStrength extends SkillLevelBase implements IExtendedEntit
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		NBTTagCompound nbt = (NBTTagCompound) compound.getTag(skillId);
-		xp = nbt.getInteger(skillId + "xp");		
+		xp = nbt.getInteger(skillId + "xp");
 	}
 
 	@Override public void init(Entity entity, World world) {}
 	
 	public static final void register(EntityPlayer player) {
 		player.registerExtendedProperties(SkillLevelStrength.staticSkillId, new SkillLevelStrength(player, staticSkillId));
+	}
+	
+	//RPGCore, constructer etc
+	
+	@Override
+	public boolean canGainXP() {
+		return false;
 	}
 	
 	@Override
@@ -50,7 +57,8 @@ public class SkillLevelStrength extends SkillLevelBase implements IExtendedEntit
 		return "Strength";
 	}
 
-	@Override public void openGui() { }
+	@Override
+	public void openGui() {}
 
 	@Override
 	public void addIncompatibilities() {
@@ -62,16 +70,12 @@ public class SkillLevelStrength extends SkillLevelBase implements IExtendedEntit
 		description.add(nameFormat() + "\u00A7l" + skillName());
 		description.add("Base Skill.");
 		description.add("Required for most damage skills");
-		description.add("Levelled slowly with any act of strength,");
-		description.add("such as mining, fighting and so on.");
-		description.add("Slowly increases punch damage.");
+		description.add("Levelled using skill points gained from");
+		description.add("advancing your Global Level.");
 	}
 
-	@Override
-	public double levelMultiplier() {
-		return 1.2;
-	}
-
+	@Override public void activateSkill(EntityPlayer player, World world) {}
+	
 	@Override
 	public ResourceLocation skillIcon() {
 		return new ResourceLocation(RPGCore.MODID, "textures/gui/skills.png");
@@ -86,10 +90,19 @@ public class SkillLevelStrength extends SkillLevelBase implements IExtendedEntit
 	public int iconZ() {
 		return 0;
 	}
-
+	
 	@Override
-	public void activateSkill(EntityPlayer player, World world) {
-		// TODO Auto-generated method stub
-		
+	public int xpBarColour() {
+		return 16723484;
+	}
+	
+	@Override
+	public String shortName() {
+		return "STR";
+	}
+	
+	@Override
+	public String nameFormat() {
+		return "\u00A7c";
 	}
 }

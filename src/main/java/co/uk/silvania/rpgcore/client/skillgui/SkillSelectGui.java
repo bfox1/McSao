@@ -1,6 +1,7 @@
 package co.uk.silvania.rpgcore.client.skillgui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -109,9 +110,14 @@ public class SkillSelectGui extends GuiContainer {
         if (skillSlot == 8) { equippedItem = mc.thePlayer.inventory.armorItemInSlot(3); }
         
 		if (skill != null) {
-			String[] text = {skill.nameFormat() + "\u00A7l" + skill.skillName(), "Lvl: " + skill.getLevel(), "XP: " + (int) skill.getXP() + "/" + (int) skill.getXpForLevel(skill.getLevel()), "XP to level up: " + (int) skill.xpToNextLevel()};
-			List temp = Arrays.asList(text);
-			drawHoveringText(temp, mouseX, mouseZ, fontRendererObj);
+			ArrayList<String> text = new ArrayList<String>();
+			text.add(skill.nameFormat() + "\u00A7l" + skill.skillName());
+			text.add("Lvl: " + skill.getLevel());
+			if (skill.canGainXP()) {
+				text.add("XP: " + skill.getXPTotalForPrint());
+				text.add("XP to level up: " + (int) skill.xpToNextLevel());
+			}
+			drawHoveringText(text, mouseX-guiLeft, mouseZ-guiTop, fontRendererObj);
 		} else if (equippedItem != null) {
 			List list = equippedItem.getTooltip(mc.thePlayer, false);
 			drawHoveringText(list, mouseX, mouseZ, fontRendererObj);
@@ -131,7 +137,7 @@ public class SkillSelectGui extends GuiContainer {
 		
 		mc.fontRendererObj.drawString("\u00A7l" + mc.thePlayer.getName(), left - 100, top + 17, 4210752);
 		mc.fontRendererObj.drawString("Global Level: " + glevel.getLevel(), left - 100, top + 30, 4210752);
-		mc.fontRendererObj.drawString("XP: " + glevel.getXPForPrint(), left - 100, top + 40, 4210752);
+		mc.fontRendererObj.drawString("XP: " + glevel.getXPTotalForPrint(), left - 100, top + 40, 4210752);
 		mc.fontRendererObj.drawString("Guild: ", left - 100, top + 55, 4210752);
 		mc.fontRendererObj.drawString("Faction: ", left - 100, top + 70, 4210752);
 		mc.fontRendererObj.drawString("\u00A7lParty", left - 100, top + 82, 4210752);

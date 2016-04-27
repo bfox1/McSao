@@ -1,4 +1,4 @@
-package co.uk.silvania.rpgcore.client.skillgui;
+package co.uk.silvania.rpgcore.client.guiparts;
 
 import org.lwjgl.opengl.GL11;
 

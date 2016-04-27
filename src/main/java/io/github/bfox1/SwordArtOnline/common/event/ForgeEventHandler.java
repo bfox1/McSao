@@ -16,15 +16,16 @@ import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOTeleporter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
-
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -148,6 +149,15 @@ public class ForgeEventHandler
     
     //Everything below this line is RPGCore/Skill related.
     
+    @SubscribeEvent
+    public void onGuiOpen(GuiOpenEvent event) {
+    	if (event.gui != null && event.gui.getClass().equals(GuiIngameMenu.class)) {
+    		event.setCanceled(true);
+    		Minecraft mc = Minecraft.getMinecraft();
+    		mc.thePlayer.openGui(RPGCore.instance, 5, mc.theWorld, (int) mc.thePlayer.posX, (int) mc.thePlayer.posY, (int) mc.thePlayer.posZ);
+    	}
+    }
+    
 	@SubscribeEvent
 	public void onRPGCoreClonePlayer(PlayerEvent.Clone event) {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -185,14 +195,14 @@ public class ForgeEventHandler
 					SkillLevelBase skill = (SkillLevelBase) skillBase.get(event.player, skillBase.skillId);
 					if (skill != null) {
 						System.out.println("Sending data to client!");
-						RPGCore.network.sendTo(new LevelPacket(skill.getXP(), skill.skillId), (EntityPlayerMP) event.player);
+						RPGCore.network.sendTo(new LevelPacket(skill.getXP(), -1, skill.skillId), (EntityPlayerMP) event.player);
 					}
 				}
 				EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get(event.player);
 				
 				System.out.println("Sending global level to client!");
 				GlobalLevel glevel = (GlobalLevel) GlobalLevel.get((EntityPlayer) event.player);
-				RPGCore.network.sendTo(new LevelPacket((int)(glevel.getXPGlobal()*10), glevel.skillId), (EntityPlayerMP) event.player);
+				RPGCore.network.sendTo(new LevelPacket((int)(glevel.getXPGlobal()*10), glevel.getSkillPoints(), glevel.skillId), (EntityPlayerMP) event.player);
 				
 				System.out.println("Sending equipped skills to client!");
 				System.out.println("Slot 0: " + equippedSkills.getSkillInSlot(0));

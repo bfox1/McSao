@@ -50,7 +50,6 @@ public class RPGCore {
     	configPath = event.getModConfigurationDirectory() + "/RPGCore/";
     	
     	RPGCoreConfig.init(configPath);
-    	GuiConfig.init(configPath);
     }
     
     @EventHandler
@@ -58,8 +57,6 @@ public class RPGCore {
     	network = NetworkRegistry.INSTANCE.newSimpleChannel("RPGCore");
     	
     	proxy.init();
-    	
-    	
     	
     	SkillLevelAgility skillAgility = new SkillLevelAgility(null, "skillAgility");
     	SkillLevelSwords skillSwords = new SkillLevelSwords(null, "skillSwords");

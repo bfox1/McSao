@@ -14,7 +14,7 @@
  *     #IHatePrivateAccessLevelModifiers
  */
 
-package co.uk.silvania.rpgcore.client.skillgui;
+package co.uk.silvania.rpgcore.client.guiparts;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;

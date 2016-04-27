@@ -12,7 +12,7 @@ public class RegisterSkill {
 	
 	public static void register(SkillLevelBase skill) {
 		skillList.add(skill);
-		System.out.println("[RPGCore] Skill " + skill.skillName() + " loaded successfully!");
+		System.out.println("[RPGCore/MCSAO] Skill " + skill.skillName() + " loaded successfully!");
 	}
 	
 	public static String getDisplayNameForSkill(String skillId) {
