@@ -24,11 +24,11 @@ version = "0.1.Dev"
 group= "io.github.TeamSao" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "SwordArtOnline"
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 minecraft {
-    version = "1.8.9-11.15.1.1808"
+    version = "1.8.9-11.15.1.1722"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
@@ -61,6 +61,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compile files('lib/luaj-jse-3.0.1.jar')
 
 }
 

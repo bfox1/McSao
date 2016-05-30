@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.event;
 
+import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -10,8 +11,8 @@ import net.minecraftforge.common.MinecraftForge;
 public class SaoEventFactory
 {
 
-    public static void triggerStepEvent(AbstractStepTriggerEvent abstractStepTriggerEvent)
+    public static void fireQuestPickupEvent(QuestItemPickupEvent event)
     {
-        MinecraftForge.EVENT_BUS.post(abstractStepTriggerEvent);
+        MinecraftForge.EVENT_BUS.post(event);
     }
 }

@@ -10,6 +10,7 @@ import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
 import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
+import io.github.bfox1.SwordArtOnline.quest.QuestEventHandler;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,7 +31,7 @@ public class CommonProxy implements SaoProxy
 
 
 	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
-    public static final SaoExtendedProperty saoIEEP= new SaoExtendedProperty(new WorldFunction(), new PlayerInformation());
+    public static final SaoExtendedProperty saoIEEP = new SaoExtendedProperty(new WorldFunction(), new PlayerInformation());
 
     @Override
     public void initClientConfig(File file)
@@ -55,6 +56,7 @@ public class CommonProxy implements SaoProxy
     {
     	//MinecraftForge.EVENT_BUS.register(new SkillBarHandler());
         MinecraftForge.EVENT_BUS.register(new ForgeEventHandler());
+
     }
 
     @Override

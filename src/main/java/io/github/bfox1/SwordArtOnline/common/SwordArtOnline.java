@@ -1,8 +1,10 @@
 package io.github.bfox1.SwordArtOnline.common;
 
 import io.github.bfox1.SwordArtOnline.common.proxy.SaoProxy;
+import io.github.bfox1.SwordArtOnline.common.util.ClassReference;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.quest.Quests;
+import net.minecraft.command.ServerCommandManager;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY)
+@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class SwordArtOnline
 {
     @Mod.Instance(Reference.MODID)
@@ -33,26 +35,33 @@ public class SwordArtOnline
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+
         proxy.preInit(event);
+
+
     }
+
+
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event)
     {
         proxy.init(event);
         proxy.registerEventHandlers();
-        new Quests("test").setTestQuest();
+
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
     	proxy.postInit(event);
+
+        //System.out.println(ClassReference.getItem(Reference.MODID, "Elucidator"));
     }
 
     @Mod.EventHandler
     public void serverStarting(FMLServerStartedEvent event)
     {
-
+        ((ServerCommandManager)MinecraftServer.getServer().getCommandManager()).registerCommand(new CommandSao());
     }
 }

@@ -2,6 +2,8 @@ package io.github.bfox1.SwordArtOnline.common.items.swords;
 
 import io.github.bfox1.SwordArtOnline.common.items.SaoItemAbstract;
 import io.github.bfox1.SwordArtOnline.skill.weaponskill.WeaponSkillType;
+import net.minecraft.item.Item;
+import org.luaj.vm2.LuaValue;
 
 /**
  * Created by bfox1 on 4/3/2016.
@@ -29,6 +31,7 @@ public class SaoSwordItem extends SaoItemAbstract
     {
         return (SaoSwordItem)super.setUnlocalizedName(string);
     }
+
 
 
 

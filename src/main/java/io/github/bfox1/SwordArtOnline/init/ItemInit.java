@@ -7,7 +7,10 @@ import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalTeleport;
 import io.github.bfox1.SwordArtOnline.common.items.swords.SaoSwordItem;
 import io.github.bfox1.SwordArtOnline.common.util.RegisterUtility;
 import io.github.bfox1.SwordArtOnline.skill.weaponskill.WeaponSkillType;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 
 public class ItemInit
 {
@@ -58,9 +61,37 @@ public class ItemInit
 		}
 	}
 
-	public static void getSword(String name)
+	public SaoSwordItem getSwordIndex(int location)
 	{
+		if(saoSwordItem[location] != null)
+		{
+			return saoSwordItem[location];
+		}
+		return null;
+	}
 
+	public static SaoSwordItem getSwordByIndex(int location)
+	{
+		if(saoSwordItem[location] != null)
+		{
+			return saoSwordItem[location];
+		}
+		return null;
+	}
+
+	public static String getUnlocalizedItemName(int id)
+	{
+		Item item = Item.getItemById(id);
+		return item.getUnlocalizedName();
+	}
+
+	public static LuaValue getLuaSword(int location)
+	{
+		if(saoSwordItem[location] != null)
+		{
+			return CoerceJavaToLua.coerce(saoSwordItem[location]);
+		}
+		return null;
 	}
 
 }

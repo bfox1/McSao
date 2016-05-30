@@ -25,16 +25,19 @@ import net.minecraftforge.common.util.Constants;
  */
 public class SaoExtendedProperty implements IExtendedEntityProperties
 {
-    private static final String IEEP_ID = "SAOIEEP";
+    public static final String IEEP_ID = "SAOIEEP";
 
     private final WorldFunction function;
 
     private final PlayerInformation information;
+    public boolean containsQuestData;
+
 
     public SaoExtendedProperty(WorldFunction function, PlayerInformation information)
     {
         this.function = function;
         this.information = information;
+
     }
 
     @Override
@@ -44,6 +47,7 @@ public class SaoExtendedProperty implements IExtendedEntityProperties
 
         propertyTag = function.compressData(propertyTag);
         propertyTag = information.compressData(propertyTag);
+
 
         compound.setTag(IEEP_ID, propertyTag);
     }
@@ -55,6 +59,7 @@ public class SaoExtendedProperty implements IExtendedEntityProperties
         {
             NBTTagCompound propertyTag = compound.getCompoundTag(IEEP_ID);
             WorldFunction.uncompressData(propertyTag, this);
+            PlayerInformation.uncompressData(propertyTag, this);
         }
 
     }
@@ -105,4 +110,6 @@ public class SaoExtendedProperty implements IExtendedEntityProperties
     {
         SwordArtOnline.NETWORK_WRAPPER.sendTo(new SaoEntityPacket(this), (EntityPlayerMP) player);
     }
+
+
 }

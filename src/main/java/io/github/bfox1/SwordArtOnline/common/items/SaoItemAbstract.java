@@ -15,4 +15,10 @@ public abstract class SaoItemAbstract extends Item
         super();
         this.setCreativeTab(SaoTabsManager.SaoItems);
     }
+
+
+    public int getItemID()
+    {
+        return Item.getIdFromItem(this);
+    }
 }
