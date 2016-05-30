@@ -91,4 +91,9 @@ public class SkillLevelSwords extends SkillLevelBase implements IExtendedEntityP
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public String shortName() {
+		return "SRD";
+	}
 }

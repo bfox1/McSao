@@ -10,6 +10,7 @@ import co.uk.silvania.rpgcore.network.EquippedSkillsPacket;
 import co.uk.silvania.rpgcore.network.LevelPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -43,6 +44,7 @@ public abstract class SkillLevelBase {
 		addRequirements();
 		addIncompatibilities();
 		addDescription();
+		addEquipIssues();
 	}
 	
 	/**
@@ -52,14 +54,23 @@ public abstract class SkillLevelBase {
 	* @param player
 	*/
 	public void addXP(float xpAdd, EntityPlayer player) {
+		prtln("Attempting to add XP to " + player.getDisplayName() + "'s " + skillName() + " skill.");
 		if (canGainXP() && !player.capabilities.isCreativeMode) {
+			prtln("The skill can gain XP, and they're not in Creative.");
 			EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get(player);
 			//We check on your behalf to make sure the skill is equipped before allowing the XP to be added.
 			if (isSkillEquipped(player, skillId)) {
+				prtln("The skill is equipped.");
 				//We'll also make sure they've not equipped armour into the slot shared by a skill
 				if (!skillArmourConflict(equippedSkills, skillId, player)) {
+					prtln("There are no armour conflicts");
+					if ((xpAdd+getXP()) >= getXpForLevel(getLevel())) { levelUp(player, xpAdd); }
+					prtln("Adding " + xpAdd + " to " + player.getDisplayName() + "'s " + skillName() + " skill.");
+					
 					xp += xpAdd;
-	
+					
+					//RPGCore! This is where the renderer would show XP gain on-screen. Disabled in MCSAO.
+					
 					//Every time a skill gains XP, the global level also gets 10% of that XP.
 					GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
 					glevel.xpGlobal += (xpAdd/10.0);
@@ -77,16 +88,32 @@ public abstract class SkillLevelBase {
 	* @param player
 	*/
 	public void addXPWithUpdate(float xpAdd, EntityPlayer player) {
+		prtln("Adding " + xpAdd + " to " + player.getDisplayName() + "'s " + skillName() + " skill, and notifying client.");
 		addXP(xpAdd, player);
-		RPGCore.network.sendTo(new LevelPacket(getXP(), skillId), (EntityPlayerMP) player);
+		if (!player.worldObj.isRemote) {
+			GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
+			
+			RPGCore.network.sendTo(new LevelPacket(getXP(), -1, skillId), (EntityPlayerMP) player);
+			RPGCore.network.sendTo(new LevelPacket(glevel.getXPGlobal(), glevel.getSkillPoints(), glevel.skillId), (EntityPlayerMP) player);
+		}
 	}
 	
 	/**
-	* Force a levelup on the skill - Simply gets XP to next level, and then adds it.
-	* Does NOT check for equip - mainly used for skill points on STR/AGI.
+	 * Called when the player has levelled up. Do anything you want upon levelling up here (eg notifying of unlocks.)
+	 */
+	public void levelUp(EntityPlayer player, float xpAdd) {
+		verbose(player.getDisplayName() + " levelled up their " + skillName() + " skill! They are now level " + getLevelFromXP(getXP() + xpAdd));
+		if (!player.worldObj.isRemote) {
+			player.addChatComponentMessage(new ChatComponentText(nameFormat() + "Level up! " + skillName() + " is now level " + getLevelFromXP(getXP() + xpAdd)));
+		}
+	}
+	
+	/**
+	* Forces a levelUp by force-adding the amount of XP remaining to the next level.
 	*/
-	public void forceLevelUp(String skillId, EntityPlayer player) {
-
+	public void forceLevelUp(EntityPlayer player) {
+		prtln("Attemping to force a levelup for " + player.getDisplayName());
+		forceAddXP(xpToNextLevel()+1, player);
 	}
 	
 	/**
@@ -107,7 +134,11 @@ public abstract class SkillLevelBase {
 	* Force XP adding, even if the skill is not equipped or even unlocked.
 	* @param xpAdd
 	*/
-	public void forceAddXP(int xpAdd) {
+	public void forceAddXP(float xpAdd, EntityPlayer player) {
+		prtln("Force-adding XP to " + player.getDisplayName() + "xpAdd: " + xpAdd + ", xp: " + getXP() + " (" + (xpAdd+getXP()) + ") ? >= "  + getXpForLevel(getLevel()));
+		if ((xpAdd+getXP()) >= getXpForLevel(getLevel())) {
+			levelUp(player, xpAdd);
+		}
 		xp += xpAdd;
 	}
 	
@@ -122,13 +153,13 @@ public abstract class SkillLevelBase {
 	public static String addXPToSkill(int xpAdd, EntityPlayer player, String skillId) {
 		SkillLevelBase skill = getSkillByID(skillId, player);
 		if (skill != null) {
-			skill.forceAddXP(xpAdd);
-			RPGCore.network.sendTo(new LevelPacket(skill.getXP(), skill.skillId), (EntityPlayerMP) player);
+			skill.forceAddXP(xpAdd, player);
+			RPGCore.network.sendTo(new LevelPacket(skill.getXP(), -1, skill.skillId), (EntityPlayerMP) player);
 			return "\u00A7aAdded " + xpAdd + " xp to " + skill.skillName();
 		} else if (skillId.equalsIgnoreCase("globalLevel")) {
 			GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
-			glevel.xpGlobal += xpAdd;
-			RPGCore.network.sendTo(new LevelPacket((int)(glevel.getXPGlobal()*10), glevel.skillId), (EntityPlayerMP) player);
+			glevel.forceAddXP(xpAdd, player);
+			RPGCore.network.sendTo(new LevelPacket((int)(glevel.getXPGlobal()*10), glevel.getSkillPoints(), glevel.skillId), (EntityPlayerMP) player);
 			return "\u00A7aAdded " + xpAdd + " xp to global level.";
 		}
 		return "\u00A7cFailed to add xp!";
@@ -169,8 +200,8 @@ public abstract class SkillLevelBase {
 		if (slot == 7 && player.inventory.armorItemInSlot(0) != null) { equippedSkills.skillId7 = ""; removedSkill = true; }
 		if (slot == 8 && player.inventory.armorItemInSlot(0) != null) { equippedSkills.skillId8 = ""; removedSkill = true; }
 		
-		if (removedSkill) {
-			System.out.println("Armour and skill slot conflict! Removing skill and telling client..");
+		if (removedSkill && !player.worldObj.isRemote) {
+			prtln("Armour and skill slot conflict for " + player.getDisplayName() + "! Removing skill and telling client..");
 			RPGCore.network.sendTo(new EquippedSkillsPacket(
 				equippedSkills.getSkillInSlot(0), 
 				equippedSkills.getSkillInSlot(1), 
@@ -184,6 +215,8 @@ public abstract class SkillLevelBase {
 				equippedSkills.getSkillInSlot(9), 
 				equippedSkills.getSkillInSlot(10), 
 				equippedSkills.getSkillInSlot(11)), (EntityPlayerMP) player);
+
+			player.addChatMessage(new ChatComponentText("You had applied armour over your equipped skills. The skills in question have been removed."));
 		}
 		
 		return removedSkill;
@@ -201,15 +234,47 @@ public abstract class SkillLevelBase {
 	* Used anywhere you want to show XP relative to next level.
 	* @return string with XP/XP for next level
 	*/
-	public String getXPForPrint() {
-		return (int) getXP() + " / " + getXpForLevel(getLevel()+1);
+	public String getXPTotalForPrint() {
+		return getXPProgressForPrint() + " (" + (int) getXP() + ")";
+	}
+	
+	/** 
+	 * Same as getXPForPrint, but shows it relevant to the current level/next level instead of total XP's
+	 * @return string with XP/XP for next level
+	 */
+	public String getXPProgressForPrint() {
+		return (int) (getXP() - getXpForLevel(getLevel()-1)) + "/" + (getXpForLevel(getLevel()) - getXpForLevel(getLevel()-1));
+	}
+	
+	/**
+	 * Gets a percentage of the skills progression to next level.
+	 * @return percentage xp gained
+	 */
+	public String getXPTotalAsPercentage() {
+		return (int) Math.round((getXP()/getXpForLevel(getLevel()+1))*100) + "%";
+	}
+	
+	/**
+	 * Same as getXPAsPercentage, but relevant only to current level/next level instead of total XP's
+	 * @return percentage xp gained
+	 */
+	public String getXPProgressAsPercentage() {
+		return (int) Math.round((getXP() - getXpForLevel(getLevel()-1))/(getXpForLevel(getLevel()) - getXpForLevel(getLevel()-1))*100) + "%";
+	}
+	
+	/** 
+	 * Quick n' easy method to grab the current level.
+	 * @return
+	 */
+	public int getLevel() {
+		return getLevelFromXP(getXP());
 	}
 	
 	/**
 	* Calculates a level based on how much XP the player has.
 	* @return level, as an integer
 	*/
-	public int getLevel() {
+	public int getLevelFromXP(float xp) {
 		int base = config.baseXp;
 		int previousXp = config.baseXp;
 		int level = 1;
@@ -244,6 +309,9 @@ public abstract class SkillLevelBase {
 	* @return how much XP is required for the given level.
 	*/
 	public int getXpForLevel(int level) {
+		if (level < 1) {
+			return 0;
+		}
 		int base = config.baseXp;
 		int xpForLevel = config.baseXp;
 		
@@ -266,6 +334,7 @@ public abstract class SkillLevelBase {
 	* @param xpSet
 	*/
 	public void setXP(float xpSet) {
+		prtln("Setting XP to " + xpSet);
 		xp = xpSet;
 	}
 	
@@ -280,19 +349,10 @@ public abstract class SkillLevelBase {
 	}
 	
 	/**
-	* Clones the skill's properties, used on player death etc to persist skills through death.
-	* Should be overriden if you save anything more than XP in your skill (eg cooldowns)
-	* @param properties
-	*/
-	public void copy(SkillLevelBase properties) {
-		xp = properties.xp;
-	}
-	
-	/**
 	* Checks if the skill is unlocked, based off the global level.
 	* If you want custom skill requirements, override skillUnlocked() instead!
 	* @param player
-	* @return			
+	* @return
 	*/
 	public boolean isSkillUnlocked(EntityPlayer player) {
 		GlobalLevel glevel = (GlobalLevel) GlobalLevel.get(player);
@@ -317,7 +377,7 @@ public abstract class SkillLevelBase {
 	/**
 	 * True if skill can be equipped, false if not.
 	 * Remember to call super if you override, else it won't check for skill requirements or unlock level.
-	 * Use "equipIssues.add("");" to show on the skill list tooltip WHY they can't equip the skill - if you want.
+	 * Use addEquipIssues() to show on the skill list tooltip WHY they can't equip the skill - if you want.
 	 * You could always keep it a secret!
 	 * @param player
 	 * @return
@@ -365,6 +425,17 @@ public abstract class SkillLevelBase {
 		return true;
 	}
 	
+	//RPGCore! For API cross-compatability between RPGCore/MCASO this method is kept here, but will do nothing nor never be used in MCSAO's version.
+	/**
+	 * Get the colour of the XP bar, as an RGBA integer (Same as used in fontRender.drawString. 
+	 * RPGCore only- not used for MCSAO. 
+	 * https://www.shodor.org/stella2java/rgbint.html can give ints from RGB values.
+	 * @return
+	 */
+	public int xpBarColour() {
+		return 25600;
+	}
+	
 	/**
 	 * Should this skill be totally hidden from the skill list until it's unlocked?
 	 * (EG Kirito's Dual Blades skill from SAO)
@@ -403,6 +474,12 @@ public abstract class SkillLevelBase {
      * @return The name of your skill.
      */
 	public abstract String skillName();
+	
+	/**
+	 * Shorthand version of skill name, for example STR instead of Strength. Used in places that size matters, such as XP bars (If selected to)
+	 * @return
+	 */
+	public abstract String shortName();
 	
 	/**
 	 * Any text formatting you want to be applied to your skill's name. Not always used.
@@ -450,6 +527,12 @@ public abstract class SkillLevelBase {
 	 * Rendered as a tooltip when hovering over icons in the Skill Selection gui.
 	 */
 	public abstract void addDescription();
+	
+	/**
+	 * Add text to describe any non-standard reasons a skill may be locked, for example it requires a quest to be completed.
+	 * Add new entries using equipIssues.add("");
+	 */
+	public void addEquipIssues() {}
 	
 	/**
      * Adjust the speed in which this skill levels up.
@@ -509,4 +592,26 @@ public abstract class SkillLevelBase {
      * @return the Y position of the top-left of your 30x30 icon
      */
 	public abstract int iconZ();
+	
+	/**
+	 * If debug mode is enabled print the string to console when called.
+	 * Useful for skill debugging etc, something that would otherwise be very spammy.
+	 * @param str
+	 */
+	public void prtln(String str) {
+		if (config.debugMode) {
+			System.out.println("[RPGCore/" + skillName() + "] " + str);
+		}
+	}
+	
+	/**
+	 * If verbose is enabled pring the string to console when called.
+	 * Useful for minor things, such as players levelling up or equipping skills - things an admin might want to know about.
+	 * @param str
+	 */
+	public void verbose(String str) {
+		if (config.verbose) {
+			System.out.println("[RPGCore/" + skillName() + "] " + str);
+		}
+	}
 }

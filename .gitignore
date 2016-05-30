@@ -43,3 +43,4 @@ options.txt
 usercache.json
 usernamecache.json
 
+src/main/java/io/github/bfox1/SwordArtOnline/common/proxy/CommonProxy.java

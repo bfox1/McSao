@@ -40,16 +40,11 @@ public class SkillLevelAgility extends SkillLevelBase implements IExtendedEntity
 		player.registerExtendedProperties(SkillLevelAgility.staticSkillId, new SkillLevelAgility(player, staticSkillId));
 	}
 	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new SkillLevelAgility((EntityPlayer)event.entity, skillId));
-		}
-	}
+	//RPGCore! This is where we would construct.
 	
 	@Override
 	public boolean hasGui() {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -69,15 +64,13 @@ public class SkillLevelAgility extends SkillLevelBase implements IExtendedEntity
 		description.add(nameFormat() + "\u00A7l" + skillName());
 		description.add("Base Skill");
 		description.add("Required for most speed skills");
-		description.add("Levelled slowly by sprinting and jumping.");
-		description.add("Slowly increases sprint speed.");
+		description.add("Levelled using skill points gained from");
+		description.add("advancing your Global Level.");
 	}
-
+	
 	@Override
-	public double levelMultiplier() {
-		return 2.0;
-	}
-
+	public void activateSkill(EntityPlayer player, World world) {}
+	
 	@Override
 	public ResourceLocation skillIcon() {
 		return new ResourceLocation(RPGCore.MODID, "textures/gui/skills.png");
@@ -92,10 +85,24 @@ public class SkillLevelAgility extends SkillLevelBase implements IExtendedEntity
 	public int iconZ() {
 		return 0;
 	}
-
+	
 	@Override
-	public void activateSkill(EntityPlayer player, World world) {
-		// TODO Auto-generated method stub
-		
+	public boolean canGainXP() {
+		return false;
+	}
+	
+	@Override
+	public int xpBarColour() {
+		return 252;
+	}
+	
+	@Override
+	public String shortName() {
+		return "AGI";
+	}
+	
+	@Override
+	public String nameFormat() {
+		return "\u00A79";
 	}
 }

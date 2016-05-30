@@ -103,34 +103,6 @@ public class EquippedSkills implements IExtendedEntityProperties {
 		return player.getExtendedProperties("equippedSkills");
 	}
 	
-	@SubscribeEvent
-	public void onClonePlayer(PlayerEvent.Clone event) {
-		((EquippedSkills) EquippedSkills.get(event.entityPlayer)).copy((EquippedSkills) EquippedSkills.get(event.original));
-	}
-	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties("equippedSkills", new EquippedSkills());
-		}
-	}
-	
-	
-	public void copy(EquippedSkills properties) {
-		skillId0 = properties.skillId0;
-		skillId1 = properties.skillId1;
-		skillId2 = properties.skillId2;
-		skillId3 = properties.skillId3;
-		skillId4 = properties.skillId4;
-		skillId5 = properties.skillId5;
-		skillId6 = properties.skillId6;
-		skillId7 = properties.skillId7;
-		skillId8 = properties.skillId8;
-		skillId9 = properties.skillId9;
-		skillId10 = properties.skillId10;
-		skillId11 = properties.skillId11;
-	}
-	
 	public String getSkillInSlot(int slot) {
 		if (slot == 0 && skillId0 != null) { return skillId0; }
 		if (slot == 1 && skillId1 != null) { return skillId1; }

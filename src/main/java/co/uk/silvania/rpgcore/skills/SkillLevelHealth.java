@@ -8,8 +8,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IExtendedEntityProperties;
-import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityProperties, ISubSkillTypeIdentifier {
 	
@@ -40,11 +38,11 @@ public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityP
 		player.registerExtendedProperties(SkillLevelHealth.staticSkillId, new SkillLevelHealth(player, staticSkillId));
 	}
 	
-	@SubscribeEvent
-	public void onEntityConstructing(EntityConstructing event) {
-		if (event.entity instanceof EntityPlayer) {
-			event.entity.registerExtendedProperties(skillId, new SkillLevelHealth((EntityPlayer)event.entity, skillId));
-		}
+	//RPGCore! Construct entity!
+	
+	@Override
+	public double levelMultiplier() {
+		return 3;
 	}
 
 	@Override
@@ -57,35 +55,25 @@ public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityP
 		return "Health";
 	}
 
-	@Override public void openGui() {}
-
 	@Override
-	public void addRequirements() {
-		requiredSkills.add("skillAgility"); 
-		requiredSkills.add("skillStrength");
-		requiredSkills.add("skillSwords");
-		requiredSkills.add("skillJump"); 
-	}
+	public void openGui() {}
 
 	@Override
 	public void addDescription() {
 		description.add(nameFormat() + "\u00A7l" + skillName());
-		description.add("\u00A7oRequirements are just to show how requirements work.");
-		description.add("\u00A7oRequirements can never be met.");
 		description.add("Each level gives +1 HP");
 		description.add("Experience earned by taking damage.");
-		description.add("Different damage sources give different XP.");		
+		description.add("Different damage sources give different XP.");
+		description.add("\u00A7oNot yet implemented.");
 	}
 	
 	@Override
-	public boolean secretSkill() {
-		return true;
+	public int unlockedLevel() {
+		return 5;
 	}
-
+	
 	@Override
-	public double levelMultiplier() {
-		return 1.2;
-	}
+	public void activateSkill(EntityPlayer player, World world) {}
 
 	@Override
 	public ResourceLocation skillIcon() {
@@ -103,13 +91,28 @@ public class SkillLevelHealth extends SkillLevelBase implements IExtendedEntityP
 	}
 	
 	@Override
-	public int unlockedLevel() {
-		return 3;
+	public void xpGained(String skillId, float xpAdd, EntityPlayer player) {
+		SkillLevelHealth skill = (SkillLevelHealth) SkillLevelHealth.get(player, skillId);
+		skill.addXP(xpAdd/10, player);
 	}
-
+	
 	@Override
-	public void activateSkill(EntityPlayer player, World world) {
-		// TODO Auto-generated method stub
-		
+	public boolean skillUnlocked() {
+		return false;
+	}
+	
+	@Override
+	public void addEquipIssues() {
+		equipIssues.add("Skill not yet implemented.");
+	}
+	
+	@Override
+	public String shortName() {
+		return "HP";
+	}
+	
+	@Override
+	public String nameFormat() {
+		return "\u00A74";
 	}
 }

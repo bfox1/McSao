@@ -111,4 +111,9 @@ public class SkillLevelPunch extends SkillLevelBase implements IExtendedEntityPr
 	public void activateSkill(EntityPlayer player, World world) {
 
 	}
+	
+	@Override
+	public String shortName() {
+		return "POW";
+	}
 }

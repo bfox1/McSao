@@ -233,4 +233,9 @@ public class SkillLevelJump extends SkillLevelBase implements IExtendedEntityPro
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public String shortName() {
+		return "JUMP";
+	}
 }
