@@ -1,7 +1,7 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
 import io.github.bfox1.SwordArtOnline.common.util.LogHelper;
-import org.apache.logging.log4j.Level;
+
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
@@ -72,7 +72,7 @@ public class Quests
                 }
                 else
                 {
-                    LogHelper.log(Level.ERROR, nFile.getName() + "is not valid and cannot be loaded!");
+                    //LogHelper.log(Level.ERROR, nFile.getName() + "is not valid and cannot be loaded!");
                 }
             }
         }

@@ -1,6 +1,5 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
-import com.google.gson.JsonObject;
 import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,22 +58,7 @@ public class QuestManager
     public final void saveQuestData(EntityPlayer player)
     {
         SaoExtendedProperty saoExtendedProperty = (SaoExtendedProperty) player.getExtendedProperties(SaoExtendedProperty.IEEP_ID);
-        JsonObject obj = new JsonObject();
-       /* List<QuestGlobals> globalses = saoExtendedProperty.getInformation().getQuestsList();
 
-        for(QuestGlobals g : globalses)
-        {
-            if(g != null)
-            {
-                obj.addProperty(g.getQuestName(), g.getQuestID());
-            }
-        }
-        try {
-            FileWriter writer = new FileWriter("SaoData/" + player.getUniqueID() + ".json");
-            writer.write(obj.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
 
     }
 
