@@ -67,7 +67,7 @@ public class SaoExtendedProperty implements IExtendedEntityProperties
     @Override
     public void init(Entity entity, World world)
     {
-
+      //  entity.registerExtendedProperties(IEEP_ID, new SaoExtendedProperty(new WorldFunction(), new PlayerInformation()));
     }
 
     public static SaoExtendedProperty getData(Entity player)

@@ -5,6 +5,8 @@ import io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy;
 import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOTeleporter;
+import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
+import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -96,9 +98,9 @@ public class ForgeEventHandler
     public void onEntityConstructing(EntityEvent.EntityConstructing event)
     {
         if(event.entity instanceof EntityPlayer)
-        if(event.entity.getExtendedProperties(CommonProxy.saoIEEP.getIEEP_ID()) == null)
+        if(event.entity.getExtendedProperties(SaoExtendedProperty.IEEP_ID) == null)
         {
-            event.entity.registerExtendedProperties(CommonProxy.saoIEEP.getIEEP_ID(), CommonProxy.saoIEEP);
+            event.entity.registerExtendedProperties(SaoExtendedProperty.IEEP_ID,new SaoExtendedProperty(new WorldFunction(), new PlayerInformation()));
         }
 
     }

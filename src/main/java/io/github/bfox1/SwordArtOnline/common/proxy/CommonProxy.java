@@ -31,7 +31,7 @@ public class CommonProxy implements SaoProxy
 
 
 	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
-    public static final SaoExtendedProperty saoIEEP = new SaoExtendedProperty(new WorldFunction(), new PlayerInformation());
+
 
     @Override
     public void initClientConfig(File file)

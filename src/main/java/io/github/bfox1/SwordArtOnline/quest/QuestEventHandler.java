@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
+import ibxm.Player;
 import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestPlayerInteract;
@@ -37,6 +38,7 @@ public class QuestEventHandler
     {
         SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entityPlayer));
 
+        if(property.getInformation().getQuestsList() != null)
         if(property.getInformation().getQuestsList().size() != 0)
         {
 
@@ -46,13 +48,13 @@ public class QuestEventHandler
     }
 
     @SubscribeEvent
-    public void onPlayerJoinEvent(PlayerEvent.PlayerLoggedInEvent event)
+    public void onPlayerJoinEvent(EntityJoinWorldEvent event)
     {
-        if(event.player != null)
+        if(event.entity != null && event.entity instanceof EntityPlayer)
         {
-            if(event.player.worldObj.isRemote)
+            if(!event.entity.worldObj.isRemote)
             {
-                SaoExtendedProperty property = (SaoExtendedProperty.getData(event.player));
+                SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entity));
                 manager.setPlayerQuest(property, "MiscTemplate", "testObjective.lua");
             }
 

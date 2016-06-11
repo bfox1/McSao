@@ -124,10 +124,9 @@ public abstract class SkillLevelBase {
 	*/
 	public boolean isSkillEquipped(EntityPlayer player, String skillId) {
 		EquippedSkills equippedSkills = (EquippedSkills) EquippedSkills.get(player);
-		if (equippedSkills.isSkillEquipped(skillId)) {
-			return true;
-		}
-		return false;
+		return equippedSkills != null &&
+				equippedSkills.isSkillEquipped(skillId);
+
 	}
 	
 	/**

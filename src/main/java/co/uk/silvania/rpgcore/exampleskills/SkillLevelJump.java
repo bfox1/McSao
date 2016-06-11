@@ -98,18 +98,21 @@ public class SkillLevelJump extends SkillLevelBase implements IExtendedEntityPro
 		if (event.entity instanceof EntityPlayer) {
 			//Get the skill in order to modify it
 			SkillLevelJump skill = (SkillLevelJump) SkillLevelJump.get((EntityPlayer) event.entity, skillId);
+		if(skill != null)
+		{
 			//XP is a float, so you can use decimals if you really really want to.
 			//It's always trimmed to an int for player views though, so if they have 30.99 xp, it'll still show 30.
 			skill.addXP(1, (EntityPlayer) event.entity);
-			
+
 			//There is a "forceAddXP(xp)" too - This will add XP even if the skill isn't equipped.
 			//I dunno why you'd ever want to do that, but you can if you really want to.
-			
+
 			//Just tell the console the player gained XP.
 			//Example of checking if the skill is equipped. Equipped-ness is checked automatically on addXP.
 			if (isSkillEquipped((EntityPlayer) event.entity, skillId)) {
 				System.out.println("It jumped! XP: " + skill.getXP());
 			}
+		}
 		}
 	}
 

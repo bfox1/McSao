@@ -16,6 +16,7 @@ public class ServerProxy extends CommonProxy
     @Override
     public void registerEventHandlers()
     {
+        super.registerEventHandlers();
         MinecraftForge.EVENT_BUS.register(new QuestEventHandler());
     }
 }

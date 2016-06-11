@@ -43,7 +43,7 @@ public final class QuestGlobals
         this.eventType = globals.getEventType();
     }
 
-    public static QuestGlobals updateQuestGlobals(QuestGlobals global, Globals value)
+    static QuestGlobals updateQuestGlobals(QuestGlobals global, Globals value)
     {
         return new QuestGlobals(global, value);
     }
@@ -51,28 +51,28 @@ public final class QuestGlobals
         return value;
     }
 
-    public int getQuestID() {
+    int getQuestID() {
         return questID;
     }
 
-    public String getQuestName() {
+    String getQuestName() {
         return questName;
     }
 
-    public int getStepLocation() {
+    private int getStepLocation() {
         return stepLocation;
     }
 
-    public void setStepLocation(int stepLocation) {
+    private void setStepLocation(int stepLocation) {
         this.stepLocation = stepLocation;
     }
 
-    public EventType getEventType()
+    private EventType getEventType()
     {
         return eventType;
     }
 
-    public void fireStepEvent(Event event)
+    void fireStepEvent(Event event)
     {
 
         switch (eventType)
@@ -93,12 +93,43 @@ public final class QuestGlobals
                     this.eventType = EventType.getType(value.get("getEventType").call().toString());
                     break;
                 }
+            case ENTITYMOUNT:
+            {
+                value.get("onEntityMountEvent").call(CoerceJavaToLua.coerce(event), CoerceJavaToLua.coerce(new ClassReference()));
+                this.setStepLocation(value.get("getStepLocation").call().toint());
+                this.eventType = EventType.getType(value.get("getEventType").call().toString());
+            }
+            case PLAYERDROPS:
+            {
+                value.get("onPlayerDropItemEvent").call(CoerceJavaToLua.coerce(event), CoerceJavaToLua.coerce(new ClassReference()));
+                this.setStepLocation(value.get("getStepLocation").call().toint());
+                this.eventType = EventType.getType(value.get("getEventType").call().toString());
+            }
+            case PLAYEROPENCONTAINER:
+            {
+                doEvents("playerOpensContainerEvent", event);
+            }
+            case PLAYERSLEEPINBED:
+            {
+                doEvents("playerSleepInBedEvent", event);
+            }
+            case PLAYERUSEITEM:
+            {
+                doEvents("playerUseItemEvent", event);
+            }
             default:
-
         }
     }
 
-    public String getFileName() {
+
+    private void doEvents(String eventName, Event event)
+    {
+        value.get(eventName).call(CoerceJavaToLua.coerce(event), CoerceJavaToLua.coerce(new ClassReference()));
+        this.setStepLocation(value.get("getStepLocation").call().toint());
+        this.eventType = EventType.getType(value.get("getEventType").call().toString());
+    }
+
+    String getFileName() {
         return fileName;
     }
 }
