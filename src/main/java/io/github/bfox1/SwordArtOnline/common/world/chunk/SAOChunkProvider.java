@@ -22,9 +22,11 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
@@ -55,6 +57,9 @@ import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraftforge.event.terraingen.WorldTypeEvent;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by Earbuds on 4/15/2016.
@@ -77,7 +82,8 @@ public class SAOChunkProvider implements IChunkProvider {
 	private final float[] parabolicField;
 	private double[] stoneNoise = new double[256];
 	private MapGenBase ravineGenerator = new MapGenRavine();
-	private BiomeGenBase[] biomesForGeneration;
+	// old::: private BiomeGenBase biomesForGeneration;
+	private Biome[] biomesForGeneration; //New
 	double[] field_147427_d;
 	double[] field_147428_e;
 	double[] field_147425_f;
@@ -134,7 +140,8 @@ public class SAOChunkProvider implements IChunkProvider {
 	 */
 	public void func_147424_a(int chunkXCoord, int chunkZCoord, Block[] chunkOfBlocks) {
 		byte b0 = 63;
-		this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkXCoord * 4 - 2, chunkZCoord * 4 - 2, 10, 10);
+		//Old::: 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkXCoord * 4 - 2, chunkZCoord * 4 - 2, 10, 10);
+		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkXCoord * 4 - 2, chunkZCoord * 4 - 2, 10, 10); //new
 		this.func_147423_a(chunkXCoord * 4, 0, chunkZCoord * 4);
 
 		for(int k = 0; k < 4; ++k) {
@@ -222,12 +229,18 @@ public class SAOChunkProvider implements IChunkProvider {
 		}
 	}
 
+	@Nullable
+	@Override
+	public Chunk getLoadedChunk(int x, int z) {
+		return null;
+	}
+
 	@Override
 	public Chunk provideChunk(int x, int z) {
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
-        this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+        this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBlocksForBiome(x, z, chunkprimer, this.biomesForGeneration);
         Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
