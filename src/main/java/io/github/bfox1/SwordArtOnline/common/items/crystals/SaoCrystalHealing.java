@@ -1,7 +1,5 @@
 package io.github.bfox1.SwordArtOnline.common.items.crystals;
 
-import io.github.bfox1.SwordArtOnline.common.util.Models;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;

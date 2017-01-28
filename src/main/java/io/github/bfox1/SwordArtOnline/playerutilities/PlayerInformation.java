@@ -1,6 +1,6 @@
 package io.github.bfox1.SwordArtOnline.playerutilities;
 
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
+
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;

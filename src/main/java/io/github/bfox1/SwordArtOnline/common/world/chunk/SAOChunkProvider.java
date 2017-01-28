@@ -1,12 +1,28 @@
 package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.CAVE;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.MINESHAFT;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.SCATTERED_FEATURE;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.STRONGHOLD;
+import static net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.VILLAGE;
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS;
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.DUNGEON;
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ICE;
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAKE;
+import static net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAVA;
+
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.SpawnerAnimals;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -14,15 +30,31 @@ import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.gen.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-
-import java.util.List;
-import java.util.Random;
-
+import net.minecraft.world.gen.ChunkProviderSettings;
+import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.MapGenCaves;
+import net.minecraft.world.gen.MapGenRavine;
+import net.minecraft.world.gen.NoiseGenerator;
+import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 //import net.minecraft.world.gen.feature.MapGenScatteredFeature;
+import net.minecraft.world.gen.feature.WorldGenDungeons;
+import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.structure.MapGenMineshaft;
+import net.minecraft.world.gen.structure.MapGenScatteredFeature;
+import net.minecraft.world.gen.structure.MapGenStronghold;
+import net.minecraft.world.gen.structure.MapGenVillage;
+import net.minecraftforge.common.MinecraftForge;
 //import net.minecraftforge.event.Event.Result;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
+import net.minecraftforge.event.terraingen.PopulateChunkEvent;
+import net.minecraftforge.event.terraingen.TerrainGen;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunkProvider;
 
 /**
  * Created by Earbuds on 4/15/2016.
@@ -166,18 +198,18 @@ public class SAOChunkProvider implements IChunkProvider {
 		}
 	}
 	
-	public void replaceBlocksForBiome(int chunkZCoord, int chunkXCoord, ChunkPrimer primer, BiomeGenBase[] biomes){
-        net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks event = new net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks(this, chunkZCoord, chunkXCoord, primer, this.worldObj);
+	public void replaceBlocksForBiome(int chunkX, int chunkY, ChunkPrimer primer, BiomeGenBase[] biomes){
+        net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks event = new net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks(this, chunkX, chunkY, primer, this.worldObj);
 		MinecraftForge.EVENT_BUS.post(event);
         if(event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY) return;
 
 		double d0 = 0.03125D;
-        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkZCoord * 16), (double)(chunkXCoord * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
+        this.stoneNoise = this.noiseGen4.func_151599_a(this.stoneNoise, (double)(chunkX * 16), (double)(chunkY * 16), 16, 16, d0 * 2.0D, d0 * 2.0D, 1.0D);
 
         for(int i = 0; i < 16; ++i) {
             for(int j = 0; j < 16; ++j) {
                 BiomeGenBase biomegenbase = biomes[j + i * 16];
-                biomegenbase.genTerrainBlocks(this.worldObj, this.rand, primer, chunkXCoord * 16 + i, chunkZCoord * 16 + j, this.stoneNoise[j + i * 16]);
+                biomegenbase.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + i, chunkY * 16 + j, this.stoneNoise[j + i * 16]);
             }
         }
 	}
@@ -235,7 +267,7 @@ public class SAOChunkProvider implements IChunkProvider {
 					for(int i2 = -b0; i2 <= b0; ++i2) {
 						BiomeGenBase biomegenbase1 = this.biomesForGeneration[j1 + l1 + 2 + (k1 + i2 + 2) * 10];
 						float f3 = biomegenbase1.minHeight;
-						float f4 = biomegenbase1.maxHeight;
+						float f4 = 12;
 
 						if(this.worldType == WorldType.AMPLIFIED && f3 > 0.0F) {
 							f3 = 1.0F + f3 * 2.0F;
@@ -341,8 +373,8 @@ public class SAOChunkProvider implements IChunkProvider {
 			//this.towerGen.generate(this.worldObj, this.rand, chunkX, chunkZ, 40);
 		}
 
-
-		/*int k1;
+		/*
+		int k1;
 		int l1;
 		int i2;
 
@@ -368,8 +400,8 @@ public class SAOChunkProvider implements IChunkProvider {
 				// Ian - Attempt to disable lava. This didn't work on its own for whatever reason. 
 				// I blame the dungeon spawn code below.
 			}
-		}*/
-
+		}
+		*/
 		
 		BlockFalling.fallInstantly = false;
 	}
@@ -421,8 +453,7 @@ public class SAOChunkProvider implements IChunkProvider {
 	public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {}
 
 	public void setBlocksInChunk(int p_180518_1_, int p_180518_2_, ChunkPrimer p_180518_3_) {
-	/*	this.biomesForGeneration =
-	this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
+		this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
 		this.func_147423_a(p_180518_1_ * 4, 0, p_180518_2_ * 4);
 
 		for(int i = 0; i < 4; ++i) {
@@ -476,88 +507,5 @@ public class SAOChunkProvider implements IChunkProvider {
 	            }
 			}
 		}
-		*/
-		byte b0 = 63;
-		this.biomesForGeneration =
-				this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, p_180518_1_ * 4 - 2, p_180518_2_ * 4 - 2, 10, 10);
-		this.func_147423_a(p_180518_1_ * 4, 0, p_180518_2_ * 4);
-
-		for (int k = 0; k < 4; ++k)
-		{
-			int l = k * 5;
-			int i1 = (k + 1) * 5;
-
-			for (int j1 = 0; j1 < 4; ++j1)
-			{
-				int k1 = (l + j1) * 33;
-				int l1 = (l + j1 + 1) * 33;
-				int i2 = (i1 + j1) * 33;
-				int j2 = (i1 + j1 + 1) * 33;
-
-				for (int k2 = 0; k2 < 32; ++k2)
-				{
-					double d0 = 0.125D;
-					double d1 = this.field_147434_q[k1 + k2];
-					double d2 = this.field_147434_q[l1 + k2];
-					double d3 = this.field_147434_q[i2 + k2];
-					double d4 = this.field_147434_q[j2 + k2];
-					double d5 = (this.field_147434_q[k1 + k2 + 1] - d1) * d0;
-					double d6 = (this.field_147434_q[l1 + k2 + 1] - d2) * d0;
-					double d7 = (this.field_147434_q[i2 + k2 + 1] - d3) * d0;
-					double d8 = (this.field_147434_q[j2 + k2 + 1] - d4) * d0;
-
-					for (int l2 = 0; l2 < 8; ++l2)
-					{
-						double d9 = 0.25D;
-						double d10 = d1;
-						double d11 = d2;
-						double d12 = (d3 - d1) * d9;
-						double d13 = (d4 - d2) * d9;
-
-						for (int i3 = 0; i3 < 4; ++i3)
-						{
-							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2 * 8 + l2;
-							short short1 = 256;
-							j3 -= short1;
-							double d14 = 0.25D;
-							double d16 = (d11 - d10) * d14;
-							double d15 = d10 - d16;
-
-							for (int k3 = 0; k3 < 4; ++k3)
-							{
-								if ((d15 += d16) > 0.0D)
-								{
-									//Ian - Attempt to replace all blocks with empty spots here and in the next block.
-									//I believe this is the filler block
-									//chunkOfBlocks[j3 += short1] = Blocks.air;
-									p_180518_3_.setBlockState(j3 += short1, Blocks.air.getDefaultState());
-								}
-								else if (k2 * 8 + l2 < b0)
-								{
-									//And I think this is the topper block.
-									//chunkOfBlocks[j3 += short1] = Blocks.air;
-									p_180518_3_.setBlockState(j3 += short1, Blocks.air.getDefaultState());
-								}
-								else
-								{
-									//chunkOfBlocks[j3 += short1] = null;
-									p_180518_3_.setBlockState(j3 += short1, null);
-								}
-							}
-
-							d10 += d12;
-							d11 += d13;
-						}
-
-						d1 += d5;
-						d2 += d6;
-						d3 += d7;
-						d4 += d8;
-					}
-				}
-			}
-		}
 	}
-
-
 }

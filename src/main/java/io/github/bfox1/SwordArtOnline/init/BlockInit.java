@@ -14,12 +14,14 @@ public class BlockInit
     public static final SaoBlockVariationAbstract aincradGrassVariation;
     public static final SaoBlockVariationAbstract aincradStoneVariation;
     public static final SaoBlockVariationAbstract aincradDirtVariation;
+
+
     static
     {
-        aincradCobbleVariation =  new AincradCobbleVariation(Material.rock, 3).setUnlocalizedName("AincradCobble").setSubTypeFullNameList();
-        aincradGrassVariation = new AincradGrassVariation(Material.grass, 4).setUnlocalizedName("AincradGrass").setSubTypeFullNameList();
-        aincradStoneVariation = new AincradStoneVariation(Material.rock, 4).setUnlocalizedName("AincradStone").setSubTypeFullNameList();
-        aincradDirtVariation = new AincradDirtVariation(Material.ground, 4).setUnlocalizedName("AincradDirt").setSubTypeFullNameList();
+        aincradCobbleVariation =  new AincradCobbleVariation(Material.ROCK, 3).setUnlocalizedName("AincradCobble").setSubTypeFullNameList();
+        aincradGrassVariation = new AincradGrassVariation(Material.GRASS, 4).setUnlocalizedName("AincradGrass").setSubTypeFullNameList();
+        aincradStoneVariation = new AincradStoneVariation(Material.ROCK, 4).setUnlocalizedName("AincradStone").setSubTypeFullNameList();
+        aincradDirtVariation = new AincradDirtVariation(Material.GROUND, 4).setUnlocalizedName("AincradDirt").setSubTypeFullNameList();
     }
 
 

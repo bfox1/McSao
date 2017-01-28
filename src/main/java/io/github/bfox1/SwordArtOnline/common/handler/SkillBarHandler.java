@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -79,7 +79,7 @@ public class SkillBarHandler {
 	{
 		if(isSkillBarButtonDown)
 		{
-			if(event.type == event.type.HOTBAR)
+			if(event.getType() == event.getType().HOTBAR)
 			{
 				event.setCanceled(true);
 			}

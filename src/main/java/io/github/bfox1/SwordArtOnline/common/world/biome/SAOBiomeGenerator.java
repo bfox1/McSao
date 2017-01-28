@@ -1,16 +1,18 @@
 package io.github.bfox1.SwordArtOnline.common.world.biome;
 
-import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
+import java.util.ArrayList;
+import java.util.Random;
+
 import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
+import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.ChunkPrimer;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class SAOBiomeGenerator extends BiomeGenBase
 {
@@ -75,10 +77,6 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		return centerPoints;
 	}
 	
-	public FloorPoint getFloorPointAtIndex(int index) {
-		return floorCenters.get(index);
-	}
-	
 	private void setFloorPointSize(int floorNumber, int radius, int wallThickness) {
 		if(floorNumber <= 0 || floorNumber >= 100) return;
 		FloorPoint floor = floorCenters.get(floorNumber-1);
@@ -136,8 +134,7 @@ public class SAOBiomeGenerator extends BiomeGenBase
 	}
 	
 	public void genVoidTerrain(World world, Random random, ChunkPrimer primer, int x, int z, double noiseGenSeed) {
-		if(x <= floorsEnd && x >= -wallEnd && z <= floorsEnd && z >= -wallEnd)
-		{
+		if(x <= floorsEnd && x >= -wallEnd && z <= floorsEnd && z >= -wallEnd) {
 			int floorNumber = getCurrentFloorNumber(x, z);
 			if(floorNumber == 0) return;
 			currentFloor = floorCenters.get(floorNumber-1);
@@ -145,53 +142,34 @@ public class SAOBiomeGenerator extends BiomeGenBase
 			
 			int chunkX = x & 15;
 	        int chunkZ = z & 15;
-			int chunkHeight = 256;
-
-			int noiseGenRand = (int)Math.pow(noiseGenSeed/3.0D + 3.0D, currentFloor.getFloorAmplitude());
-
-
-			if(distance <= wallEnd && distance > wallStart)
-			{
+	        
+	        if(distance <= wallEnd && distance > wallStart) {
 				int wallTop = ((wallThickness-(wallEnd - distance)) * wallSegmentHeight)+40;
-
 	        	int wallBottom = wallTop-wallSegmentHeight;
-				//System.out.println("\n Set wall up here.");
-				for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
-				{
-					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;
-
-		        	if(blockHeight <= wallTop && blockHeight >= wallBottom)
-					{
-		        		primer.setBlockState(blockIndex, this.wallBlock);
+	        	
+				for (int blockHeight = 255; blockHeight >= 0; --blockHeight) {
+		        	if(blockHeight <= wallTop && blockHeight >= wallBottom) {
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, this.wallBlock);
 		        	}
-
 		        }
-			}else if(distance <= wallStart)
-			{
-
+			}else if(distance <= wallStart) {
 		        IBlockState aincradGrass = this.topBlock;
 		        IBlockState aincradDirt = this.fillerBlock;
 		        		        
-		        int blockMaxHeight = noiseGenRand + 40;
-		        for (int blockHeight = 255; blockHeight >= 0; --blockHeight)
-				{
-					int blockIndex = (chunkZ * 16 + chunkX) * chunkHeight + blockHeight;
-
-		        	if(blockHeight == blockMaxHeight)
-					{
-		        		primer.setBlockState(blockIndex, aincradGrass);
+		        int blockMaxHeight = 60;
+		        
+		        for (int blockHeight = 255; blockHeight >= 0; --blockHeight) {
+		        	if(blockHeight == blockMaxHeight) {
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, aincradGrass);
 		        	}
-		        	else if(blockHeight < blockMaxHeight && blockHeight >= 40)
-					{
-		        		primer.setBlockState(blockIndex, aincradDirt);
+		        	else if(blockHeight < blockMaxHeight && blockHeight >= 40) {
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, aincradDirt);
 		        	}
-		        	else if(blockHeight < 40 && blockHeight >= 0 && isWithinCone(distance, blockHeight))
-					{
-		        		primer.setBlockState(blockIndex, aincradDirt);
+		        	else if(blockHeight < blockMaxHeight && blockHeight >= 0 && isWithinCone(distance, blockHeight)) {
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, aincradDirt);
 		        	}
-		        	else
-					{
-		        		primer.setBlockState(blockIndex, Blocks.air.getDefaultState());
+		        	else {
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, Blocks.air.getDefaultState());
 		        	}
 	            }
 	        }

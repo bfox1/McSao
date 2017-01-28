@@ -1,9 +1,7 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
-import ibxm.Player;
 import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
-import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestPlayerInteract;
 import io.github.bfox1.SwordArtOnline.common.proxy.ServerProxy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;

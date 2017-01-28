@@ -4,9 +4,11 @@ import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.border.WorldBorder;
 import org.lwjgl.opengl.GL11;
 
 public class SaoHUD extends Gui
@@ -57,7 +59,8 @@ public class SaoHUD extends Gui
 		GL11.glColor3d(2 * (1 - percent), 2 * percent, 0);
 		
 		Tessellator t = Tessellator.getInstance();
-		WorldRenderer w = t.getWorldRenderer();
+
+		net.minecraft.client.renderer.VertexBuffer w = t.getBuffer();
 		w.begin(7, DefaultVertexFormats.POSITION_TEX);
 		w.pos(XPOS + 241 / SCALE, YPOS + 27 / SCALE, this.zLevel).tex(0, 0).endVertex();;
         w.pos(XPOS + 241 / SCALE, YPOS + 27 / SCALE + HEIGHFOR, this.zLevel).tex(0, 1).endVertex();;
@@ -83,7 +86,7 @@ public class SaoHUD extends Gui
 		GL11.glEnable(GL11.GL_BLEND);
 		
 		Tessellator t = Tessellator.getInstance();
-		WorldRenderer w = t.getWorldRenderer();
+		net.minecraft.client.renderer.VertexBuffer w = t.getBuffer();
 		w.begin(7, DefaultVertexFormats.POSITION_TEX);
 		w.pos(XPOS, YPOS, this.zLevel).tex(0, 0).endVertex();;
         w.pos(XPOS, YPOS + HEIGHTBACK, this.zLevel).tex(0, 1).endVertex();;

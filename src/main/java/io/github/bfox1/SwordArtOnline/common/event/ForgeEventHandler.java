@@ -1,22 +1,13 @@
 package io.github.bfox1.SwordArtOnline.common.event;
 
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
+
 import io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy;
 import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.common.world.SAOTeleporter;
-import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
-import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -44,7 +35,7 @@ public class ForgeEventHandler
     @SubscribeEvent(priority = EventPriority.NORMAL)
     public void onRenderHealthBar(RenderGameOverlayEvent.Pre event)
     {
-        if(event.type.equals(RenderGameOverlayEvent.ElementType.HEALTH) && event.isCancelable() /*&& mc.thePlayer.worldObj.provider.getDimensionId() == Reference.DIMENSIONID*/)
+        if(event.getType().equals(RenderGameOverlayEvent.ElementType.HEALTH) && event.isCancelable() /*&& mc.thePlayer.worldObj.provider.getDimensionId() == Reference.DIMENSIONID*/)
         {
             event.setCanceled(true);
             ClientProxy.saoHud.drawBase();
@@ -64,7 +55,7 @@ public class ForgeEventHandler
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
                 ((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
-				playerMP.mcServer.getConfigurationManager().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
+				//playerMP.setWorld().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				
 				//((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 			}
@@ -94,46 +85,4 @@ public class ForgeEventHandler
 
     }
 
-    @SubscribeEvent
-    public void onEntityConstructing(EntityEvent.EntityConstructing event)
-    {
-        if(event.entity instanceof EntityPlayer)
-        if(event.entity.getExtendedProperties(SaoExtendedProperty.IEEP_ID) == null)
-        {
-            event.entity.registerExtendedProperties(SaoExtendedProperty.IEEP_ID,new SaoExtendedProperty(new WorldFunction(), new PlayerInformation()));
-        }
-
-    }
-
-    @SubscribeEvent
-    public void entityJoinedWorld(EntityJoinWorldEvent event)
-    {
-        SaoExtendedProperty property = SaoExtendedProperty.getData(event.entity);
-
-        if(property != null)
-        {
-            property.entitySpawned(event.world, event.entity);
-        }
-    }
-
-    @SubscribeEvent
-    public void playerStartedTracking(PlayerEvent.StartTracking event)
-    {
-        SaoExtendedProperty property = SaoExtendedProperty.getData(event.target);
-        if(property != null)
-        {
-            property.playerStartedTracking(event.entityPlayer);
-        }
-    }
-
-    @SubscribeEvent
-    public void onClonePlayer(PlayerEvent.Clone event)
-    {
-        if(event.wasDeath)
-        {
-            NBTTagCompound compound = new NBTTagCompound();
-            SaoExtendedProperty.getData(event.original).saveNBTData(compound);
-            SaoExtendedProperty.getData(event.entityPlayer).loadNBTData(compound);
-        }
-    }
 }

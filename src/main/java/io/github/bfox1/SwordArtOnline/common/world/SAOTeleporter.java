@@ -2,10 +2,12 @@ package io.github.bfox1.SwordArtOnline.common.world;
 
 import com.google.common.collect.Lists;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.LongHashMap;
-import net.minecraft.util.MathHelper;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
@@ -21,7 +23,7 @@ import java.util.Random;
 public class SAOTeleporter extends Teleporter {
     private final WorldServer worldServerInstance;
     private final Random random;
-    private final LongHashMap<PortalPosition> destinationCoordinateCache = new LongHashMap();
+    private final Long2ObjectOpenHashMap<PortalPosition> destinationCoordinateCache = new Long2ObjectOpenHashMap<>();
     private final List<Long> destinationCoordinateKeys = Lists.<Long>newArrayList();
 
     public SAOTeleporter(WorldServer world) {
@@ -34,7 +36,7 @@ public class SAOTeleporter extends Teleporter {
     }
 
     public void placeInPortal(Entity entity, float rotationYaw) {
-        if(this.worldServerInstance.provider.getDimensionId() != Reference.saoDimensionId) {
+        if(this.worldServerInstance.provider.getDimension() != Reference.saoDimensionId) {
             if(!this.placeInExistingPortal(entity, rotationYaw)) {
                 this.makePortal(entity);
                 this.placeInExistingPortal(entity, rotationYaw);
@@ -56,7 +58,7 @@ public class SAOTeleporter extends Teleporter {
 
             while(iterator.hasNext()) {
                 Long olong = (Long)iterator.next();
-                PortalPosition teleporter$portalposition = (PortalPosition)this.destinationCoordinateCache.getValueByKey(olong.longValue());
+                PortalPosition teleporter$portalposition = (PortalPosition)this.destinationCoordinateCache.get(olong.longValue());
 
                 if(teleporter$portalposition == null || teleporter$portalposition.lastUpdateTime < i) {
                     iterator.remove();

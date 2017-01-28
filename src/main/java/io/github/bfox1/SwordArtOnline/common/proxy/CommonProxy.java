@@ -1,16 +1,13 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
-import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
-import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
-import io.github.bfox1.SwordArtOnline.quest.QuestEventHandler;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +17,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by bfox1 on 4/2/2016.
@@ -31,6 +29,7 @@ public class CommonProxy implements SaoProxy
 
 
 	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
+
 
 
     @Override
@@ -100,6 +99,7 @@ public class CommonProxy implements SaoProxy
 		GameRegistry.registerBlock(BlockInit.aincradCobbleVariation, SaoItemBlockMetaAbstract.class, "AincradCobble");
         GameRegistry.registerBlock(BlockInit.aincradGrassVariation, SaoItemBlockMetaAbstract.class, "AincradGrass");
         GameRegistry.registerBlock(BlockInit.aincradDirtVariation, SaoItemBlockMetaAbstract.class, "AincradDirt");
+
 		
 		GameRegistry.registerItem(ItemInit.healingCrystal, "Healing Crystal");
         GameRegistry.registerItem(ItemInit.antidoteCrystal, "Antidote Crystal");
@@ -110,8 +110,9 @@ public class CommonProxy implements SaoProxy
 
     @Override
     public void init(FMLInitializationEvent event) {
-    	DimensionManager.registerProviderType(Reference.saoDimensionId, SAOWorldProvider.class, false);
-    	DimensionManager.registerDimension(Reference.saoDimensionId, Reference.saoDimensionId);
+        SAOWorldProvider provider = new SAOWorldProvider();
+    	//DimensionManager.registerProviderType(Reference.saoDimensionId, SAOWorldProvider.class, false);
+    	DimensionManager.registerDimension(Reference.saoDimensionId, provider.getDimensionType());
     }
 
     @Override

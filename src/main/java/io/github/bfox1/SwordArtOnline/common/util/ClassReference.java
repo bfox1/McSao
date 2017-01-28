@@ -1,10 +1,10 @@
 package io.github.bfox1.SwordArtOnline.common.util;
 
-import net.minecraft.client.Minecraft;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
+
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -30,6 +30,6 @@ public class ClassReference
 
     public void sendPlayerMessage(String message, EntityPlayer player)
     {
-        player.addChatMessage(new ChatComponentText(message));
+        player.addChatMessage(new TextComponentString(message));
     }
 }

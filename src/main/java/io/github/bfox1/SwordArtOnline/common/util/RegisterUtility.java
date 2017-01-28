@@ -2,9 +2,11 @@ package io.github.bfox1.SwordArtOnline.common.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Created by bfox1 on 4/14/2016.
@@ -15,7 +17,7 @@ public class RegisterUtility
 {
     public static void registerBlockItem(Block block, int meta, String blockName)
     {
-        ModelBakery.addVariantName(Item.getItemFromBlock(block), blockName);
+        ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ResourceLocation(Reference.MODID, "texture/blocks/" + blockName));
 
         registerBlock(block, meta, blockName);
     }
@@ -27,11 +29,13 @@ public class RegisterUtility
      */
     public static void registerBlockMetaItem(Block block, String... blockNames)
     {
-        ModelBakery.addVariantName(Item.getItemFromBlock(block), blockNames);
+
+
 
         for(int i = 0; i < blockNames.length; i++)
         {
             registerBlock(block, i, blockNames[i].replaceAll("sao:", ""));
+            ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ResourceLocation(Reference.MODID, "texture/blocks/" + blockNames));
         }
     }
     public static void registerBlock(Block block , int meta, String file)

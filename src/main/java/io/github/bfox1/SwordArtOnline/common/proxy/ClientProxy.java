@@ -32,7 +32,7 @@ public class ClientProxy extends CommonProxy
     {
         super.preInit(event);
         settings = new Settings(event);
-        OBJLoader.instance.addDomain(Reference.MODID);
+        OBJLoader.INSTANCE.addDomain(Reference.MODID);
 
         ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
         ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);

@@ -5,6 +5,7 @@
 tile.AincradCobble.block_one.name=AincradCobble
 tile.AincradCobble.block_two.name=AincradCobbleBrick
 tile.AincradCobble.block_three.name=AincradCobbleChisel
+tile.RiftChest.name=Rift Chest
 
 # Misc
 ########################################
