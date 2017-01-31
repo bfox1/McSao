@@ -40,6 +40,6 @@ public class SaoTabsManager extends CreativeTabs
     @SideOnly(Side.CLIENT)
     public final Item getTabIconItem()
     {
-        return itemIcon != null ? itemIcon : Item.getItemFromBlock(Blocks.barrier);
+        return itemIcon != null ? itemIcon : Item.getItemFromBlock(Blocks.BARRIER);
     }
 }

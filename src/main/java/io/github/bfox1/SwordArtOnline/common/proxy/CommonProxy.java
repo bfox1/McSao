@@ -7,6 +7,7 @@ import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
+import io.github.bfox1.SwordArtOnline.init.BiomeInit;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
@@ -105,7 +106,8 @@ public class CommonProxy implements SaoProxy
         GameRegistry.registerItem(ItemInit.antidoteCrystal, "Antidote Crystal");
         GameRegistry.registerItem(ItemInit.teleportCrystal, "Teleport Crystal");
         
-		ItemInit.init();        
+		ItemInit.init();
+        BiomeInit.regsiterBiomes();
     }
 
     @Override

@@ -6,15 +6,13 @@ import java.util.Random;
 import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
 import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 
-public class SAOBiomeGenerator extends BiomeGenBase
+public class SAOBiomeGenerator extends Biome
 {
 	public IBlockState wallBlock;
 	private int wallSegmentHeight = 20;
@@ -27,9 +25,8 @@ public class SAOBiomeGenerator extends BiomeGenBase
 	private ArrayList<FloorPoint> floorCenters = getFloorCenterPoints();
 	private FloorPoint currentFloor;
 	
-	public SAOBiomeGenerator(int biomeID, boolean registerBiome) {
-		super(biomeID, registerBiome);
-		setHeight(new BiomeGenBase.Height(-0.5F, 0F));
+	public SAOBiomeGenerator(Biome.BiomeProperties biomeProperties) {
+		super(biomeProperties);
 		this.spawnableMonsterList.clear();
 		this.spawnableCreatureList.clear();
 		this.spawnableCaveCreatureList.clear();
@@ -37,10 +34,6 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		this.topBlock = BlockInit.aincradGrassVariation.getDefaultState();
 		this.fillerBlock = BlockInit.aincradDirtVariation.getDefaultState();
 		this.wallBlock = BlockInit.aincradCobbleVariation.getDefaultState();
-		this.enableRain = false;
-		this.enableSnow = false;
-		
-		this.setBiomeName("Aincrad");
 	}
 	
 	@Override
@@ -169,7 +162,7 @@ public class SAOBiomeGenerator extends BiomeGenBase
 		        		primer.setBlockState(chunkX, blockHeight, chunkZ, aincradDirt);
 		        	}
 		        	else {
-		        		primer.setBlockState(chunkX, blockHeight, chunkZ, Blocks.air.getDefaultState());
+		        		primer.setBlockState(chunkX, blockHeight, chunkZ, Blocks.AIR.getDefaultState());
 		        	}
 	            }
 	        }
