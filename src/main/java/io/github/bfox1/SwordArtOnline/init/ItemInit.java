@@ -2,7 +2,9 @@ package io.github.bfox1.SwordArtOnline.init;
 
 import io.github.bfox1.SwordArtOnline.common.items.ISaoItem;
 import io.github.bfox1.SwordArtOnline.common.items.SaoItemAbstract;
+import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalAntidote;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalHealing;
+import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalTeleport;
 import io.github.bfox1.SwordArtOnline.common.items.swords.SaoSwordItem;
 import net.minecraft.item.Item;
 import org.luaj.vm2.LuaValue;
@@ -37,7 +39,8 @@ public class ItemInit
 		//teleportCrystal = new SaoCrystalTeleport();
 
         registerItem(new SaoCrystalHealing(), "healing_crystal");
-
+        registerItem(new SaoCrystalAntidote(), "antidote_crystal");
+        registerItem(new SaoCrystalTeleport(), "teleport_crystal");
 	}
 
 

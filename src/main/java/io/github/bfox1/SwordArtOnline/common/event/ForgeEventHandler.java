@@ -51,8 +51,10 @@ public class ForgeEventHandler
      */
     @SubscribeEvent
 	public void onPlayerLog(PlayerLoggedInEvent e) {
-		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
-			if(e.player.dimension != Reference.saoDimensionId) {
+		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld)
+		{
+			if(e.player.dimension != Reference.saoDimensionId)
+			{
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
