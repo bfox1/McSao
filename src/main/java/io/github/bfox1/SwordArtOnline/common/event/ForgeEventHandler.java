@@ -51,7 +51,8 @@ public class ForgeEventHandler
      * @param e McForge event.
      */
     @SubscribeEvent
-	public void onPlayerLog(PlayerLoggedInEvent e) {
+	public void onPlayerLog(PlayerLoggedInEvent e)
+    {
         System.out.println("Teleporting to Aincrad...");
 		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
 		    System.out.println("Checking world type.");
