@@ -7,6 +7,7 @@ import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
+import io.github.bfox1.SwordArtOnline.init.DimensionInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import io.github.bfox1.SwordArtOnline.init.BiomeInit;
 import net.minecraft.entity.player.EntityPlayer;
@@ -115,14 +116,15 @@ public class CommonProxy implements SaoProxy
         GameRegistry.registerItem(ItemInit.teleportCrystal, "Teleport Crystal");*/
         
 		ItemInit.init();
-        BiomeInit.regsiterBiomes();
+
+
     }
 
     @Override
     public void init(FMLInitializationEvent event) {
         SAOWorldProvider provider = new SAOWorldProvider();
     	//DimensionManager.registerProviderType(Reference.saoDimensionId, SAOWorldProvider.class, false);
-    	DimensionManager.registerDimension(Reference.saoDimensionId, provider.getDimensionType());
+        DimensionInit.init();
     }
 
     @Override

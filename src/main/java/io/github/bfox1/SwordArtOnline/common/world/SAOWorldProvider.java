@@ -1,6 +1,7 @@
 package io.github.bfox1.SwordArtOnline.common.world;
 
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.init.DimensionInit;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.fml.relauncher.Side;
@@ -35,6 +36,6 @@ public class SAOWorldProvider extends WorldProvider {
 
 	@Override
 	public DimensionType getDimensionType() {
-		return DimensionType.register(getDimensionName(), getInternalNameSuffix(), Reference.saoDimensionId, SAOWorldProvider.class, true);
+		return DimensionInit.AINCRAD_DIMENSION;
 	}
 }

@@ -5,6 +5,7 @@ import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
 import io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy;
 import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import io.github.bfox1.SwordArtOnline.common.world.SAOTeleporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -51,16 +52,25 @@ public class ForgeEventHandler
      */
     @SubscribeEvent
 	public void onPlayerLog(PlayerLoggedInEvent e) {
+        System.out.println("Teleporting to Aincrad...");
 		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
+		    System.out.println("Checking world type.");
 			if(e.player.dimension != Reference.saoDimensionId) {
+                System.out.println("Teleported to Aincrad");
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
                 ((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
-				//playerMP.setWorld(((EntityPlayerMP) e.player).worldObj).transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
-				
+				playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
+				System.out.println("Teleported to Aincrad");
+
 			}
+			else
+            {
+                System.out.println(e.player.dimension);
+                System.out.println(Reference.saoDimensionId);
+            }
 		}
 	}
     /**
