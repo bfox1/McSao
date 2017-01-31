@@ -33,9 +33,13 @@ public interface SaoProxy
 
     void registerRenderers();
 
+    void registerCapabilities();
+
     void preInit(FMLPreInitializationEvent event);
 
     void init(FMLInitializationEvent event);
 
     void postInit(FMLPostInitializationEvent event);
+
+
 }

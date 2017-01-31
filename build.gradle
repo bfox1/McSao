@@ -13,7 +13,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 version = "10.0.2-0.0.0.1-alpha"
 group= "io.github.bfox1.sao" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "TheRift"
+archivesBaseName = "McSao"
 
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.
 compileJava {

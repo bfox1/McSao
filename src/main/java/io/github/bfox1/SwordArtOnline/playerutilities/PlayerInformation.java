@@ -42,6 +42,12 @@ public class PlayerInformation
         this.questUniqueId.add(uuid);
     }
 
+    public NBTTagCompound storeQuestAndSave(UUID id)
+    {
+        this.questUniqueId.add(id);
+        return compressData(new NBTTagCompound());
+    }
+
     public void removeQuestID(UUID uuid)
     {
         if(this.questUniqueId.contains(uuid))
@@ -67,10 +73,10 @@ public class PlayerInformation
         return compound;
     }
 
-    public static void uncompressData(NBTTagCompound compound, SaoExtendedProperty property)
+    public static PlayerInformation uncompressData(NBTTagCompound compound)
     {
-        property.getInformation().setCurrency(compound.getInteger("currency"));
-
+        PlayerInformation information = new PlayerInformation();
+        information.setCurrency(compound.getInteger("currency"));
         int id = 0;
         List<UUID> tempList = new ArrayList<>();
         while(!compound.hasKey(QuestKey + ":" + id))
@@ -80,7 +86,9 @@ public class PlayerInformation
             tempList.add(id, UUID.fromString(compound.getString(QuestKey + ":" + id)));
             id++;
         }
-        property.getInformation().setQuestsList(tempList);
+        information.setQuestsList(tempList);
+
+        return information;
     }
 
 

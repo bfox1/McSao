@@ -1,14 +1,18 @@
 package io.github.bfox1.SwordArtOnline.common.event;
 
 
+import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
 import io.github.bfox1.SwordArtOnline.common.proxy.ClientProxy;
 import io.github.bfox1.SwordArtOnline.common.proxy.CommonProxy;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -55,9 +59,9 @@ public class ForgeEventHandler
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
                 ((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
-				//playerMP.setWorld().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
+				//playerMP.setWorld(((EntityPlayerMP) e.player).worldObj).transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
 				
-				//((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
+				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 			}
 		}
 	}
@@ -80,9 +84,19 @@ public class ForgeEventHandler
     }
 
     @SubscribeEvent
-    public void onPlayerBreak(PlayerInteractEvent event)
+    public void addCapabilities(AttachCapabilitiesEvent event)
     {
 
+        if(event.getObject() instanceof Entity)
+        {
+            Entity e = (Entity) event.getObject();
+
+            if(!e.hasCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES, null))
+            {
+                event.addCapability(new ResourceLocation(Reference.MODID), (ICapabilityProvider) CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES);
+
+            }
+        }
     }
 
 }
