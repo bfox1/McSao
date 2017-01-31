@@ -1,8 +1,9 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
+import io.github.bfox1.SwordArtOnline.common.player.PlayerPropertyHandler;
 import io.github.bfox1.SwordArtOnline.common.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 import java.util.ArrayList;
@@ -57,12 +58,10 @@ public class QuestManager
 
     public final void saveQuestData(EntityPlayer player)
     {
-        SaoExtendedProperty saoExtendedProperty = (SaoExtendedProperty) player.getExtendedProperties(SaoExtendedProperty.IEEP_ID);
-
-
+        ///
     }
 
-    public void setPlayerQuest(SaoExtendedProperty property, String questTemplate, String questName)
+    public void setPlayerQuest(AttachCapabilitiesEvent event, String questTemplate, String questName)
     {
         Quests quest = this.questTemplate.get(questTemplate);
         if(quest != null)
@@ -70,15 +69,16 @@ public class QuestManager
             QuestGlobals globals = new QuestGlobals(quest.getGlobalsByName(questName), questName);
             UUID uuid = UUID.randomUUID();
             quest.storeQuestData(uuid, globals);
-            property.getInformation().storeQuestID(uuid);
+            //TODO:Add quests to players
+
         }
     }
 
-    public void callActives(Event event, SaoExtendedProperty property)
+    public void callActives(Event event, PlayerPropertyHandler property)
     {
         for(Quests quest : questTemplate.values())
         {
-            property.getInformation().getQuestsList().stream().filter(id -> quest.getQuestGlobals().containsKey(id)).forEach(id ->
+            property.getQuestsList().stream().filter(id -> quest.getQuestGlobals().containsKey(id)).forEach(id ->
             {
                 QuestGlobals globals = quest.getQuestGlobals().get(id);
 

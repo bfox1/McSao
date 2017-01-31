@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public abstract class SaoItemAbstract extends Item
+public class SaoItemAbstract extends Item implements ISaoItem
 {
     public SaoItemAbstract()
     {
@@ -20,5 +20,17 @@ public abstract class SaoItemAbstract extends Item
     public int getItemID()
     {
         return Item.getIdFromItem(this);
+    }
+
+    public ISaoItem setRegName(String name)
+    {
+        this.setRegistryName(name);
+        return this;
+    }
+
+    @Override
+    public Item getItem()
+    {
+        return this;
     }
 }

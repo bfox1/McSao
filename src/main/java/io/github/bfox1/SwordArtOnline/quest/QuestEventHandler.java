@@ -1,10 +1,13 @@
 package io.github.bfox1.SwordArtOnline.quest;
 
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
+import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestPlayerInteract;
+import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
+import io.github.bfox1.SwordArtOnline.common.player.PlayerPropertyHandler;
 import io.github.bfox1.SwordArtOnline.common.proxy.ServerProxy;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -22,8 +25,10 @@ public class QuestEventHandler
     @SubscribeEvent
     public void onItemPickupEvent(PlayerEvent.ItemPickupEvent event)
     {
-        SaoExtendedProperty property = (SaoExtendedProperty)event.player.getExtendedProperties(SaoExtendedProperty.IEEP_ID);
-        if(property.getInformation().getQuestsList().size() != 0)
+
+        //SaoExtendedProperty property = (SaoExtendedProperty)event.player.getExtendedProperties(SaoExtendedProperty.IEEP_ID);
+        PlayerPropertyHandler property = event.player.getCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES, null);
+        if(property.getQuestsList().size() != 0)
         {
             QuestItemPickupEvent event1 = new QuestItemPickupEvent(event.player, event.pickedUp);
 
@@ -34,10 +39,10 @@ public class QuestEventHandler
     @SubscribeEvent
     public void onPlayerInteractEvent(PlayerInteractEvent event)
     {
-        SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entityPlayer));
+        PlayerPropertyHandler property = event.getEntity().getCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES, null);
 
-        if(property.getInformation().getQuestsList() != null)
-        if(property.getInformation().getQuestsList().size() != 0)
+        if(property.getQuestsList() != null)
+        if(property.getQuestsList().size() != 0)
         {
 
             manager.callActives(new QuestPlayerInteract(event), property);
@@ -46,14 +51,15 @@ public class QuestEventHandler
     }
 
     @SubscribeEvent
-    public void onPlayerJoinEvent(EntityJoinWorldEvent event)
+    public void onPlayerJoinEvent(AttachCapabilitiesEvent event)
     {
-        if(event.entity != null && event.entity instanceof EntityPlayer)
+        if(event.getObject() != null && event.getObject() instanceof EntityPlayer)
         {
-            if(!event.entity.worldObj.isRemote)
+            Entity e = (Entity) event.getObject();
+            if(!e.worldObj.isRemote)
             {
-                SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entity));
-                manager.setPlayerQuest(property, "MiscTemplate", "testObjective.lua");
+               // SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entity));
+                manager.setPlayerQuest(event, "MiscTemplate", "testObjective.lua");
             }
 
         }

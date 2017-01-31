@@ -1,10 +1,9 @@
 package io.github.bfox1.SwordArtOnline.common;
 
 import io.github.bfox1.SwordArtOnline.common.proxy.SaoProxy;
-import io.github.bfox1.SwordArtOnline.common.util.ClassReference;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.command.ServerCommandManager;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -62,6 +61,6 @@ public class SwordArtOnline
     @Mod.EventHandler
     public void serverStarting(FMLServerStartedEvent event)
     {
-        ((ServerCommandManager)MinecraftServer.getServer().getCommandManager()).registerCommand(new CommandSao());
+        ((ServerCommandManager)FMLCommonHandler.instance().getMinecraftServerInstance().getCommandManager()).registerCommand(new CommandSao());
     }
 }

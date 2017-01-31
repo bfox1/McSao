@@ -2,7 +2,6 @@ package io.github.bfox1.SwordArtOnline.common.network;
 
 import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
 import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
-import io.github.bfox1.SwordArtOnline.playerutilities.WorldFunction;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

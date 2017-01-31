@@ -2,6 +2,7 @@ package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
 import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
+import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
@@ -18,7 +19,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
-import java.util.HashMap;
 
 /**
  * Created by bfox1 on 4/2/2016.
@@ -96,15 +96,23 @@ public class CommonProxy implements SaoProxy
     }
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void registerCapabilities()
+    {
+        CapabilitySaoPlayerHandler.register();
+    }
+
+    @Override
+    public void preInit(FMLPreInitializationEvent event)
+    {
+        registerCapabilities();
 		GameRegistry.registerBlock(BlockInit.aincradCobbleVariation, SaoItemBlockMetaAbstract.class, "AincradCobble");
         GameRegistry.registerBlock(BlockInit.aincradGrassVariation, SaoItemBlockMetaAbstract.class, "AincradGrass");
         GameRegistry.registerBlock(BlockInit.aincradDirtVariation, SaoItemBlockMetaAbstract.class, "AincradDirt");
 
 		
-		GameRegistry.registerItem(ItemInit.healingCrystal, "Healing Crystal");
+		/*GameRegistry.registerItem(ItemInit.healingCrystal, "Healing Crystal");
         GameRegistry.registerItem(ItemInit.antidoteCrystal, "Antidote Crystal");
-        GameRegistry.registerItem(ItemInit.teleportCrystal, "Teleport Crystal");
+        GameRegistry.registerItem(ItemInit.teleportCrystal, "Teleport Crystal");*/
         
 		ItemInit.init();
         BiomeInit.regsiterBiomes();

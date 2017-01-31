@@ -2,6 +2,8 @@ package io.github.bfox1.SwordArtOnline.common.items.crystals;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class SaoCrystalHealing extends SaoCrystalAbstract{
@@ -13,9 +15,9 @@ public class SaoCrystalHealing extends SaoCrystalAbstract{
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world,
-			EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world,
+													EntityPlayer player, EnumHand hand) {
 		player.heal(4f);
-		return super.onItemRightClick(itemStack, world, player);
+		return super.onItemRightClick(itemStack, world, player, hand);
 	}
 }
