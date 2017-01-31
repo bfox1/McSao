@@ -1,12 +1,10 @@
 package io.github.bfox1.SwordArtOnline.common.network;
 
-import io.github.bfox1.SwordArtOnline.common.entity.SaoExtendedProperty;
-import io.github.bfox1.SwordArtOnline.playerutilities.PlayerInformation;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.IThreadListener;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -18,18 +16,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  */
 public class SaoEntityPacket implements IMessage
 {
-    private PlayerInformation information;
-    private WorldFunction function;
 
-    public SaoEntityPacket(SaoExtendedProperty property)
+
+    public SaoEntityPacket()
     {
-        this.information = property.getInformation();
-        this.function = property.getFunction();
+        //this.information = property.getInformation();
+       // this.function = property.getFunction();
     }
     @Override
     public void fromBytes(ByteBuf buf)
     {
-        this.function = readWorldFunction(buf);
+       // this.function = readWorldFunction(buf);
     }
 
     @Override
@@ -47,29 +44,21 @@ public class SaoEntityPacket implements IMessage
 
     public void parsePlayerInformation(ByteBuf buf)
     {
-        buf.writeByte(information.getCurrency());
+       // buf.writeByte(information.getCurrency());
     }
 
     public void parseWorldFunction(ByteBuf buf)
     {
-        ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("admin")));
-        ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("build")));
-        ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("plotbuild")));
-        ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("mod")));
+       // ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("admin")));
+        //ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("build")));
+        //ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("plotbuild")));
+       // ByteBufUtils.writeUTF8String(buf, String.valueOf(function.getFunctionType("mod")));
     }
+           // function.setFunctionType("admin",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
+           // function.setFunctionType("build",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
+           // function.setFunctionType("plotbuild",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
+           // function.setFunctionType("mod",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
 
-    public WorldFunction readWorldFunction(ByteBuf buf)
-    {
-        WorldFunction function = new WorldFunction();
-
-            function.setFunctionType("admin",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
-            function.setFunctionType("build",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
-            function.setFunctionType("plotbuild",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
-            function.setFunctionType("mod",Boolean.getBoolean(ByteBufUtils.readUTF8String(buf)));
-
-
-        return function;
-    }
 
     public static class SaoEntityPacketHandler implements IMessageHandler<SaoEntityPacket, IMessage>
     {
@@ -89,8 +78,8 @@ public class SaoEntityPacket implements IMessage
                     {
                         EntityPlayerSP playerSP = mc.thePlayer;
 
-                        SaoExtendedProperty property = SaoExtendedProperty.getData(playerSP);
-                        property.getFunction().setToOldFunction(message.function);
+                      //  SaoExtendedProperty property = SaoExtendedProperty.getData(playerSP);
+                      //  property.getFunction().setToOldFunction(message.function);
                     }
                 });
             }

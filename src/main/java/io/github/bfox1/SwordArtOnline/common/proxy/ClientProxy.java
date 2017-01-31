@@ -2,7 +2,6 @@ package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
 import io.github.bfox1.SwordArtOnline.common.blocks.SaoBlockVariationAbstract;
-import io.github.bfox1.SwordArtOnline.common.util.Models;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.util.RegisterUtility;
 import io.github.bfox1.SwordArtOnline.common.util.Settings;
@@ -10,7 +9,6 @@ import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -33,10 +31,10 @@ public class ClientProxy extends CommonProxy
         super.preInit(event);
         settings = new Settings(event);
         OBJLoader.INSTANCE.addDomain(Reference.MODID);
-
-        ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
-        ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);
-        ModelLoader.setCustomModelResourceLocation(ItemInit.teleportCrystal, 0, Models.crystalTeleport);
+        //TODO: Create Item Model registry here
+        //ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
+        //ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);
+        //ModelLoader.setCustomModelResourceLocation(ItemInit.teleportCrystal, 0, Models.crystalTeleport);
 
     }
 

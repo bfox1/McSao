@@ -182,7 +182,7 @@ public class SkillBarHandler {
 	private void renderSlot(int par1, int par2, int par3) {
 		Minecraft mc = Minecraft.getMinecraft();
 		//ItemStack itemstack = mc.thePlayer.inventory.mainInventory[par1];
-		ItemStack itemstack = new ItemStack(ItemInit.healingCrystal, 2);
+		ItemStack itemstack = new ItemStack(ItemInit.getSaoItem("healing_crystal").getItem(), 2);
 		
 		if (itemstack != null) {
 			float f1 = (float) itemstack.animationsToGo - 0;

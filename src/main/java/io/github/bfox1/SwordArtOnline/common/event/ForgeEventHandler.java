@@ -8,10 +8,8 @@ import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -93,7 +91,8 @@ public class ForgeEventHandler
 
             if(!e.hasCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES, null))
             {
-                event.addCapability(new ResourceLocation(Reference.MODID), (ICapabilityProvider) CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES);
+                //TODO: FIX CAPABILITIES
+               // event.addCapability(new ResourceLocation(Reference.MODID), (ICapabilityProvider) CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES);
 
             }
         }

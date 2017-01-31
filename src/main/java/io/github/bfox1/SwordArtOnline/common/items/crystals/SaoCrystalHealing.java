@@ -11,7 +11,7 @@ public class SaoCrystalHealing extends SaoCrystalAbstract{
 	public SaoCrystalHealing()
 	{
 		super();
-		this.setUnlocalizedName("HealingCrystal");
+
 	}
 	
 	@Override

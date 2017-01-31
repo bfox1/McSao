@@ -13,8 +13,10 @@ import net.minecraft.util.ResourceLocation;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
+@Deprecated
 public class RegisterUtility
 {
+    @Deprecated
     public static void registerBlockItem(Block block, int meta, String blockName)
     {
         ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ResourceLocation(Reference.MODID, "texture/blocks/" + blockName));
@@ -27,6 +29,7 @@ public class RegisterUtility
      * @param block The Block to register and render.
      * @param blockNames The Array of Stringed names of the Blocks.
      */
+    @Deprecated
     public static void registerBlockMetaItem(Block block, String... blockNames)
     {
 
@@ -38,14 +41,17 @@ public class RegisterUtility
             ModelBakery.registerItemVariants(Item.getItemFromBlock(block), new ResourceLocation(Reference.MODID, "texture/blocks/" + blockNames));
         }
     }
+    @Deprecated
     public static void registerBlock(Block block , int meta, String file)
     {
         registerItem(Item.getItemFromBlock(block), meta, file);
     }
+    @Deprecated
     public static void registerItem(Item item, String file)
     {
         registerItem(item, 0, file);
     }
+    @Deprecated
     public static void registerItem(Item item, int meta, String file)
     {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, meta, new ModelResourceLocation(Reference.MODID + ":" + file, "inventory"));
