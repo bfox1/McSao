@@ -28,11 +28,7 @@ import java.io.File;
  */
 public class CommonProxy implements SaoProxy
 {
-
-
-	public static WorldType saoWorld = new SAOWorldType("saoWorldType");
-
-
+	public static WorldType SAO_WORLD_TYPE = new SAOWorldType("saoWorldType");
 
     @Override
     public void initClientConfig(File file)

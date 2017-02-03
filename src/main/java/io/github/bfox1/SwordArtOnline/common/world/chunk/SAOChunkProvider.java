@@ -3,6 +3,7 @@ package io.github.bfox1.SwordArtOnline.common.world.chunk;
 import java.util.List;
 import java.util.Random;
 
+import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -20,10 +21,18 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.IChunkGenerator;
 
 /**
- * Created by Dradgit on 4/15/2016.
+ * Created by Dradgit on 2/3/2017.
+ *
+ * In the future... if you do not plan on spending hours trying to fix the world gen to make it work properly with nice looking walls and proper terrain gen noise...
+ * DO NOT TOUCH MY DAMN WORLD GEN CODE.
+ * YOU HAVE NO IDEA HOW IT WORKS, SO DO NOT MESS WITH IT.
+ * DO NOT CORRECT IT. DO NOT TRY MAKE IT LOOK PRETTY. DO NOT OPTIMIZE IT WITH LAMBDA FUNCTIONS. DO NOTHING!
+ * AND BEFORE ALL ELSE, DO NOT "STYLE" IT TO SAVE WHITESPACE BY MOVING THE BRACKETS AROUND. IT IS A STUPID METRIC TO MEASURE PRODUCTIVITY ANYWAY.
+ *
+ * If there is something wrong that happened in the update process, I will fix it, and it will be easier because I know how it was supposed to work from experience.
  */
-public class SAOChunkProvider implements IChunkGenerator {
-
+public class SAOChunkProvider implements IChunkGenerator
+{
 	protected static final IBlockState STONE = Blocks.STONE.getDefaultState();
 	private final Random rand;
 	private NoiseGeneratorOctaves minLimitPerlinNoise;
@@ -39,7 +48,11 @@ public class SAOChunkProvider implements IChunkGenerator {
 	private final double[] heightMap;
 	private final float[] biomeWeights;
 	private ChunkProviderSettings settings;
-	private IBlockState oceanBlock = Blocks.WATER.getDefaultState();
+	private IBlockState oceanBlock = Blocks.AIR.getDefaultState();
+	private IBlockState topBlock = Blocks.AIR.getDefaultState();
+    private IBlockState dirtBlock = Blocks.AIR.getDefaultState();
+    private IBlockState stoneBlock = Blocks.AIR.getDefaultState();
+    private IBlockState cobbleBlock = Blocks.AIR.getDefaultState();
 	private double[] depthBuffer = new double[256];
 	private MapGenBase caveGenerator = new MapGenCaves();
 	private MapGenStronghold strongholdGenerator = new MapGenStronghold();
@@ -54,15 +67,16 @@ public class SAOChunkProvider implements IChunkGenerator {
 	double[] maxLimitRegion;
 	double[] depthRegion;
 
-	public SAOChunkProvider(World worldIn, long seed, boolean mapFeaturesEnabledIn, String settings) {
+	public SAOChunkProvider(World worldIn, long seed, boolean mapFeaturesEnabledIn, String settings)
+    {
 		{
-			caveGenerator = net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(caveGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.CAVE);
-			strongholdGenerator = (MapGenStronghold)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(strongholdGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.STRONGHOLD);
-			villageGenerator = (MapGenVillage)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(villageGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.VILLAGE);
-			mineshaftGenerator = (MapGenMineshaft)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(mineshaftGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.MINESHAFT);
-			scatteredFeatureGenerator = (MapGenScatteredFeature)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(scatteredFeatureGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.SCATTERED_FEATURE);
-			ravineGenerator = net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(ravineGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE);
-			oceanMonumentGenerator = (StructureOceanMonument)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(oceanMonumentGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.OCEAN_MONUMENT);
+			//caveGenerator = net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(caveGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.CAVE);
+			//strongholdGenerator = (MapGenStronghold)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(strongholdGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.STRONGHOLD);
+			//villageGenerator = (MapGenVillage)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(villageGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.VILLAGE);
+			//mineshaftGenerator = (MapGenMineshaft)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(mineshaftGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.MINESHAFT);
+			//scatteredFeatureGenerator = (MapGenScatteredFeature)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(scatteredFeatureGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.SCATTERED_FEATURE);
+			//ravineGenerator = net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(ravineGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.RAVINE);
+			//oceanMonumentGenerator = (StructureOceanMonument)net.minecraftforge.event.terraingen.TerrainGen.getModdedMapGen(oceanMonumentGenerator, net.minecraftforge.event.terraingen.InitMapGenEvent.EventType.OCEAN_MONUMENT);
 		}
 		this.worldObj = worldIn;
 		this.mapFeaturesEnabled = mapFeaturesEnabledIn;
@@ -90,7 +104,7 @@ public class SAOChunkProvider implements IChunkGenerator {
 		if (settings != null)
 		{
 			this.settings = ChunkProviderSettings.Factory.jsonToFactory(settings).build();
-			this.oceanBlock = this.settings.useLavaOceans ? Blocks.LAVA.getDefaultState() : Blocks.WATER.getDefaultState();
+			//this.oceanBlock = this.settings.useLavaOceans ? Blocks.LAVA.getDefaultState() : Blocks.WATER.getDefaultState();
 			worldIn.setSeaLevel(this.settings.seaLevel);
 		}
 
@@ -106,101 +120,25 @@ public class SAOChunkProvider implements IChunkGenerator {
 		this.forestNoise = ctx.getForest();
 	}
 
-	/*
-	 * I Believe this method is used to create the upper layers of terrain generation in the world. For example the top
-	 * layer of most biomes is a grass block, followed mostly by dirt but there may be sand and gravel in-between. Then
-	 * there is stone, which is generated first I assume, so that this topper and filler layer can be placed above it
-	 * using the same random seed.
-	 * @param chunkXCoord
-	 * @param chunkZCoord
-	 * @param chunkOfBlocks
-	 */
-	/*
-	public void func_147424_a(int chunkXCoord, int chunkZCoord, Block[] chunkOfBlocks) {
-		byte b0 = 63;
-		//Old::: 		this.biomesForGeneration = this.worldObj.getWorldChunkManager().getBiomesForGeneration(this.biomesForGeneration, chunkXCoord * 4 - 2, chunkZCoord * 4 - 2, 10, 10);
-		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkXCoord * 4 - 2, chunkZCoord * 4 - 2, 10, 10); //new
-		this.func_147423_a(chunkXCoord * 4, 0, chunkZCoord * 4);
-
-		for(int k = 0; k < 4; ++k) {
-			int l = k * 5;
-			int i1 = (k + 1) * 5;
-
-			for(int j1 = 0; j1 < 4; ++j1) {
-				int k1 = (l + j1) * 33;
-				int l1 = (l + j1 + 1) * 33;
-				int i2 = (i1 + j1) * 33;
-				int j2 = (i1 + j1 + 1) * 33;
-
-				for(int k2 = 0; k2 < 32; ++k2) {
-					double d0 = 0.125D;
-					double d1 = this.field_147434_q[k1 + k2];
-					double d2 = this.field_147434_q[l1 + k2];
-					double d3 = this.field_147434_q[i2 + k2];
-					double d4 = this.field_147434_q[j2 + k2];
-					double d5 = (this.field_147434_q[k1 + k2 + 1] - d1) * d0;
-					double d6 = (this.field_147434_q[l1 + k2 + 1] - d2) * d0;
-					double d7 = (this.field_147434_q[i2 + k2 + 1] - d3) * d0;
-					double d8 = (this.field_147434_q[j2 + k2 + 1] - d4) * d0;
-
-					for(int l2 = 0; l2 < 8; ++l2) {
-						double d9 = 0.25D;
-						double d10 = d1;
-						double d11 = d2;
-						double d12 = (d3 - d1) * d9;
-						double d13 = (d4 - d2) * d9;
-
-						for(int i3 = 0; i3 < 4; ++i3) {
-							int j3 = i3 + k * 4 << 12 | 0 + j1 * 4 << 8 | k2 * 8 + l2;
-							short short1 = 256;
-							j3 -= short1;
-							double d14 = 0.25D;
-							double d16 = (d11 - d10) * d14;
-							double d15 = d10 - d16;
-
-							for(int k3 = 0; k3 < 4; ++k3) {
-								if((d15 += d16) > 0.0D) {
-									chunkOfBlocks[j3 += short1] = Blocks.AIR;
-								}
-								else if(k2 * 8 + l2 < b0) {
-									chunkOfBlocks[j3 += short1] = Blocks.AIR;
-								}else {
-									chunkOfBlocks[j3 += short1] = null;
-								}
-							}
-
-							d10 += d12;
-							d11 += d13;
-						}
-
-						d1 += d5;
-						d2 += d6;
-						d3 += d7;
-						d4 += d8;
-					}
-				}
-			}
-		}
-	}*/
-
 	public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn)
 	{
 		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, x, z, primer, this.worldObj)) return;
 		double d0 = 0.03125D;
 		this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, (double)(x * 16), (double)(z * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
-		for (int i = 0; i < 16; ++i)
+		for (int xIncrement = 0; xIncrement < 16; ++xIncrement)
 		{
-			for (int j = 0; j < 16; ++j)
+			for (int zIncrement = 0; zIncrement < 16; ++zIncrement)
 			{
-				Biome biome = biomesIn[j + i * 16];
-				biome.genTerrainBlocks(this.worldObj, this.rand, primer, x * 16 + i, z * 16 + j, this.depthBuffer[j + i * 16]);
+				Biome biome = biomesIn[zIncrement + xIncrement * 16];
+				biome.genTerrainBlocks(this.worldObj, this.rand, primer, x * 16 + xIncrement, z * 16 + zIncrement, this.depthBuffer[xIncrement + zIncrement * 16]);
 			}
 		}
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z) {
+	public Chunk provideChunk(int x, int z)
+    {
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
@@ -218,12 +156,14 @@ public class SAOChunkProvider implements IChunkGenerator {
 	}
 
 	@Override
-	public boolean generateStructures(Chunk chunkIn, int x, int z) {
+	public boolean generateStructures(Chunk chunkIn, int x, int z)
+	{
 		return false;
 	}
 
 	@Override
-	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
+	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos)
+    {
 		return null;
 	}
 
@@ -453,12 +393,16 @@ public class SAOChunkProvider implements IChunkGenerator {
 							{
 								if ((lvt_45_1_ += d16) > 0.0D)
 								{
-									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, STONE);
+									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, Blocks.AIR.getDefaultState());
 								}
 								else if (i2 * 8 + j2 < this.settings.seaLevel)
 								{
-									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, this.oceanBlock);
+									primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, Blocks.AIR.getDefaultState());
 								}
+								else
+                                {
+                                    primer.setBlockState(i * 4 + k2, i2 * 8 + j2, l * 4 + l2, Blocks.AIR.getDefaultState());
+                                }
 							}
 
 							d10 += d12;

@@ -54,7 +54,7 @@ public class ForgeEventHandler
 	public void onPlayerLog(PlayerLoggedInEvent e)
     {
         System.out.println("Teleporting to Aincrad...");
-		if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
+		if(e.player.worldObj.getWorldType() == CommonProxy.SAO_WORLD_TYPE) {
 		    System.out.println("Checking world type.");
 			if(e.player.dimension != Reference.saoDimensionId) {
                 System.out.println("Teleported to Aincrad");
@@ -82,7 +82,7 @@ public class ForgeEventHandler
     public void onPlayerRespawn(PlayerRespawnEvent e)
     {
 
-    	if(e.player.worldObj.getWorldType() == CommonProxy.saoWorld) {
+    	if(e.player.worldObj.getWorldType() == CommonProxy.SAO_WORLD_TYPE) {
     		if(e.player.dimension == Reference.saoDimensionId) {
     			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 				

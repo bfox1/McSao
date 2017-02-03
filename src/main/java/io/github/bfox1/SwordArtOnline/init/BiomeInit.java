@@ -35,7 +35,7 @@ public class BiomeInit
         public static void registerBiomes(RegistryEvent.Register<Biome> event)
         {
             final IForgeRegistry<Biome> registry = event.getRegistry();
-
+            
             registerBiome(registry, SAO_BIOME, "Aincrad", BiomeManager.BiomeType.WARM, Integer.MAX_VALUE, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.PLAINS);
         }
 
