@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.blocks.itemblock;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -7,7 +8,11 @@ import net.minecraft.item.ItemStack;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public interface IMetaBlockName
+public interface ISaoBlock
 {
-    String getSaoBlockName(ItemStack itemStack);
+    String getSaoMetaBlockName(ItemStack itemStack);
+
+    Block getBlock();
+
+    ISaoBlock setRegName(String name);
 }

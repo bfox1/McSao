@@ -1,19 +1,16 @@
 package io.github.bfox1.SwordArtOnline.common.blocks;
 
-import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.IMetaBlockName;
+import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.ISaoBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import net.minecraft.util.IStringSerializable;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -26,7 +23,7 @@ import java.util.List;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract implements IMetaBlockName
+public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract
 {
     public static final PropertyEnum TYPE = PropertyEnum.create("type", SaoBlockVariationAbstract.EnumType.class);
     public final int subTypes;
@@ -47,7 +44,7 @@ public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract impleme
     }
 
     @Override
-    public String getSaoBlockName(ItemStack stack)
+    public String getSaoMetaBlockName(ItemStack stack)
     {
 
         return EnumType.getTypeById(stack.getItemDamage()).getName();
@@ -109,11 +106,12 @@ public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract impleme
         return (SaoBlockVariationAbstract)super.setUnlocalizedName(name);
     }
 
-    public SaoBlockVariationAbstract setSubTypeFullNameList()
+    public ISaoBlock setSubTypeFullNameList()
     {
         for(int i = 0; i <= subTypes; i++)
         {
-            this.subTypeNamList.add(i, "sao:" + this.getUnlocalizedName().replaceAll("tile.", "") + "_" + EnumType.getTypeById(i).getName());
+            //this.subTypeNamList.add(i, this.getUnlocalizedName().replaceAll("tile.", "") + "_" + EnumType.getTypeById(i).getName());
+            this.subTypeNamList.add(i, this.getRegistryName().toString() + "_" + EnumType.getTypeById(i).getName());
             System.out.println(this.subTypeNamList.get(i));
         }
         return this;

@@ -2,6 +2,6 @@
   "parent":"block/cube_all",
   "textures":
   {
-    "all":"sao:blocks/AincradCobble_block_one"
+    "all":"sao:blocks/aincrad_cobble_block_two"
   }
 }

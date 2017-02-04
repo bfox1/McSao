@@ -1,15 +1,16 @@
 package io.github.bfox1.SwordArtOnline.common.blocks;
 
-import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
+import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.ISaoBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.ItemStack;
 
 /**
  * Created by bfox1 on 4/2/2016.
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public abstract class SaoBlockAbstract extends Block
+public class SaoBlockAbstract extends Block implements ISaoBlock
 {
 
     private boolean canBreak;
@@ -18,7 +19,7 @@ public abstract class SaoBlockAbstract extends Block
     public SaoBlockAbstract(Material p_i46399_1_, float hardnessValue)
     {
         super(p_i46399_1_);
-        this.setCreativeTab(SaoTabsManager.SaoBlocks);
+       // this.setCreativeTab(SaoTabsManager.SaoBlocks);
         this.HARDNESS_VALUE = hardnessValue;
         this.setBreakable(false);
     }
@@ -41,15 +42,22 @@ public abstract class SaoBlockAbstract extends Block
         }
     }
 
-    /**
-     * All this method does is returns SaoBlockAbstract instead of Block.
-     * @param name The name of the Block
-     * @return SaoBlockAbstract Object.
-     */
+
     @Override
-    public SaoBlockAbstract setUnlocalizedName(String name)
+    public String getSaoMetaBlockName(ItemStack itemStack) {
+        return "";
+    }
+
+    @Override
+    public Block getBlock() {
+        return this;
+    }
+
+    @Override
+    public SaoBlockAbstract setRegName(String name)
     {
-        return (SaoBlockAbstract)super.setUnlocalizedName(name);
+        this.setRegistryName(name);
+        return this;
     }
 
 }

@@ -1,7 +1,18 @@
 package io.github.bfox1.SwordArtOnline.init;
 
+import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
 import io.github.bfox1.SwordArtOnline.common.blocks.*;
+import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.HashMap;
 
 /**
  * Created by bfox1 on 4/3/2016.
@@ -10,20 +21,96 @@ import net.minecraft.block.material.Material;
  */
 public class BlockInit
 {
-    public static final SaoBlockVariationAbstract aincradCobbleVariation;
-    public static final SaoBlockVariationAbstract aincradGrassVariation;
-    public static final SaoBlockVariationAbstract aincradStoneVariation;
-    public static final SaoBlockVariationAbstract aincradDirtVariation;
+
+    public static final HashMap<String, SaoBlockAbstract> saoBlocks = new HashMap<>();
 
 
     static
     {
-        aincradCobbleVariation =  new AincradCobbleVariation(Material.ROCK, 3).setUnlocalizedName("AincradCobble").setSubTypeFullNameList();
-        aincradGrassVariation = new AincradGrassVariation(Material.GRASS, 4).setUnlocalizedName("AincradGrass").setSubTypeFullNameList();
-        aincradStoneVariation = new AincradStoneVariation(Material.ROCK, 4).setUnlocalizedName("AincradStone").setSubTypeFullNameList();
-        aincradDirtVariation = new AincradDirtVariation(Material.GROUND, 4).setUnlocalizedName("AincradDirt").setSubTypeFullNameList();
+        setBlock("aincrad_cobble", new AincradCobbleVariation(Material.ROCK, 3));
+        setBlock("aincrad_grass", new AincradGrassVariation(Material.GRASS, 4));
+        setBlock("aincrad_stone", new AincradStoneVariation(Material.ROCK, 4));
+        setBlock("aincrad_dirt", new AincradDirtVariation(Material.GROUND,4));
     }
 
+
+    public static void register()
+    {
+        for(SaoBlockAbstract block : saoBlocks.values())
+        {
+            if(block instanceof SaoBlockVariationAbstract)
+            {
+                registerVariations((SaoBlockVariationAbstract) block);
+            }
+            else
+            {
+                block.setUnlocalizedName(block.getRegistryName().toString());
+            }
+            GameRegistry.register(block);
+
+
+            ItemBlock iBlock = new ItemBlock(block);
+            iBlock.setRegistryName(block.getRegistryName());
+
+            GameRegistry.register(iBlock);
+        }
+
+        saoBlocks.forEach((k,v) -> v.setCreativeTab(SaoTabsManager.SaoBlocks) );
+    }
+
+    public static void registerRenders()
+    {
+        saoBlocks.forEach((k,v) ->
+        {
+            if(v instanceof SaoBlockVariationAbstract)
+            {
+                SaoBlockVariationAbstract var = (SaoBlockVariationAbstract) v;
+
+                int i =0;
+                for(String s: var.getSubtypeArray())
+                {
+
+                    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(var), i, new ModelResourceLocation(ItemBlock.getItemFromBlock(var).getRegistryName(), "inventory"));
+                    ModelBakery.registerItemVariants(Item.getItemFromBlock(var), new ResourceLocation(Reference.MODID, "texture/blocks/" + s));
+
+                    i++;
+                }
+            }
+            ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(v), 0, new ModelResourceLocation(ItemBlock.getItemFromBlock(v).getRegistryName(), "inventory"));
+        });
+    }
+
+    public static void registerItemBlocks()
+    {
+
+    }
+
+    private static void registerVariations(SaoBlockVariationAbstract variationAbstract)
+    {
+        variationAbstract.setSubTypeFullNameList();
+
+        for(String s : variationAbstract.subTypeNamList)
+        {
+            variationAbstract.setUnlocalizedName(s);
+            //GameRegistry.register(variationAbstract.type)
+        }
+        variationAbstract.setUnlocalizedName(variationAbstract.getRegistryName().toString()).setSubTypeFullNameList();
+    }
+
+    private static void setBlock(String name, SaoBlockAbstract block)
+    {
+        saoBlocks.put(name, block.setRegName(name));
+    }
+
+    private static void setRegBlock(String name)
+    {
+        saoBlocks.put(name, new SaoBlockAbstract(Material.GROUND, 1.5F));
+    }
+
+    public static SaoBlockAbstract getSaoBlocks(String name)
+    {
+        return saoBlocks.get(name);
+    }
 
 
 }

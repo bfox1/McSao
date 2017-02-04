@@ -1,16 +1,16 @@
 package io.github.bfox1.SwordArtOnline.common.world.biome;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
 import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
+import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Made by Ian/Dradgit
@@ -38,9 +38,10 @@ public class SAOBiomeGenerator extends Biome
 		this.spawnableCreatureList.clear();
 		this.spawnableCaveCreatureList.clear();
 		this.spawnableWaterCreatureList.clear();
-		this.topBlock = BlockInit.aincradGrassVariation.getDefaultState();
-		this.fillerBlock = BlockInit.aincradDirtVariation.getDefaultState();
-		this.wallBlock = BlockInit.aincradCobbleVariation.getDefaultState();
+		this.topBlock = BlockInit.getSaoBlocks("aincrad_grass").getDefaultState();
+		this.fillerBlock = BlockInit.getSaoBlocks("aincrad_dirt").getDefaultState();
+		this.wallBlock = BlockInit.getSaoBlocks("aincrad_cobble").getDefaultState();
+
 	}
 	
 	@Override

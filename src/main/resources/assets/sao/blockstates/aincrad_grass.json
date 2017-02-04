@@ -1,0 +1,14 @@
+{
+  "variants":
+  {
+    "type=block_one":
+    [
+      {"model":"sao:aincrad_grass_block_one"},
+    {"model":"sao:aincrad_grass_block_one", "y" : 90},
+    {"model":"sao:aincrad_grass_block_one", "y" : 180},
+      {"model":"sao:aincrad_grass_block_one", "y" : 270}],
+    "type=block_two":{"model":"sao:aincrad_grass_block_two"},
+    "type=block_three":{"model":"sao:aincrad_grass_block_three"},
+    "type=block_four":{"model":"sao:aincrad_grass_block_four"}
+  }
+}

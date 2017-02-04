@@ -15,7 +15,7 @@ public class SaoItemBlockMetaAbstract extends ItemBlock
     {
         super(block);
 
-        if(!(block instanceof IMetaBlockName))
+        if(!(block instanceof ISaoBlock))
         {
             throw new IllegalArgumentException(String.format("The given Block %s is not an instance of SaoBlock!", block.getUnlocalizedName()));
         }
@@ -38,6 +38,6 @@ public class SaoItemBlockMetaAbstract extends ItemBlock
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return super.getUnlocalizedName(stack) + "." + ((IMetaBlockName)this.block).getSaoBlockName(stack);
+        return super.getUnlocalizedName(stack) + "." + ((ISaoBlock)this.block).getSaoMetaBlockName(stack);
     }
 }
