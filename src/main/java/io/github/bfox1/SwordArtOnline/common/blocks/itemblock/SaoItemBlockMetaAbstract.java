@@ -14,7 +14,7 @@ public class SaoItemBlockMetaAbstract extends ItemBlock
     public SaoItemBlockMetaAbstract(Block block)
     {
         super(block);
-
+        this.setRegistryName(block.getRegistryName().toString());
         if(!(block instanceof ISaoBlock))
         {
             throw new IllegalArgumentException(String.format("The given Block %s is not an instance of SaoBlock!", block.getUnlocalizedName()));

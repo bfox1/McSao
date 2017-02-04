@@ -2,6 +2,7 @@ package io.github.bfox1.SwordArtOnline.init;
 
 import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
 import io.github.bfox1.SwordArtOnline.common.blocks.*;
+import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelBakery;
@@ -45,14 +46,15 @@ public class BlockInit
             else
             {
                 block.setUnlocalizedName(block.getRegistryName().toString());
+                GameRegistry.register(block);
+
+
+                ItemBlock iBlock = new ItemBlock(block);
+                iBlock.setRegistryName(block.getRegistryName());
+
+                GameRegistry.register(iBlock);
             }
-            GameRegistry.register(block);
 
-
-            ItemBlock iBlock = new ItemBlock(block);
-            iBlock.setRegistryName(block.getRegistryName());
-
-            GameRegistry.register(iBlock);
         }
 
         saoBlocks.forEach((k,v) -> v.setCreativeTab(SaoTabsManager.SaoBlocks) );
@@ -70,11 +72,12 @@ public class BlockInit
                 for(String s: var.getSubtypeArray())
                 {
 
-                    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(var), i, new ModelResourceLocation(ItemBlock.getItemFromBlock(var).getRegistryName(), "inventory"));
-                    ModelBakery.registerItemVariants(Item.getItemFromBlock(var), new ResourceLocation(Reference.MODID, "texture/blocks/" + s));
+                    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(var), i, new ModelResourceLocation(s.replace("sao:", ""), "inventory"));
+                    ModelBakery.registerItemVariants(Item.getItemFromBlock(var), new ResourceLocation(Reference.MODID, s.replaceAll("sao:", "")));
 
                     i++;
                 }
+                //ModelBakery.registerItemVariants(new SaoItemBlockMetaAbstract(var), new ResourceLocation());
             }
             ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(v), 0, new ModelResourceLocation(ItemBlock.getItemFromBlock(v).getRegistryName(), "inventory"));
         });
@@ -92,8 +95,9 @@ public class BlockInit
         for(String s : variationAbstract.subTypeNamList)
         {
             variationAbstract.setUnlocalizedName(s);
-            //GameRegistry.register(variationAbstract.type)
         }
+        GameRegistry.register(variationAbstract);
+        GameRegistry.register(new SaoItemBlockMetaAbstract(variationAbstract));
         variationAbstract.setUnlocalizedName(variationAbstract.getRegistryName().toString()).setSubTypeFullNameList();
     }
 
