@@ -1,5 +1,5 @@
 {
-  "parent":"sao:block/AincradCobble_block_one",
+  "parent":"sao:block/aincrad_cobble_block_one",
   "display": {
     "thirdperson": {
       "rotation": [ 10, -45, 170 ],

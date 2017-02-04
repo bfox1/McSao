@@ -1,13 +1,11 @@
 package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
-import java.util.List;
-import java.util.Random;
-
-import io.github.bfox1.SwordArtOnline.init.BlockInit;
-import net.minecraft.block.Block;
+import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -15,10 +13,14 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.structure.*;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.TemplateManager;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Dradgit on 2/3/2017.
@@ -142,7 +144,8 @@ public class SAOChunkProvider implements IChunkGenerator
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
-        this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+		// OLD this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
         Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -298,8 +301,11 @@ public class SAOChunkProvider implements IChunkGenerator
 		net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, this.worldObj, this.rand, chunkX, chunkZ, flag);
 		//MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(thisChunkProvider, worldObj, rand, chunkX, chunkZ, flag));
 
-		if (chunkX == 0 && chunkZ == 0) {
-			//this.towerGen.generate(this.worldObj, this.rand, chunkX, chunkZ, 40);
+		if (k == 0 && l == 0) {
+            TemplateManager manager = new TemplateManager("resources/assets/sao/schematics");
+            Template test = manager.getTemplate(worldObj.getMinecraftServer(), new ResourceLocation("sao","BlankShape-1.schematic"));
+            DungeonSchematic test1 = new DungeonSchematic(test, new int[][] {{2,3,4}, {5,6,7}}, new int[][] {{9, 5}, {15, 4}});
+            test1.placeSchematic(worldObj, 0, 130, 0);
 		}
 
 		/*

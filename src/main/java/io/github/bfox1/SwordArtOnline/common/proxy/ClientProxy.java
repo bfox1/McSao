@@ -42,7 +42,8 @@ public class ClientProxy extends CommonProxy
     public void init(FMLInitializationEvent event)
     {
         super.init(event);
-        blockRenderRegister(BlockInit.aincradCobbleVariation);
+       // blockRenderRegister(BlockInit.aincradCobbleVariation);
+        BlockInit.registerRenders();
         ItemInit.register();
     }
     

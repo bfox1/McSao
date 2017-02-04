@@ -2,18 +2,17 @@
 ########################################
 
 
-tile.AincradCobble.block_one.name=AincradCobble
-tile.AincradCobble.block_two.name=AincradCobbleBrick
-tile.AincradCobble.block_three.name=AincradCobbleChisel
-tile.RiftChest.name=Rift Chest
+tile.sao:aincrad_cobble.block_one.name=Aincrad Cobble
+tile.sao:aincrad_cobble.block_two.name=Aincrad Cobble Brick
+tile.sao:aincrad_cobble.block_three.name=Aincrad Cobble Chiseled
+tile.sao:aincrad_cobble.block_four.name=Aincrad Unknown Named
+
+tile.sao:aincrad_grass.block_one.name=Aincrad Grass Block
+tile.sao:aincrad_grass.block_two.name=Aincrad Unnamed Grass Block
 
 # Misc
 ########################################
 generator.saoWorldType=Aincrad
-=======
-tile.AincradCobble.block_one.name=Aincrad Cobble
-tile.AincradCobble.block_two.name=Aincrad Cobble Brick
-tile.AincradCobble.block_three.name=Aincrad Cobble Chisel
 
 item.HealingCrystal.name=Healing Crystal
 item.AntidoteCrystal.name=Antidote Crystal

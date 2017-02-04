@@ -1,20 +1,18 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
-import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
 import io.github.bfox1.SwordArtOnline.common.event.ForgeEventHandler;
 import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
-import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldProvider;
 import io.github.bfox1.SwordArtOnline.common.world.SAOWorldType;
-import io.github.bfox1.SwordArtOnline.init.*;
-import net.minecraft.entity.player.EntityPlayer;
+import io.github.bfox1.SwordArtOnline.init.BlockInit;
+import io.github.bfox1.SwordArtOnline.init.DimensionInit;
+import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.io.File;
 
@@ -99,16 +97,13 @@ public class CommonProxy implements SaoProxy
     public void preInit(FMLPreInitializationEvent event)
     {
         registerCapabilities();
-		GameRegistry.registerBlock(BlockInit.aincradCobbleVariation, SaoItemBlockMetaAbstract.class, "AincradCobble");
-        GameRegistry.registerBlock(BlockInit.aincradGrassVariation, SaoItemBlockMetaAbstract.class, "AincradGrass");
-        GameRegistry.registerBlock(BlockInit.aincradDirtVariation, SaoItemBlockMetaAbstract.class, "AincradDirt");
-
-		
+        BlockInit.register();
 		/*GameRegistry.registerItem(ItemInit.healingCrystal, "Healing Crystal");
         GameRegistry.registerItem(ItemInit.antidoteCrystal, "Antidote Crystal");
         GameRegistry.registerItem(ItemInit.teleportCrystal, "Teleport Crystal");*/
         
 		ItemInit.init();
+
 
     }
 

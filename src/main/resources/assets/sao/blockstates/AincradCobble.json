@@ -1,9 +1,0 @@
-{
-  "variants":
-  {
-    "type=block_one":{"model":"sao:AincradCobble_block_one"},
-    "type=block_two":{"model":"sao:AincradCobble_block_two"},
-    "type=block_three":{"model":"sao:AincradCobble_block_three"},
-    "type=block_four":{"model":"sao:AincradCobble_block_four"}
-  }
-}
