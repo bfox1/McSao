@@ -3,14 +3,18 @@ package io.github.bfox1.SwordArtOnline.common.world.biome;
 import java.util.ArrayList;
 import java.util.Random;
 
+import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
 import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
 import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraft.world.gen.structure.template.TemplateManager;
 
 /**
  * Made by Ian/Dradgit
@@ -52,6 +56,10 @@ public class SAOBiomeGenerator extends Biome
 	public void genTerrainBlocks(World world, Random rand, ChunkPrimer primer, int x, int z, double noiseGenSeed)
 	{
 		this.genVoidTerrain(world, rand, primer, x, z, noiseGenSeed);
+        TemplateManager manager = new TemplateManager("resources/assets/sao/schematics");
+        Template test = manager.getTemplate(world.getMinecraftServer(), new ResourceLocation("sao","BlankShape-1.schematic"));
+        DungeonSchematic test1 = new DungeonSchematic(test, new int[][] {{2,3,4}, {5,6,7}}, new int[][] {{9, 5}, {15, 4}});
+		test1.placeSchematic(world, 0, 130, 0);
 	}
 	
 	private boolean isWithinCone(int distance, int blockHeight)

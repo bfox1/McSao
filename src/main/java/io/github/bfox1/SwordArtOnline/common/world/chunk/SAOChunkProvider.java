@@ -142,7 +142,7 @@ public class SAOChunkProvider implements IChunkGenerator
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
-        this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+        this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
         Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -288,7 +288,7 @@ public class SAOChunkProvider implements IChunkGenerator
 		int k = chunkX * 16;
 		int l = chunkZ * 16;
 		BlockPos blockpos = new BlockPos(k, 0, l);
-		Biome biomegenbase = this.worldObj.getBiomeGenForCoords(blockpos.add(16, 0, 16));
+		//Biome biomegenbase = this.worldObj.getBiomeGenForCoords(blockpos.add(16, 0, 16));
 		this.rand.setSeed(this.worldObj.getSeed());
 		long i1 = this.rand.nextLong() / 2L * 2L + 1L;
 		long j1 = this.rand.nextLong() / 2L * 2L + 1L;

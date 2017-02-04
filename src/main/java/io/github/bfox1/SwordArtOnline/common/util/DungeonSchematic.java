@@ -1,6 +1,9 @@
 package io.github.bfox1.SwordArtOnline.common.util;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
 import java.util.HashMap;
@@ -39,11 +42,16 @@ public class DungeonSchematic
         boundingBox = new Cuboid(schematic.getSize().getX(), schematic.getSize().getZ(), schematic.getSize().getY());
     }
 
+    public void placeSchematic(World worldin, int x, int y, int z)
+    {
+        schematic.addBlocksToWorld(worldin, new BlockPos((double)x, (double)y, (double)z), new PlacementSettings());
+    }
+
     /**
      * Thank you handy game dev techniques. This method uses cuboids and origin points to determine if two sets of 3d bounding boxes intersect.
      * @param otherBox
      * @param otherBoxOrigin
-     * @returns whether the two cuboids intersect anywhere.
+     * @returns true if the two cuboids intersect, false if not. Intersections have to mean that they intersect on all three axes.
      */
     public boolean boundingBoxCollision(Cuboid otherBox, Point3D otherBoxOrigin)
     {
