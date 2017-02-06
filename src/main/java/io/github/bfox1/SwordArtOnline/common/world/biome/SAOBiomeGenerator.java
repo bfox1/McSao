@@ -18,8 +18,6 @@ import java.util.Random;
 
 /**
  * Made by Ian/Dradgit
- *
- * DO NOT TOUCH MY DAMN WORLD GEN CODE. SEE RANT IN SAOChunkProvider.
  */
 public class SAOBiomeGenerator extends Biome
 {

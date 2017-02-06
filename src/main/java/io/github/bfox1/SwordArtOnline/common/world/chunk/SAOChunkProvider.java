@@ -19,19 +19,12 @@ import net.minecraft.world.gen.structure.*;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Dradgit on 2/3/2017.
- *
- * In the future... if you do not plan on spending hours trying to fix the world gen to make it work properly with nice looking walls and proper terrain gen noise...
- * DO NOT TOUCH MY DAMN WORLD GEN CODE.
- * YOU HAVE NO IDEA HOW IT WORKS, SO DO NOT MESS WITH IT.
- * DO NOT CORRECT IT. DO NOT TRY MAKE IT LOOK PRETTY. DO NOT OPTIMIZE IT WITH LAMBDA FUNCTIONS. DO NOTHING!
- * AND BEFORE ALL ELSE, DO NOT "STYLE" IT TO SAVE WHITESPACE BY MOVING THE BRACKETS AROUND. IT IS A STUPID METRIC TO MEASURE PRODUCTIVITY ANYWAY.
- *
- * If there is something wrong that happened in the update process, I will fix it, and it will be easier because I know how it was supposed to work from experience.
+ * Created and fixed by Dradgit again on 2/3/2017.
  */
 public class SAOChunkProvider implements IChunkGenerator
 {
@@ -302,10 +295,11 @@ public class SAOChunkProvider implements IChunkGenerator
 		//MinecraftForge.EVENT_BUS.post(new PopulateChunkEvent.Pre(thisChunkProvider, worldObj, rand, chunkX, chunkZ, flag));
 
 		if (k == 0 && l == 0) {
-            TemplateManager manager = new TemplateManager("resources/assets/sao/schematics");
-            Template test = manager.getTemplate(worldObj.getMinecraftServer(), new ResourceLocation("sao","BlankShape-1.schematic"));
-            DungeonSchematic test1 = new DungeonSchematic(test, new int[][] {{2,3,4}, {5,6,7}}, new int[][] {{9, 5}, {15, 4}});
-            test1.placeSchematic(worldObj, 0, 130, 0);
+            DungeonSchematic test1 = new DungeonSchematic("BlankShape-1", new int[][] {{2,3,4}, {5,6,7}}, new int[][] {{9, 5}, {15, 4}});
+            test1.placeSchematic(worldObj, 0, 90, 0);
+            DungeonSchematic test2 = new DungeonSchematic("BasicCrossroads");
+            test2.placeSchematic(worldObj, 0, 67, 0);
+            System.out.println(test2.getConnections());
 		}
 
 		/*

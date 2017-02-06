@@ -36,7 +36,7 @@ public class SAOTeleporter extends Teleporter {
     }
 
     public void placeInPortal(Entity entity, float rotationYaw) {
-        if(this.worldServerInstance.provider.getDimension() != Reference.saoDimensionId) {
+        if(this.worldServerInstance.provider.getDimension() != Reference.SAO_DIMENSION_ID) {
             if(!this.placeInExistingPortal(entity, rotationYaw)) {
                 this.makePortal(entity);
                 this.placeInExistingPortal(entity, rotationYaw);

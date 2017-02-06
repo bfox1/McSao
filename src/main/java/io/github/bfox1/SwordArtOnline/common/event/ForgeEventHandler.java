@@ -56,13 +56,13 @@ public class ForgeEventHandler
         System.out.println("Teleporting to Aincrad...");
 		if(e.player.worldObj.getWorldType() == CommonProxy.SAO_WORLD_TYPE) {
 		    System.out.println("Checking world type.");
-			if(e.player.dimension != Reference.saoDimensionId) {
+			if(e.player.dimension != Reference.SAO_DIMENSION_ID) {
                 System.out.println("Teleported to Aincrad");
 				EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
                 int y = playerMP.worldObj.getChunkFromChunkCoords(0,0).getHeightValue(0,0);
                 playerMP.setPositionAndUpdate(0, y, 0);
                 ((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
-				playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP, Reference.saoDimensionId, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.saoDimensionId)));
+				playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP, Reference.SAO_DIMENSION_ID, new SAOTeleporter(playerMP.mcServer.worldServerForDimension(Reference.SAO_DIMENSION_ID)));
 				((EntityPlayerMP) e.player).worldObj.setSpawnPoint(new BlockPos(0, y, 0));
 				System.out.println("Teleported to Aincrad");
 
@@ -70,7 +70,7 @@ public class ForgeEventHandler
 			else
             {
                 System.out.println(e.player.dimension);
-                System.out.println(Reference.saoDimensionId);
+                System.out.println(Reference.SAO_DIMENSION_ID);
             }
 		}
 	}
@@ -83,7 +83,7 @@ public class ForgeEventHandler
     {
 
     	if(e.player.worldObj.getWorldType() == CommonProxy.SAO_WORLD_TYPE) {
-    		if(e.player.dimension == Reference.saoDimensionId) {
+    		if(e.player.dimension == Reference.SAO_DIMENSION_ID) {
     			EntityPlayerMP playerMP = (EntityPlayerMP) e.player;
 				
 				BlockPos p = playerMP.worldObj.getSpawnPoint();

@@ -110,7 +110,7 @@ public class CommonProxy implements SaoProxy
     @Override
     public void init(FMLInitializationEvent event) {
         SAOWorldProvider provider = new SAOWorldProvider();
-    	//DimensionManager.registerProviderType(Reference.saoDimensionId, SAOWorldProvider.class, false);
+    	//DimensionManager.registerProviderType(Reference.SAO_DIMENSION_ID, SAOWorldProvider.class, false);
         DimensionInit.init();
     }
 
