@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
+import io.github.bfox1.SwordArtOnline.common.util.Cuboid;
 import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
 import io.github.bfox1.SwordArtOnline.common.world.SAODungeonBuilder;
 import net.minecraft.block.BlockFalling;
@@ -300,8 +301,9 @@ public class SAOChunkProvider implements IChunkGenerator
             System.out.println(test2.getConnections());*/
             ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
             pieceList.add(new DungeonSchematic("BasicCrossroads"));
-            SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new DungeonSchematic.Cuboid(100, 100, 20));
+            SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new Cuboid(100, 100, 20));
             dungeonBuilder.buildDungeon(worldObj);
+
 		}
 
 		/*

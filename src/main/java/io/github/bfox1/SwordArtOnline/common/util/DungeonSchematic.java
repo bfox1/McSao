@@ -13,15 +13,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
-
-import static net.minecraft.init.Blocks.WOOL;
 
 /**
  * Created by Ian on 2/3/2017.
@@ -304,168 +301,6 @@ public class DungeonSchematic
             (0 <= box2MaxY && box1MaxY >= box2MinY) &&
             (0 <= box2MaxZ && box1MaxZ >= box2MinZ);
 }
-
-    public static class Point3D
-    {
-        int x,y,z;
-        public Point3D(int x, int y, int z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public boolean isEqualOrLargerThan(Point3D otherPoint)
-        {
-            return x >= otherPoint.x && y >= otherPoint.y && z >= otherPoint.z;
-        }
-
-        public boolean isLessThan(Point3D otherPoint)
-        {
-            return x < otherPoint.x && y < otherPoint.y && z < otherPoint.z;
-        }
-
-        public Point3D getNewPoint(int xOffset, int yOffset, int zOffset)
-        {
-            return new Point3D(x+xOffset, y+yOffset, z+zOffset);
-        }
-
-        public int getX() {
-            return x;
-        }
-
-        public int getY() {
-            return y;
-        }
-
-        public int getZ() {
-            return z;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Point3D-[x="+x+", y="+y+", z="+z+"]";
-        }
-    }
-
-    public static class Connection
-    {
-        /**
-         * Three sizes, 5x5, 9x9, 15x15, for simplicity for now.
-         */
-        int width;
-        /**
-         * Just the cardinal directions, not up or down. That's what we have stairs for.
-         */
-        EnumFacing direction;
-
-        public Connection(int width, EnumFacing direction)
-        {
-            this.width = width;
-            this.direction = direction;
-        }
-
-        public boolean canConnect(Connection otherConnection)
-        {
-            return otherConnection.direction == this.direction.getOpposite() && this.width == otherConnection.width;
-        }
-
-        public int getWidth() {
-            return width;
-        }
-
-        public EnumFacing getDirection() {
-            return direction;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "Connection-[width:"+width+" , direction:"+direction.toString()+"]";
-        }
-    }
-
-    public static class DungeonBounds
-    {
-        private Cuboid bounds;
-        private Point3D origin;
-
-        public DungeonBounds(Cuboid bounds, Point3D origin)
-        {
-            this.bounds = bounds;
-            this.origin = origin;
-        }
-
-        public DungeonBounds(Cuboid bounds, int x, int y, int z)
-        {
-            this.bounds = bounds;
-            this.origin = new Point3D(x,y,z);
-        }
-
-        public Point3D getMaxBounds()
-        {
-            return new Point3D(origin.getX() + bounds.getWidthX()-1, origin.getY() + bounds.getHeightY()-1, origin.getZ() + bounds.getLengthZ()-1);
-        }
-
-        public Cuboid getBounds() {
-            return bounds;
-        }
-
-        public Point3D getOrigin() {
-            return origin;
-        }
-
-        public boolean intersectsWith(DungeonBounds otherBounds)
-        {
-            Point3D otherBoundsMax = otherBounds.getMaxBounds();
-            Point3D boundsMax = getMaxBounds();
-            return (origin.getX() <= otherBoundsMax.getX() && boundsMax.getX() >= otherBounds.getOrigin().getX()) &&
-                    (origin.getZ() <= otherBoundsMax.getZ() && boundsMax.getZ() >= otherBounds.getOrigin().getZ()) &&
-                    (origin.getY() <= otherBoundsMax.getY() && boundsMax.getY() >= otherBounds.getOrigin().getY());
-        }
-    }
-
-    public static class Cuboid
-    {
-        int width, length, height;
-
-        public Cuboid(int width, int length, int height)
-        {
-            this.width = width;
-            this.length = length;
-            this.height = height;
-        }
-
-        public Point3D maxBoundsPoint(Point3D origin)
-        {
-            return new Point3D(origin.x+width, origin.y+height, origin.z+length);
-        }
-
-        public int getWidthX() {
-            return width;
-        }
-
-        public int getLengthZ() {
-            return length;
-        }
-
-        public int getHeightY() {
-            return height;
-        }
-
-        /**
-         * Determines whether or not this cuboid is within the other cuboid, by checking whether the cuboid's min and max bounds fall within the other cuboid's.
-         * @param originPoint - This cuboid's origin point, cannot be reasonably stored within, so it must be supplied.
-         * @param otherCuboid - The cuboid you're comparing this one to.
-         * @param otherOriginPoint - The other cuboid's origin point, cannot be reasonably stored within, so it must be supplied.
-         * @returns true if this cuboid's bounds are completely within the other cuboid's, inclusive.
-         */
-        public boolean isWithin(Point3D originPoint, Cuboid otherCuboid, Point3D otherOriginPoint)
-        {
-            return originPoint.isEqualOrLargerThan(otherOriginPoint) && this.maxBoundsPoint(originPoint).isLessThan(otherCuboid.maxBoundsPoint(otherOriginPoint));
-        }
-    }
 
     public Template getSchematic() {
         return schematic;

@@ -1,6 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.world;
 
-import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
+import io.github.bfox1.SwordArtOnline.common.util.*;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
@@ -16,31 +16,31 @@ public class SAODungeonBuilder
 {
     private ArrayList<DungeonSchematic> potentialPieces;
     private int maxDungeonPieces;
-    private DungeonSchematic.Cuboid dungeonBounds;
-    private HashSet<DungeonSchematic.DungeonBounds> placedBounds = new HashSet<>();
-    private HashMap<DungeonSchematic.Point3D, DungeonSchematic.Connection> connections = new HashMap<DungeonSchematic.Point3D, DungeonSchematic.Connection>();
-    private HashMap<DungeonSchematic.Point3D, DungeonSchematic> placedPieces = new HashMap<>();
-    private DungeonSchematic.Point3D dungeonOrigin = new DungeonSchematic.Point3D(0, 70, 0);
+    private Cuboid dungeonBounds;
+    private HashSet<DungeonBounds> placedBounds = new HashSet<>();
+    private HashMap<Point3D, Connection> connections = new HashMap<Point3D, Connection>();
+    private HashMap<Point3D, DungeonSchematic> placedPieces = new HashMap<>();
+    private Point3D dungeonOrigin = new Point3D(0, 70, 0);
 
-    public SAODungeonBuilder(ArrayList<DungeonSchematic> pieces, int maxDungeonPieces, DungeonSchematic.Cuboid bounds)
+    public SAODungeonBuilder(ArrayList<DungeonSchematic> pieces, int maxDungeonPieces, Cuboid bounds)
     {
         this.potentialPieces = pieces;
         this.maxDungeonPieces = maxDungeonPieces;
         this.dungeonBounds = bounds;
     }
 
-    private void placePiece(DungeonSchematic schema, DungeonSchematic.Point3D pieceOrigin)
+    private void placePiece(DungeonSchematic schema, Point3D pieceOrigin)
     {
-        DungeonSchematic.DungeonBounds bounds = new DungeonSchematic.DungeonBounds(schema.getBoundingBox(), pieceOrigin);
+        DungeonBounds bounds = new DungeonBounds(schema.getBoundingBox(), pieceOrigin);
         if(pieceOrigin.getX() < 0 || pieceOrigin.getY() < 0 || pieceOrigin.getZ() < 0 || !pieceFits(bounds))
         {
             System.out.println("Bad bounds arguments, somehow the schema is larger than the dungeon bounds.");
             return;
         }
         placedBounds.add(bounds);
-        for(DungeonSchematic.Point3D point : schema.getConnections().keySet())
+        for(Point3D point : schema.getConnections().keySet())
         {
-            DungeonSchematic.Point3D offsetPoint = new DungeonSchematic.Point3D(
+            Point3D offsetPoint = new Point3D(
                     point.getX() + pieceOrigin.getX(),
                     point.getY() + pieceOrigin.getY(),
                     point.getZ() + pieceOrigin.getZ());
@@ -59,13 +59,13 @@ public class SAODungeonBuilder
      * @param piece
      * @returns true if the piece fits within the dungeon and among all other placed pieces, false if not.
      */
-    public boolean pieceFits(DungeonSchematic.DungeonBounds piece)
+    public boolean pieceFits(DungeonBounds piece)
     {
         if(!(piece.getBounds().isWithin(piece.getOrigin(), dungeonBounds, dungeonOrigin)))
         {
             return false;
         }
-        for(DungeonSchematic.DungeonBounds bounds : placedBounds)
+        for(DungeonBounds bounds : placedBounds)
         {
             if(bounds.intersectsWith(piece))
             {
@@ -75,15 +75,15 @@ public class SAODungeonBuilder
         return true;
     }
 
-    public HashMap<DungeonSchematic, DungeonSchematic.DungeonBounds> getFittingPieces()
+    public HashMap<DungeonSchematic, DungeonBounds> getFittingPieces()
     {
-        HashMap<DungeonSchematic, DungeonSchematic.DungeonBounds> boundsList = new HashMap<>();
-        for(DungeonSchematic.Point3D connectionPoint : connections.keySet())
+        HashMap<DungeonSchematic, DungeonBounds> boundsList = new HashMap<>();
+        for(Point3D connectionPoint : connections.keySet())
         {
-            DungeonSchematic.Connection connection = connections.get(connectionPoint);
+            Connection connection = connections.get(connectionPoint);
             for(DungeonSchematic schema : potentialPieces)
             {
-                for(DungeonSchematic.Point3D connectionPoint2 : schema.getConnections().keySet())
+                for(Point3D connectionPoint2 : schema.getConnections().keySet())
                 {
                     if(connection.canConnect(schema.getConnections().get(connectionPoint2)))
                     {
@@ -91,8 +91,8 @@ public class SAODungeonBuilder
                         int offsetX = connectionPoint.getX()+offset.getX()-connectionPoint2.getX();
                         int offsetY = connectionPoint.getY()+offset.getY()-connectionPoint2.getY();
                         int offsetZ = connectionPoint.getZ()+offset.getZ()-connectionPoint2.getZ();
-                        DungeonSchematic.Point3D offsetPoint = new DungeonSchematic.Point3D(offsetX, offsetY, offsetZ);
-                        DungeonSchematic.DungeonBounds bounds = new DungeonSchematic.DungeonBounds(schema.getBoundingBox(), offsetPoint);
+                        Point3D offsetPoint = new Point3D(offsetX, offsetY, offsetZ);
+                        DungeonBounds bounds = new DungeonBounds(schema.getBoundingBox(), offsetPoint);
                         if(pieceFits(bounds))
                         {
                             boundsList.put(schema, bounds);
@@ -134,24 +134,24 @@ public class SAODungeonBuilder
         int randomX = rand.nextInt((maxX-minX)+1)+minX;
         int randomY = rand.nextInt((maxY-minY)+1)+minY;
         int randomZ = rand.nextInt((maxZ-minZ)+1)+minZ;
-        DungeonSchematic.Point3D initialOrigin = new DungeonSchematic.Point3D(randomX, randomY, randomZ);
+        Point3D initialOrigin = new Point3D(randomX, randomY, randomZ);
 
         placePiece(initial, initialOrigin);
 
         for(int i = 1; i < maxDungeonPieces; i++)
         {
             //get list of pieces that can fit, and what orientations etc
-            HashMap<DungeonSchematic, DungeonSchematic.DungeonBounds> fittingPieces = getFittingPieces();
+            HashMap<DungeonSchematic, DungeonBounds> fittingPieces = getFittingPieces();
             if(fittingPieces.isEmpty())
             {
                 break;
             }
-            ArrayList<DungeonSchematic.DungeonBounds> pieces = new ArrayList<DungeonSchematic.DungeonBounds>(fittingPieces.values());
-            DungeonSchematic.DungeonBounds randomPiece = pieces.get(rand.nextInt(pieces.size()));
+            ArrayList<DungeonBounds> pieces = new ArrayList<DungeonBounds>(fittingPieces.values());
+            DungeonBounds randomPiece = pieces.get(rand.nextInt(pieces.size()));
             DungeonSchematic schema = (DungeonSchematic)getKeyFromValue(fittingPieces, randomPiece);
             placePiece(schema, randomPiece.getOrigin());
         }
-        for(DungeonSchematic.Point3D point : placedPieces.keySet())
+        for(Point3D point : placedPieces.keySet())
         {
             placedPieces.get(point).placeSchematic(world, point.getX(), point.getY(), point.getZ());
         }
