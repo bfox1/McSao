@@ -1,6 +1,7 @@
 package io.github.bfox1.SwordArtOnline.common.util;
 
 import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
@@ -18,9 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static net.minecraft.init.Blocks.WOOL;
 
@@ -29,11 +28,19 @@ import static net.minecraft.init.Blocks.WOOL;
  */
 public class DungeonSchematic
 {
+    /**
+     * /me flips table WHY does this not have a public accessor for the list of blocks and entities?! I am sorely tempted to do away with it, copy most of the code, then
+     * implement additional functionality so I never have to use it again. If we ever update, I am going to do that instead of reflection.
+     */
     private Template schematic;
+    private String fileName;
     private HashMap<Point3D, Connection> connections = new HashMap<Point3D, Connection>();
     private Cuboid boundingBox;
-    private List<Template.BlockInfo> blocks;
+    private ArrayList<Template.BlockInfo> blocks;
     private IBlockState[][][] schema3DList;
+    private HashSet<Template.BlockInfo> fullBlockList = new HashSet<Template.BlockInfo>();
+    private HashSet<Template.BlockInfo> torchList = new HashSet<Template.BlockInfo>();
+
     /**
      * Constructor for the dungeon schematic. Will generate the hashmap of connections, and the bounds box.
      *
@@ -54,15 +61,30 @@ public class DungeonSchematic
             {
                 Field f = schematic.getClass().getDeclaredField("blocks"); //NoSuchFieldException
                 f.setAccessible(true);
-                List<Template.BlockInfo> schema = (List<Template.BlockInfo>) f.get(schematic);
+                ArrayList<Template.BlockInfo> schema = (ArrayList<Template.BlockInfo>) f.get(schematic);
                 this.blocks = schema;
+                this.fileName = fileName;
             }
             catch(Exception e)
             {
                 System.out.println(e);
+                System.out.println("Most likely the error here is from either the field within the Template class changing names, the type of the list" +
+                        " we are trying to get changing types, the data storage class within the list changing types or being replaced by a new class, or" +
+                        " the template class itself changing names or being replaced, which wouldn't surprise me in the least.");
             }
             boundingBox = new Cuboid(schematic.getSize().getX(), schematic.getSize().getZ(), schematic.getSize().getY());
             schema3DList = get3DSchema(blocks);
+            for(Template.BlockInfo block : blocks)
+            {
+                if(block.blockState.isFullBlock())
+                {
+                    fullBlockList.add(block);
+                }
+                else if(block.blockState.getBlock() instanceof BlockTorch)
+                {
+                    torchList.add(block);
+                }
+            }
             if(connectionPoints == null || connectionPoints.length < 1 || connections == null || connections.length < 1 || connectionPoints.length != connections.length)
             {
                 return;
@@ -98,7 +120,7 @@ public class DungeonSchematic
             {
                 Field f = schematic.getClass().getDeclaredField("blocks"); //NoSuchFieldException
                 f.setAccessible(true);
-                List<Template.BlockInfo> schema = (List<Template.BlockInfo>) f.get(schematic);
+                ArrayList<Template.BlockInfo> schema = (ArrayList<Template.BlockInfo>) f.get(schematic);
                 this.blocks = schema;
             }
             catch(Exception e)
@@ -158,22 +180,29 @@ public class DungeonSchematic
         return sizeCounter;
     }
 
-    public boolean isMarkerBlock(IBlockState block)
+    /**
+     * Checks the block type to see if it's a wool block, and then the color of the wool block to see if it's one of the colors we look for in a marker block.
+     * @param block - An IBlockState pulled from the world or a schema, must be a blockstate so that it can have IProperty values.
+     * @returns True if the color is red, blue, yellow, or orange, false if it is none of those colors or not a wool block.
+     */
+    public static boolean isMarkerBlock(IBlockState block)
     {
-        EnumDyeColor color = block.getValue(BlockColored.COLOR);
-        switch(color)
-        {
-            case RED:
-                return true;
-            case BLUE:
-                return true;
-            case YELLOW:
-                return true;
-            case ORANGE:
-                return true;
-            default:
-                return false;
+        if(block.getBlock().equals(Blocks.WOOL)) {
+            EnumDyeColor color = block.getValue(BlockColored.COLOR);
+            switch (color) {
+                case RED:
+                    return true;
+                case BLUE:
+                    return true;
+                case YELLOW:
+                    return true;
+                case ORANGE:
+                    return true;
+                default:
+                    return false;
+            }
         }
+        return false;
     }
 
     /**
@@ -261,22 +290,22 @@ public class DungeonSchematic
      * @returns true if the two cuboids intersect, false if not. Intersections have to mean that they intersect on all three axes.
      */
     public boolean boundingBoxCollision(Cuboid otherBox, Point3D otherBoxOrigin)
-    {
-        int box1MaxX = boundingBox.getWidthX();
-        int box1MaxY = boundingBox.getHeightY();
-        int box1MaxZ = boundingBox.getLengthZ();
-        int box2MinX = otherBoxOrigin.x;
-        int box2MinY = otherBoxOrigin.y;
-        int box2MinZ = otherBoxOrigin.z;
-        int box2MaxX = otherBox.getWidthX()+box2MinX;
-        int box2MaxY = otherBox.getHeightY()+box2MinY;
-        int box2MaxZ = otherBox.getLengthZ()+box2MinZ;
-        return (0 <= box2MaxX && box1MaxX >= box2MinX) &&
-                (0 <= box2MaxY && box1MaxY >= box2MinY) &&
-                (0 <= box2MaxZ && box1MaxZ >= box2MinZ);
-    }
+{
+    int box1MaxX = boundingBox.getWidthX();
+    int box1MaxY = boundingBox.getHeightY();
+    int box1MaxZ = boundingBox.getLengthZ();
+    int box2MinX = otherBoxOrigin.x;
+    int box2MinY = otherBoxOrigin.y;
+    int box2MinZ = otherBoxOrigin.z;
+    int box2MaxX = otherBox.getWidthX()+box2MinX;
+    int box2MaxY = otherBox.getHeightY()+box2MinY;
+    int box2MaxZ = otherBox.getLengthZ()+box2MinZ;
+    return (0 <= box2MaxX && box1MaxX >= box2MinX) &&
+            (0 <= box2MaxY && box1MaxY >= box2MinY) &&
+            (0 <= box2MaxZ && box1MaxZ >= box2MinZ);
+}
 
-    public class Point3D
+    public static class Point3D
     {
         int x,y,z;
         public Point3D(int x, int y, int z)
@@ -286,6 +315,33 @@ public class DungeonSchematic
             this.z = z;
         }
 
+        public boolean isEqualOrLargerThan(Point3D otherPoint)
+        {
+            return x >= otherPoint.x && y >= otherPoint.y && z >= otherPoint.z;
+        }
+
+        public boolean isLessThan(Point3D otherPoint)
+        {
+            return x < otherPoint.x && y < otherPoint.y && z < otherPoint.z;
+        }
+
+        public Point3D getNewPoint(int xOffset, int yOffset, int zOffset)
+        {
+            return new Point3D(x+xOffset, y+yOffset, z+zOffset);
+        }
+
+        public int getX() {
+            return x;
+        }
+
+        public int getY() {
+            return y;
+        }
+
+        public int getZ() {
+            return z;
+        }
+
         @Override
         public String toString()
         {
@@ -293,7 +349,7 @@ public class DungeonSchematic
         }
     }
 
-    public class Connection
+    public static class Connection
     {
         /**
          * Three sizes, 5x5, 9x9, 15x15, for simplicity for now.
@@ -315,6 +371,14 @@ public class DungeonSchematic
             return otherConnection.direction == this.direction.getOpposite() && this.width == otherConnection.width;
         }
 
+        public int getWidth() {
+            return width;
+        }
+
+        public EnumFacing getDirection() {
+            return direction;
+        }
+
         @Override
         public String toString()
         {
@@ -322,7 +386,47 @@ public class DungeonSchematic
         }
     }
 
-    public class Cuboid
+    public static class DungeonBounds
+    {
+        private Cuboid bounds;
+        private Point3D origin;
+
+        public DungeonBounds(Cuboid bounds, Point3D origin)
+        {
+            this.bounds = bounds;
+            this.origin = origin;
+        }
+
+        public DungeonBounds(Cuboid bounds, int x, int y, int z)
+        {
+            this.bounds = bounds;
+            this.origin = new Point3D(x,y,z);
+        }
+
+        public Point3D getMaxBounds()
+        {
+            return new Point3D(origin.getX() + bounds.getWidthX()-1, origin.getY() + bounds.getHeightY()-1, origin.getZ() + bounds.getLengthZ()-1);
+        }
+
+        public Cuboid getBounds() {
+            return bounds;
+        }
+
+        public Point3D getOrigin() {
+            return origin;
+        }
+
+        public boolean intersectsWith(DungeonBounds otherBounds)
+        {
+            Point3D otherBoundsMax = otherBounds.getMaxBounds();
+            Point3D boundsMax = getMaxBounds();
+            return (origin.getX() <= otherBoundsMax.getX() && boundsMax.getX() >= otherBounds.getOrigin().getX()) &&
+                    (origin.getZ() <= otherBoundsMax.getZ() && boundsMax.getZ() >= otherBounds.getOrigin().getZ()) &&
+                    (origin.getY() <= otherBoundsMax.getY() && boundsMax.getY() >= otherBounds.getOrigin().getY());
+        }
+    }
+
+    public static class Cuboid
     {
         int width, length, height;
 
@@ -333,19 +437,9 @@ public class DungeonSchematic
             this.height = height;
         }
 
-        public int getMaxX(int startX)
+        public Point3D maxBoundsPoint(Point3D origin)
         {
-            return width+startX;
-        }
-
-        public int getMaxY(int startY)
-        {
-            return height+startY;
-        }
-
-        public int getMaxZ(int startZ)
-        {
-            return length + startZ;
+            return new Point3D(origin.x+width, origin.y+height, origin.z+length);
         }
 
         public int getWidthX() {
@@ -358,6 +452,18 @@ public class DungeonSchematic
 
         public int getHeightY() {
             return height;
+        }
+
+        /**
+         * Determines whether or not this cuboid is within the other cuboid, by checking whether the cuboid's min and max bounds fall within the other cuboid's.
+         * @param originPoint - This cuboid's origin point, cannot be reasonably stored within, so it must be supplied.
+         * @param otherCuboid - The cuboid you're comparing this one to.
+         * @param otherOriginPoint - The other cuboid's origin point, cannot be reasonably stored within, so it must be supplied.
+         * @returns true if this cuboid's bounds are completely within the other cuboid's, inclusive.
+         */
+        public boolean isWithin(Point3D originPoint, Cuboid otherCuboid, Point3D otherOriginPoint)
+        {
+            return originPoint.isEqualOrLargerThan(otherOriginPoint) && this.maxBoundsPoint(originPoint).isLessThan(otherCuboid.maxBoundsPoint(otherOriginPoint));
         }
     }
 
@@ -385,11 +491,11 @@ public class DungeonSchematic
         this.boundingBox = boundingBox;
     }
 
-    public List<Template.BlockInfo> getBlocks() {
+    public ArrayList<Template.BlockInfo> getBlocks() {
         return blocks;
     }
 
-    public void setBlocks(List<Template.BlockInfo> blocks) {
+    public void setBlocks(ArrayList<Template.BlockInfo> blocks) {
         this.blocks = blocks;
     }
 
@@ -400,4 +506,28 @@ public class DungeonSchematic
     public void setSchema3DList(IBlockState[][][] schema3DList) {
         this.schema3DList = schema3DList;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    /**
+     * Attempt to uniquely copy the data within the list of BlockInfo objects, uses copy methods/constructors from BlockPos and NBTTagCompound,
+     * but it doesn't need it for IBlockState because it can't be copied, each block state is unique to a position in the world and can't be accessed
+     * without the world anyway.
+     * @returns a non-reference copy list of the data within the block info list.
+     */
+    public ArrayList<Template.BlockInfo> copyBlockList()
+    {
+        ArrayList<Template.BlockInfo> copyList = new ArrayList<Template.BlockInfo>();
+        for(Template.BlockInfo block : this.blocks)
+        {
+            BlockPos copyPos = new BlockPos(block.pos);
+            NBTTagCompound copyNBTData = block.tileentityData.copy();
+            Template.BlockInfo copyBlock = new Template.BlockInfo(copyPos, block.blockState, copyNBTData);
+            copyList.add(copyBlock);
+        }
+        return copyList;
+    }
+
 }
