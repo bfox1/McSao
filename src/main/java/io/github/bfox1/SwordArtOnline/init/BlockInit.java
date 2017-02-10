@@ -3,15 +3,16 @@ package io.github.bfox1.SwordArtOnline.init;
 import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
 import io.github.bfox1.SwordArtOnline.common.blocks.*;
 import io.github.bfox1.SwordArtOnline.common.blocks.itemblock.SaoItemBlockMetaAbstract;
-import io.github.bfox1.SwordArtOnline.common.util.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistry;
 
 import java.util.HashMap;
 
@@ -20,6 +21,7 @@ import java.util.HashMap;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
+//@GameRegistry.ObjectHolder(Reference.MODID)
 public class BlockInit
 {
 
@@ -28,12 +30,41 @@ public class BlockInit
 
     static
     {
-        setBlock("aincrad_cobble", new AincradCobbleVariation(Material.ROCK, 3));
-        setBlock("aincrad_grass", new AincradGrassVariation(Material.GRASS, 4));
-        setBlock("aincrad_stone", new AincradStoneVariation(Material.ROCK, 4));
-        setBlock("aincrad_dirt", new AincradDirtVariation(Material.GROUND,4));
+       // setBlock("aincrad_cobble", new AincradCobbleVariation(Material.ROCK, 3));
+       // setBlock("aincrad_grass", new AincradGrassVariation(Material.GRASS, 4));
+       // setBlock("aincrad_stone", new AincradStoneVariation(Material.ROCK, 4));
+       // setBlock("aincrad_dirt", new AincradDirtVariation(Material.GROUND,4));
+
+        setBlock("aincrad_grass_t1", new AincradGrass());
+        setBlock("aincrad_grass_t2", new AincradGrass());
+        setBlock("aincrad_wall_t1", new AincradWalls());
+        setBlock("aincrad_wall_t2", new AincradWalls());
+        setBlock("aincrad_wall_t3", new AincradWalls());
+        setBlock("aincrad_dirt_t1", new AincradDirt());
     }
 
+    @Mod.EventBusSubscriber
+    public static class RegistrationHandler
+    {
+        @SubscribeEvent
+        public void onBlockRegistration(RegistryEvent.Register<Block> blockRegistryEvent)
+        {
+            final IForgeRegistry<Block> registry = blockRegistryEvent.getRegistry();
+
+            for(SaoBlockAbstract saoBlockAbstract : saoBlocks.values())
+            {
+                saoBlockAbstract = registerBlocks(registry, saoBlockAbstract);
+                System.out.println(saoBlockAbstract.getRegistryName());
+            }
+
+        }
+
+        private static <T extends Block> T registerBlocks(IForgeRegistry registry, T block)
+        {
+            return BlockInit.register(block);
+        }
+
+    }
 
     public static void register()
     {
@@ -60,6 +91,20 @@ public class BlockInit
         saoBlocks.forEach((k,v) -> v.setCreativeTab(SaoTabsManager.SaoBlocks) );
     }
 
+    public static <T extends Block> T register(T block)
+    {
+        block.setUnlocalizedName(block.getRegistryName().toString());
+        GameRegistry.register(block);
+
+        ItemBlock iBlock = new ItemBlock(block);
+        iBlock.setRegistryName(block.getRegistryName());
+
+        GameRegistry.register(iBlock);
+        block.setCreativeTab(SaoTabsManager.SaoBlocks);
+        return block;
+    }
+
+
     public static void registerRenders()
     {
         saoBlocks.forEach((k,v) ->
@@ -71,15 +116,17 @@ public class BlockInit
                 int i =0;
                 for(String s: var.getSubtypeArray())
                 {
-
-                    ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(var), i, new ModelResourceLocation(s.replace("sao:", ""), "inventory"));
-                    ModelBakery.registerItemVariants(Item.getItemFromBlock(var), new ResourceLocation(Reference.MODID, s.replaceAll("sao:", "")));
-
+                    System.out.println(s);
+                    System.out.println(var.getRegistryName());
+                    ModelLoader.setCustomModelResourceLocation(new SaoItemBlockMetaAbstract(var), i, new ModelResourceLocation(s, "inventory"));
                     i++;
                 }
-                //ModelBakery.registerItemVariants(new SaoItemBlockMetaAbstract(var), new ResourceLocation());
             }
-            ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(v), 0, new ModelResourceLocation(ItemBlock.getItemFromBlock(v).getRegistryName(), "inventory"));
+            else
+            {
+                System.out.println(ItemBlock.getItemFromBlock(v).getRegistryName());
+                ModelLoader.setCustomModelResourceLocation(ItemBlock.getItemFromBlock(v), 0, new ModelResourceLocation(ItemBlock.getItemFromBlock(v).getRegistryName(), "inventory"));
+            }
         });
     }
 
@@ -90,15 +137,11 @@ public class BlockInit
 
     private static void registerVariations(SaoBlockVariationAbstract variationAbstract)
     {
-        variationAbstract.setSubTypeFullNameList();
-
-        for(String s : variationAbstract.subTypeNamList)
-        {
-            variationAbstract.setUnlocalizedName(s);
-        }
+        //variationAbstract.setSubTypeFullNameList();
+        variationAbstract.setUnlocalizedName(variationAbstract.getRegistryName().toString()).setSubTypeFullNameList();
         GameRegistry.register(variationAbstract);
         GameRegistry.register(new SaoItemBlockMetaAbstract(variationAbstract));
-        variationAbstract.setUnlocalizedName(variationAbstract.getRegistryName().toString()).setSubTypeFullNameList();
+
     }
 
     private static void setBlock(String name, SaoBlockAbstract block)

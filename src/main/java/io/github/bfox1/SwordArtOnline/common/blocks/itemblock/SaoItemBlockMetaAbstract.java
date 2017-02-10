@@ -19,6 +19,7 @@ public class SaoItemBlockMetaAbstract extends ItemBlock
         {
             throw new IllegalArgumentException(String.format("The given Block %s is not an instance of SaoBlock!", block.getUnlocalizedName()));
         }
+        this.setMaxDamage(0);
         this.setHasSubtypes(true);
     }
 

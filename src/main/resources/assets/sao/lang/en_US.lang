@@ -2,13 +2,14 @@
 ########################################
 
 
-tile.sao:aincrad_cobble.block_one.name=Aincrad Cobble
-tile.sao:aincrad_cobble.block_two.name=Aincrad Cobble Brick
-tile.sao:aincrad_cobble.block_three.name=Aincrad Cobble Chiseled
-tile.sao:aincrad_cobble.block_four.name=Aincrad Unknown Named
+tile.sao:aincrad_dirt_t1.name=Aincrad Dirt Block
+tile.sao:aincrad_wall_t1.name=Aincrad Wall Block
+tile.sao:aincrad_wall_t2.name=Aincrad Wall Stoned Block
+tile.sao:aincrad_wall_t3.name=Aincrad Wall Chiseled Block
 
-tile.sao:aincrad_grass.block_one.name=Aincrad Grass Block
-tile.sao:aincrad_grass.block_two.name=Aincrad Unnamed Grass Block
+
+tile.sao:aincrad_grass.t1.name=Aincrad Grass Block
+tile.sao:aincrad_grass.t2.name=Aincrad Unnamed Grass Block
 
 # Misc
 ########################################

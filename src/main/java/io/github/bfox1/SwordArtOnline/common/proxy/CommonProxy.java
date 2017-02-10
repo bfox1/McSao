@@ -8,7 +8,6 @@ import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.DimensionInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
 import net.minecraft.world.WorldType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

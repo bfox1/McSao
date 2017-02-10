@@ -46,7 +46,7 @@ public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract
     @Override
     public String getSaoMetaBlockName(ItemStack stack)
     {
-
+        System.out.println(EnumType.getTypeById(stack.getItemDamage()).getName());
         return EnumType.getTypeById(stack.getItemDamage()).getName();
     }
 
@@ -110,9 +110,7 @@ public abstract class SaoBlockVariationAbstract extends SaoBlockAbstract
     {
         for(int i = 0; i <= subTypes; i++)
         {
-            //this.subTypeNamList.add(i, this.getUnlocalizedName().replaceAll("tile.", "") + "_" + EnumType.getTypeById(i).getName());
             this.subTypeNamList.add(i, this.getRegistryName().toString() + "_" + EnumType.getTypeById(i).getName());
-            System.out.println(this.subTypeNamList.get(i));
         }
         return this;
     }

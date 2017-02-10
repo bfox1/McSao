@@ -35,6 +35,7 @@ public class ClientProxy extends CommonProxy
         //ModelLoader.setCustomModelResourceLocation(ItemInit.healingCrystal, 0, Models.crystalHealing);
         //ModelLoader.setCustomModelResourceLocation(ItemInit.antidoteCrystal, 0, Models.crystalAntidote);
         //ModelLoader.setCustomModelResourceLocation(ItemInit.teleportCrystal, 0, Models.crystalTeleport);
+        BlockInit.registerRenders();
 
     }
 
@@ -42,8 +43,6 @@ public class ClientProxy extends CommonProxy
     public void init(FMLInitializationEvent event)
     {
         super.init(event);
-       // blockRenderRegister(BlockInit.aincradCobbleVariation);
-        BlockInit.registerRenders();
         ItemInit.register();
     }
     

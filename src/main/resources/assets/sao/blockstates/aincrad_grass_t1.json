@@ -1,0 +1,11 @@
+{
+  "variants":
+  {
+    "normal":
+    [
+      {"model":"sao:aincrad_grass_t1"},
+    {"model":"sao:aincrad_grass_t1", "y" : 90},
+    {"model":"sao:aincrad_grass_t1", "y" : 180},
+      {"model":"sao:aincrad_grass_t1", "y" : 270}]
+  }
+}

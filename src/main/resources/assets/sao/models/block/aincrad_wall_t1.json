@@ -1,0 +1,7 @@
+{
+  "parent":"block/cube_all",
+  "textures":
+  {
+    "all":"sao:blocks/aincrad_wall_t1"
+  }
+}
