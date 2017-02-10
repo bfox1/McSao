@@ -6,7 +6,6 @@ import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -17,10 +16,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.structure.*;
-import net.minecraft.world.gen.structure.template.Template;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -298,9 +294,9 @@ public class SAOChunkProvider implements IChunkGenerator
 
 		if (k == 0 && l == 0) {
             /*DungeonSchematic test1 = new DungeonSchematic("BlankShape-1", new int[][] {{2,3,4}, {5,6,7}}, new int[][] {{9, 5}, {15, 4}});
-            test1.placeSchematic(worldObj, 0, 90, 0);
+            test1.placeSchematic(worldObj, 0, 90, 0); //TODO: These here caused errors.
             DungeonSchematic test2 = new DungeonSchematic("BasicCrossroads");
-            test2.placeSchematic(worldObj, 0, 67, 0);
+            test2.placeSchematic(worldObj, 0, 67, 0); //TODO: Same here
             System.out.println(test2.getConnections());*/
             ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
             pieceList.add(new DungeonSchematic("BasicCrossroads"));
