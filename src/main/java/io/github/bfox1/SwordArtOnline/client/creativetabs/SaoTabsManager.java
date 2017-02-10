@@ -20,7 +20,7 @@ public class SaoTabsManager extends CreativeTabs
         super(label);
     }
 
-    public static final SaoTabsManager SaoBlocks = new SaoTabsManager("Sao Blocks").setItem(Item.getItemFromBlock(BlockInit.getSaoBlocks("aincrad_grass_t1")));
+    public static final SaoTabsManager SaoBlocks = new SaoTabsManager("Sao Blocks").setItem(Item.getItemFromBlock(BlockInit.getSaoBlocks("aincrad_grass_t1").getBlock()));
     public static final SaoTabsManager SaoItems = new SaoTabsManager("Sao Items").setItem(null);
 
     /**

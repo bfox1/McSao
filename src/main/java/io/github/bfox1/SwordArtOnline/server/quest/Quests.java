@@ -1,6 +1,4 @@
-package io.github.bfox1.SwordArtOnline.quest;
-
-import io.github.bfox1.SwordArtOnline.common.util.LogHelper;
+package io.github.bfox1.SwordArtOnline.server.quest;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;

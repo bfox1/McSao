@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.quest;
+package io.github.bfox1.SwordArtOnline.server.quest;
 
 import io.github.bfox1.SwordArtOnline.common.player.PlayerPropertyHandler;
 import io.github.bfox1.SwordArtOnline.common.util.LogHelper;
@@ -16,7 +16,7 @@ import java.util.UUID;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
-public class QuestManager
+public final class QuestManager
 {
     private final HashMap<String, Quests> questTemplate;
     private final List<QuestGlobals> tempGlobals;
@@ -74,7 +74,7 @@ public class QuestManager
         }
     }
 
-    public void callActives(Event event, PlayerPropertyHandler property)
+    public final void callActives(Event event, PlayerPropertyHandler property)
     {
         for(Quests quest : questTemplate.values())
         {

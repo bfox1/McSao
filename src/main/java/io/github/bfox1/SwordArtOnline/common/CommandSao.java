@@ -29,7 +29,7 @@ public class CommandSao extends CommandBase
     {
         if(args[0].equalsIgnoreCase("questReload"))
         {
-            ServerProxy.manager.scanQuests();
+            ServerProxy.server.getQuestManager().scanQuests();
         }
     }
     

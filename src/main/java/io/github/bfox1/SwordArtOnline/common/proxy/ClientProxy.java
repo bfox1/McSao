@@ -1,13 +1,10 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
 import io.github.bfox1.SwordArtOnline.client.overlay.SaoHUD;
-import io.github.bfox1.SwordArtOnline.common.blocks.SaoBlockVariationAbstract;
 import io.github.bfox1.SwordArtOnline.common.util.Reference;
-import io.github.bfox1.SwordArtOnline.common.util.RegisterUtility;
 import io.github.bfox1.SwordArtOnline.common.util.Settings;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import io.github.bfox1.SwordArtOnline.init.ItemInit;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.model.obj.OBJLoader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -52,21 +49,5 @@ public class ClientProxy extends CommonProxy
     	super.postInit(event);
     }
 
-    /**
-     * Method is used to not only register but render the block and itemBlock.
-     * @param block
-     */
-    public void blockRenderRegister(Block block)
-    {
-        //registerBlockMetaItem(block, "sao:AincradCobble_block_one","sao:AincradCobble_block_two","sao:AincradCobble_block_three","sao:AincradCobble_block_four");
-        RegisterUtility.registerBlockMetaItem(block, ((SaoBlockVariationAbstract)block).getSubtypeArray());
-    }
-
-    /**
-     * Registers a single block.
-     * @param block The Block to register and render.
-     * @param meta The id of the MEta. Should be left as 0, if anything else, use ClientProxy#registerBlockMetaItem
-     * @param blockName The Blocks name.
-     */
 
 }

@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.common.handler;
+package io.github.bfox1.SwordArtOnline.common.event;
 
 //code referenced from https://github.com/kulttuuri/quick-hotbar-mod/blob/1.8.9/src/main/java/com/kulttuuri/quickhotbar/QuickHotbarEventHandler.java#L270
 

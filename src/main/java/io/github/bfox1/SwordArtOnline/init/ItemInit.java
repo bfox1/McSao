@@ -1,16 +1,19 @@
 package io.github.bfox1.SwordArtOnline.init;
 
-import io.github.bfox1.SwordArtOnline.common.items.ISaoItem;
+import io.github.bfox1.SwordArtOnline.api.item.ISaoItem;
 import io.github.bfox1.SwordArtOnline.common.items.SaoItemAbstract;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalAntidote;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalHealing;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalTeleport;
-import io.github.bfox1.SwordArtOnline.common.items.swords.SaoSwordItem;
+
 import net.minecraft.item.Item;
 import org.luaj.vm2.LuaValue;
 
 import java.util.HashMap;
 
+/**
+ * Granted this is a complete mess! this is one of the next things i will work on, which is Item initializing.
+ */
 public class ItemInit
 {
 
@@ -75,7 +78,7 @@ public class ItemInit
         return saoItems.get(name);
     }
 
-	public static SaoSwordItem getSwordIndex(int location)
+	public static Item getSwordIndex(int location)
 	{
 		//if(saoSwordItem[location] != null)
 		{
@@ -84,7 +87,7 @@ public class ItemInit
 		return null;
 	}
     @Deprecated
-	public static SaoSwordItem getSwordByIndex(int location)
+	public static Item getSwordByIndex(int location)
 	{
 		//if(saoSwordItem[location] != null)
 		{

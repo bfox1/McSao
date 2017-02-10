@@ -1,7 +1,7 @@
-package io.github.bfox1.SwordArtOnline.common.util;
+package io.github.bfox1.SwordArtOnline.client;
 
+import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.util.ResourceLocation;
 
 public class Models {
 	public static final ModelResourceLocation crystalHealing = new ModelResourceLocation(Reference.MODID + ":" + "HealingCrystal", "inventory");

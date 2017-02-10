@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.quest;
+package io.github.bfox1.SwordArtOnline.server.quest;
 
 import io.github.bfox1.SwordArtOnline.common.util.ClassReference;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;

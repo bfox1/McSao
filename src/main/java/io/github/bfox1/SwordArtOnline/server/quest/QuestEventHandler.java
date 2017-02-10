@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.quest;
+package io.github.bfox1.SwordArtOnline.server.quest;
 
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
 import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestPlayerInteract;
@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class QuestEventHandler
 {
 
-    private QuestManager manager = ServerProxy.manager;
+    private QuestManager manager = ServerProxy.server.getQuestManager();
 
     @SubscribeEvent
     public void onItemPickupEvent(PlayerEvent.ItemPickupEvent event)
@@ -60,6 +60,7 @@ public class QuestEventHandler
             {
                // SaoExtendedProperty property = (SaoExtendedProperty.getData(event.entity));
                 manager.setPlayerQuest(event, "MiscTemplate", "testObjective.lua");
+                //
             }
 
         }

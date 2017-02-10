@@ -36,9 +36,9 @@ public class SAOBiomeGenerator extends Biome
 		this.spawnableCreatureList.clear();
 		this.spawnableCaveCreatureList.clear();
 		this.spawnableWaterCreatureList.clear();
-		this.topBlock = BlockInit.getSaoBlocks("aincrad_grass_t1").getDefaultState();
-		this.fillerBlock = BlockInit.getSaoBlocks("aincrad_dirt_t1").getDefaultState();
-		this.wallBlock = BlockInit.getSaoBlocks("aincrad_wall_t1").getDefaultState();
+		this.topBlock = BlockInit.getSaoBlocks("aincrad_grass_t1").getBlock().getDefaultState();
+		this.fillerBlock = BlockInit.getSaoBlocks("aincrad_dirt_t1").getBlock().getDefaultState();
+		this.wallBlock = BlockInit.getSaoBlocks("aincrad_wall_t1").getBlock().getDefaultState();
 
 	}
 	

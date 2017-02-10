@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.common.blocks.itemblock;
+package io.github.bfox1.SwordArtOnline.api.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

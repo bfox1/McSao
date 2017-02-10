@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.playerutilities;
+package io.github.bfox1.SwordArtOnline.common.util.playerutilities;
 
 
 import net.minecraft.nbt.NBTTagCompound;

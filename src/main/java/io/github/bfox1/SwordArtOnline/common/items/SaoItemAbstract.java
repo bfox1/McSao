@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.items;
 
+import io.github.bfox1.SwordArtOnline.api.item.ISaoItem;
 import io.github.bfox1.SwordArtOnline.client.creativetabs.SaoTabsManager;
 import net.minecraft.item.Item;
 

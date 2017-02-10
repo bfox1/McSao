@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.quest;
+package io.github.bfox1.SwordArtOnline.server.quest;
 
 /**
  * Created by bfox1 on 4/23/2016.

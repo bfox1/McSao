@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.common.items;
+package io.github.bfox1.SwordArtOnline.api.item;
 
 import net.minecraft.item.Item;
 
