@@ -1,6 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.event;
 
-import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
+import io.github.bfox1.SwordArtOnline.server.questevents.QuestItemPickupEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 /**

@@ -1,15 +1,10 @@
-package io.github.bfox1.SwordArtOnline.common.event.questevents;
+package io.github.bfox1.SwordArtOnline.server.questevents;
 
-import io.github.bfox1.SwordArtOnline.common.items.SaoItemAbstract;
-import io.github.bfox1.SwordArtOnline.common.items.swords.SaoSwordItem;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.jse.CoerceLuaToJava;
-import org.omg.CORBA.Object;
 
 /**
  * Created by rober on 5/21/2016.

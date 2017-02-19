@@ -8,6 +8,7 @@ import io.github.bfox1.SwordArtOnline.common.util.Reference;
 import io.github.bfox1.SwordArtOnline.common.world.SAOTeleporter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -90,20 +91,25 @@ public class ForgeEventHandler
 				playerMP.setPosition(p.getX(), p.getY(), p.getZ());
     		}
     	}
+
+        System.out.println(e.player.hasCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES,null));
     }
 
     @SubscribeEvent
     public void addCapabilities(AttachCapabilitiesEvent event)
     {
 
-        if(event.getObject() instanceof Entity)
+
+        if(event.getObject() instanceof EntityPlayer)
         {
             Entity e = (Entity) event.getObject();
 
+            if(!e.worldObj.isRemote)
             if(!e.hasCapability(CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES, null))
             {
                 //TODO: FIX CAPABILITIES
-               // event.addCapability(new ResourceLocation(Reference.MODID), (ICapabilityProvider) CapabilitySaoPlayerHandler.PLAYER_HANDLER_PROPERTIES);
+                System.out.println("test");
+                //event.addCapability(new ResourceLocation(Reference.MODID),new CapabilitySaoPlayerHandler());
 
             }
         }

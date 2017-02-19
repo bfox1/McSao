@@ -1,4 +1,4 @@
-package io.github.bfox1.SwordArtOnline.common.event.questevents;
+package io.github.bfox1.SwordArtOnline.server.questevents;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;

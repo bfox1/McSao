@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.common.proxy;
 
+import io.github.bfox1.SwordArtOnline.common.event.ServerEventHandler;
 import io.github.bfox1.SwordArtOnline.server.Server;
 import io.github.bfox1.SwordArtOnline.server.quest.QuestEventHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,6 +19,7 @@ public class ServerProxy extends CommonProxy
     {
         super.registerEventHandlers();
         MinecraftForge.EVENT_BUS.register(new QuestEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ServerEventHandler());
     }
 
     @Override

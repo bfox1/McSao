@@ -12,6 +12,7 @@ import java.util.UUID;
  * Deuteronomy 8:18
  * 1 Peter 4:10
  */
+@Deprecated
 public class PlayerInformation
 {
     private int currency;

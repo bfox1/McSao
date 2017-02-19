@@ -87,6 +87,7 @@ public class CommonProxy implements SaoProxy
     public void registerCapabilities()
     {
         CapabilitySaoPlayerHandler.register();
+        //FMLServerHandler.instance().getServer().registerTickable(new PlayerMovementEvent());
     }
 
     @Override

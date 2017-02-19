@@ -1,6 +1,7 @@
 package io.github.bfox1.SwordArtOnline.common.network;
 
 
+import io.github.bfox1.SwordArtOnline.common.player.PlayerPropertyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -16,24 +17,26 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
  */
 public class SaoEntityPacket implements IMessage
 {
+    private PlayerPropertyHandler handler;
 
-
-    public SaoEntityPacket()
+    public SaoEntityPacket(PlayerPropertyHandler handler)
     {
+        this.handler = handler;
         //this.information = property.getInformation();
        // this.function = property.getFunction();
     }
     @Override
     public void fromBytes(ByteBuf buf)
     {
+
        // this.function = readWorldFunction(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf)
     {
-        //parsePlayerInformation(buf);
-        parseWorldFunction(buf);
+        parsePlayerInformation(buf);
+        //parseWorldFunction(buf);
         while(buf.isReadable())
         {
 
@@ -42,9 +45,19 @@ public class SaoEntityPacket implements IMessage
 
     }
 
+    public PlayerPropertyHandler readProperty(ByteBuf buf)
+    {
+        PlayerPropertyHandler handler = new PlayerPropertyHandler();
+        handler.deserializeObject(buf.readBytes(0).array());
+        handler.setCurrency(buf.getInt(1));
+        return handler;
+    }
+
     public void parsePlayerInformation(ByteBuf buf)
     {
        // buf.writeByte(information.getCurrency());
+        buf.writeBytes(this.handler.serializeQuest());
+        buf.writeInt(handler.getCurrency());
     }
 
     public void parseWorldFunction(ByteBuf buf)
@@ -66,6 +79,7 @@ public class SaoEntityPacket implements IMessage
         @Override
         public IMessage onMessage(final SaoEntityPacket message, MessageContext ctx)
         {
+
             if(ctx.side.isClient())
             {
                 final Minecraft mc = Minecraft.getMinecraft();

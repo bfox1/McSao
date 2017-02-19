@@ -1,7 +1,7 @@
 package io.github.bfox1.SwordArtOnline.server.quest;
 
-import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestItemPickupEvent;
-import io.github.bfox1.SwordArtOnline.common.event.questevents.QuestPlayerInteract;
+import io.github.bfox1.SwordArtOnline.server.questevents.QuestItemPickupEvent;
+import io.github.bfox1.SwordArtOnline.server.questevents.QuestPlayerInteract;
 import io.github.bfox1.SwordArtOnline.common.player.CapabilitySaoPlayerHandler;
 import io.github.bfox1.SwordArtOnline.common.player.PlayerPropertyHandler;
 import io.github.bfox1.SwordArtOnline.common.proxy.ServerProxy;
