@@ -64,10 +64,10 @@ public class DungeonSchematic
             }
             catch(Exception e)
             {
-                System.out.println(e);
                 System.out.println("Most likely the error here is from either the field within the Template class changing names, the type of the list" +
                         " we are trying to get changing types, the data storage class within the list changing types or being replaced by a new class, or" +
                         " the template class itself changing names or being replaced, which wouldn't surprise me in the least.");
+                System.out.println(e);
             }
             boundingBox = new Cuboid(schematic.getSize().getX(), schematic.getSize().getZ(), schematic.getSize().getY());
             schema3DList = get3DSchema(blocks);

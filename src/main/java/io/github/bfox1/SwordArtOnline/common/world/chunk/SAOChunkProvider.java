@@ -1,7 +1,9 @@
 package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
 import io.github.bfox1.SwordArtOnline.common.util.Cuboid;
+import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
+import io.github.bfox1.SwordArtOnline.common.util.Point3D;
 import io.github.bfox1.SwordArtOnline.common.world.SAODungeonBuilder;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
@@ -19,6 +21,7 @@ import net.minecraft.world.gen.*;
 import net.minecraft.world.gen.structure.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -60,6 +63,8 @@ public class SAOChunkProvider implements IChunkGenerator
 	double[] minLimitRegion;
 	double[] maxLimitRegion;
 	double[] depthRegion;
+
+	private int[][] dungeonOriginChunks = new int[3][2];
 
 	public SAOChunkProvider(World worldIn, long seed, boolean mapFeaturesEnabledIn, String settings)
     {
@@ -112,6 +117,27 @@ public class SAOChunkProvider implements IChunkGenerator
 		this.scaleNoise = ctx.getScale();
 		this.depthNoise = ctx.getDepth();
 		this.forestNoise = ctx.getForest();
+
+		int counter = 0;
+		while(counter < 3)
+        {
+            int chunkX = rand.nextInt(126)-63;
+            int chunkZ = rand.nextInt(126)-63;
+            Point3D chunkCornerNW = new Point3D(chunkX*16, 70, chunkZ*16);
+            Point3D chunkCornerSE = new Point3D(chunkCornerNW.getX()+15, 70, chunkCornerNW.getZ()+15);
+            Point3D chunkCornerSW = new Point3D(chunkCornerNW.getX(), 70, chunkCornerNW.getZ()+15);
+            Point3D chunkCornerNE = new Point3D(chunkCornerNW.getX()+15, 70, chunkCornerNW.getZ());
+            if(DistanceHelper.distance2D(chunkCornerNW.getX(), chunkCornerNW.getZ()) <= 983
+                    && DistanceHelper.distance2D(chunkCornerSE.getX(), chunkCornerSE.getZ()) <= 983
+                    && DistanceHelper.distance2D(chunkCornerSW.getX(), chunkCornerSW.getZ()) <= 983
+                    && DistanceHelper.distance2D(chunkCornerNE.getX(), chunkCornerNE.getZ()) <= 983)
+            {
+                dungeonOriginChunks[counter][0] = chunkX;
+                dungeonOriginChunks[counter][1] = chunkZ;
+                counter++;
+            }
+        }
+        System.out.println("Origin Chunks: "+"[[ 0 - "+Arrays.toString(dungeonOriginChunks[0])+"], 1 - "+Arrays.toString(dungeonOriginChunks[1])+"], 2 - "+Arrays.toString(dungeonOriginChunks[2])+"]]");
 	}
 
 	public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn)
@@ -146,7 +172,21 @@ public class SAOChunkProvider implements IChunkGenerator
 			abyte[i] = (byte)Biome.getIdForBiome(this.biomesForGeneration[i]);
         }
 
+        for(int i = 0; i < dungeonOriginChunks.length; i++)
+        {
+            int chunkX = dungeonOriginChunks[i][0];
+            int chunkZ = dungeonOriginChunks[i][1];
+            if(x == chunkX && z == chunkZ)
+            {
+                ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
+                pieceList.add(new DungeonSchematic("BasicCrossroads"));
+                SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new Cuboid(100, 100, 20 ),new Point3D(x*16, 70, z*16 ));
+                dungeonBuilder.buildDungeon(worldObj);
+            }
+        }
+
         chunk.generateSkylightMap();
+        chunk.resetRelightChecks();
         return chunk;
 	}
 
@@ -299,11 +339,6 @@ public class SAOChunkProvider implements IChunkGenerator
             DungeonSchematic test2 = new DungeonSchematic("BasicCrossroads");
             test2.placeSchematic(worldObj, 0, 67, 0); //TODO: Same here
             System.out.println(test2.getConnections());*/
-            ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
-            pieceList.add(new DungeonSchematic("BasicCrossroads"));
-            SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new Cuboid(100, 100, 20));
-            dungeonBuilder.buildDungeon(worldObj);
-
 		}
 
 		/*

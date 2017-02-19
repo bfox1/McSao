@@ -6,7 +6,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -35,7 +34,7 @@ public class SchematicReader
             NBTTagList entities = nbtdata.getTagList("Entities", 10);
             NBTTagList tileEntities = nbtdata.getTagList("TileEntities", 10);
 
-            ArrayList<BlockData> blockDatum = new ArrayList<>();
+            ArrayList<BlockData> blockData = new ArrayList<>();
             for(int x = 0; x < width; x++)
             for(int y = 0; y < height; y++)
             for(int z = 0; z < length; z++)
@@ -44,12 +43,12 @@ public class SchematicReader
                 Block block = Block.getBlockById(blocks[index]);
                 int metadata = (int)data[index];
                 BlockPos position = new BlockPos(x, y, z);
-                BlockData blockData = new BlockData(position, block, metadata, null);
-                blockDatum.add(blockData);
+                BlockData blockDatum = new BlockData(position, block, metadata, null);
+                blockData.add(blockDatum);
             }
             ArrayList<EntityData> entityData = new ArrayList<>();
 
-            schema = new Schematic(width, length, height, blockDatum, entityData);
+            schema = new Schematic(width, length, height, blockData, entityData);
 
             fis.close();
         }

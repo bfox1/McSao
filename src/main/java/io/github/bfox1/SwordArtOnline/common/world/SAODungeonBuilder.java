@@ -1,6 +1,8 @@
 package io.github.bfox1.SwordArtOnline.common.world;
 
 import io.github.bfox1.SwordArtOnline.common.util.*;
+import io.github.bfox1.SwordArtOnline.init.BlockInit;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
@@ -20,19 +22,29 @@ public class SAODungeonBuilder
     private HashSet<DungeonBounds> placedBounds = new HashSet<>();
     private HashMap<Point3D, Connection> connections = new HashMap<Point3D, Connection>();
     private HashMap<Point3D, DungeonSchematic> placedPieces = new HashMap<>();
-    private Point3D dungeonOrigin = new Point3D(0, 70, 0);
+    private Point3D dungeonOrigin;
 
     public SAODungeonBuilder(ArrayList<DungeonSchematic> pieces, int maxDungeonPieces, Cuboid bounds)
     {
         this.potentialPieces = pieces;
         this.maxDungeonPieces = maxDungeonPieces;
         this.dungeonBounds = bounds;
+        dungeonOrigin = new Point3D(0, 70, 0);
     }
+
+    public SAODungeonBuilder(ArrayList<DungeonSchematic> pieces, int maxDungeonPieces, Cuboid bounds, Point3D point)
+    {
+        this.potentialPieces = pieces;
+        this.maxDungeonPieces = maxDungeonPieces;
+        this.dungeonBounds = bounds;
+        dungeonOrigin = point;
+    }
+
 
     private void placePiece(DungeonSchematic schema, Point3D pieceOrigin)
     {
         DungeonBounds bounds = new DungeonBounds(schema.getBoundingBox(), pieceOrigin);
-        if(pieceOrigin.getX() < 0 || pieceOrigin.getY() < 0 || pieceOrigin.getZ() < 0 || !pieceFits(bounds))
+        if(pieceOrigin.getX() < dungeonOrigin.getX() || pieceOrigin.getY() < dungeonOrigin.getY() || pieceOrigin.getZ() < dungeonOrigin.getZ() || !pieceFits(bounds))
         {
             System.out.println("Bad bounds arguments, somehow the schema is larger than the dungeon bounds.");
             return;
@@ -63,6 +75,7 @@ public class SAODungeonBuilder
     {
         if(!(piece.getBounds().isWithin(piece.getOrigin(), dungeonBounds, dungeonOrigin)))
         {
+            System.out.println("");
             return false;
         }
         for(DungeonBounds bounds : placedBounds)
@@ -104,9 +117,12 @@ public class SAODungeonBuilder
         return boundsList;
     }
 
-    public static Object getKeyFromValue(Map hm, Object value) {
-        for (Object o : hm.keySet()) {
-            if (hm.get(o).equals(value)) {
+    public static Object getKeyFromValue(Map hm, Object value)
+    {
+        for (Object o : hm.keySet())
+        {
+            if (hm.get(o).equals(value))
+            {
                 return o;
             }
         }
@@ -123,6 +139,38 @@ public class SAODungeonBuilder
     {
         Random rand = new Random();
 
+        //Find the floor, based on the overall size of the dungeon, place it on the floor or in it
+
+        int maxHeight = 0;
+        int originX = dungeonOrigin.getX();
+        int originZ = dungeonOrigin.getZ();
+
+        for(int x = 0; x < dungeonBounds.getWidthX()-1; x++)
+        for(int z = 0; z < dungeonBounds.getLengthZ()-1; z++)
+        {
+            BlockPos ceiling = world.getHeight(new BlockPos(originX+x, 0, originZ+z));
+            if(ceiling.getY() > maxHeight)
+            {
+                maxHeight = ceiling.getY();
+            }
+        }
+
+        dungeonOrigin = new Point3D(originX, maxHeight, originZ);
+
+        /*for(int x = 0; x < dungeonBounds.getWidthX()-1; x++)
+        for(int z = 0; z < dungeonBounds.getLengthZ()-1; z++)
+        {
+            //Here we put dirt below the dungeon to fill in holes.
+            //This may disappear into a method based on flags for an above-ground dungeon or below-ground dungeon
+            BlockPos ceiling = world.getHeight(new BlockPos(originX+x, 0, originZ+z));
+            for(int y = maxHeight; y > ceiling.getY(); y--)
+            {
+                world.setBlockState(new BlockPos(dungeonOrigin.getX()+x, dungeonOrigin.getY()+y, dungeonOrigin.getZ()+z), BlockInit.getSaoBlocks("aincrad_dirt_t1").getDefaultState());
+            }
+        }*/
+
+        System.out.println(Reference.RESOURCE_DIRECTORY);
+
         //Place initial piece. Random type for now, may classify entrances later.
         DungeonSchematic initial = potentialPieces.get(rand.nextInt(potentialPieces.size()));
         int minX = dungeonOrigin.getX();
@@ -132,9 +180,10 @@ public class SAODungeonBuilder
         int minZ = dungeonOrigin.getZ();
         int maxZ = dungeonBounds.maxBoundsPoint(dungeonOrigin).getZ()-initial.getBoundingBox().getLengthZ();
         int randomX = rand.nextInt((maxX-minX)+1)+minX;
-        int randomY = rand.nextInt((maxY-minY)+1)+minY;
         int randomZ = rand.nextInt((maxZ-minZ)+1)+minZ;
-        Point3D initialOrigin = new Point3D(randomX, randomY, randomZ);
+        Point3D initialOrigin = new Point3D(randomX, 70, randomZ);
+
+        System.out.println("Placed dungeon at: "+initialOrigin);
 
         placePiece(initial, initialOrigin);
 
@@ -144,6 +193,7 @@ public class SAODungeonBuilder
             HashMap<DungeonSchematic, DungeonBounds> fittingPieces = getFittingPieces();
             if(fittingPieces.isEmpty())
             {
+                System.out.println("No more spots to fit, we have placed "+i+" piece(s).");
                 break;
             }
             ArrayList<DungeonBounds> pieces = new ArrayList<DungeonBounds>(fittingPieces.values());
