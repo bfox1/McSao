@@ -56,8 +56,7 @@ public class SAODungeonBuilder
                     point.getX() + pieceOrigin.getX(),
                     point.getY() + pieceOrigin.getY(),
                     point.getZ() + pieceOrigin.getZ());
-            if(offsetPoint.getX() < dungeonBounds.getWidthX()-1 && offsetPoint.getZ() < dungeonBounds.getLengthZ()-1
-                    && offsetPoint.getX() > 0 && offsetPoint.getZ() > 0)
+            if(offsetPoint.getX() < dungeonOrigin.getX()+dungeonBounds.getWidthX()-1 && offsetPoint.getZ() < dungeonOrigin.getZ()+dungeonBounds.getLengthZ()-1)
             {
                 connections.put(offsetPoint, schema.getConnections().get(point));
             }
@@ -75,13 +74,14 @@ public class SAODungeonBuilder
     {
         if(!(piece.getBounds().isWithin(piece.getOrigin(), dungeonBounds, dungeonOrigin)))
         {
-            System.out.println("");
+            System.out.println("Piece is not within the dungeon bounds.");
             return false;
         }
         for(DungeonBounds bounds : placedBounds)
         {
             if(bounds.intersectsWith(piece))
             {
+                System.out.println("Trying to place "+piece+" failed because it intersects with "+bounds+".");
                 return false;
             }
         }
@@ -110,6 +110,10 @@ public class SAODungeonBuilder
                         {
                             boundsList.put(schema, bounds);
                         }
+                    }
+                    else
+                    {
+                        System.out.println("Connection "+connection+" failed to connect to "+schema.getConnections().get(connectionPoint2));
                     }
                 }
             }
@@ -141,22 +145,6 @@ public class SAODungeonBuilder
 
         //Find the floor, based on the overall size of the dungeon, place it on the floor or in it
 
-        int maxHeight = 0;
-        int originX = dungeonOrigin.getX();
-        int originZ = dungeonOrigin.getZ();
-
-        for(int x = 0; x < dungeonBounds.getWidthX()-1; x++)
-        for(int z = 0; z < dungeonBounds.getLengthZ()-1; z++)
-        {
-            BlockPos ceiling = world.getHeight(new BlockPos(originX+x, 0, originZ+z));
-            if(ceiling.getY() > maxHeight)
-            {
-                maxHeight = ceiling.getY();
-            }
-        }
-
-        dungeonOrigin = new Point3D(originX, maxHeight, originZ);
-
         /*for(int x = 0; x < dungeonBounds.getWidthX()-1; x++)
         for(int z = 0; z < dungeonBounds.getLengthZ()-1; z++)
         {
@@ -181,7 +169,7 @@ public class SAODungeonBuilder
         int maxZ = dungeonBounds.maxBoundsPoint(dungeonOrigin).getZ()-initial.getBoundingBox().getLengthZ();
         int randomX = rand.nextInt((maxX-minX)+1)+minX;
         int randomZ = rand.nextInt((maxZ-minZ)+1)+minZ;
-        Point3D initialOrigin = new Point3D(randomX, 70, randomZ);
+        Point3D initialOrigin = new Point3D(randomX, minY, randomZ);
 
         System.out.println("Placed dungeon at: "+initialOrigin);
 

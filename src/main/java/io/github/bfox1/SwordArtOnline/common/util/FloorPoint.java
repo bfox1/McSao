@@ -99,4 +99,9 @@ public class FloorPoint {
 	public void setWallEnd(int wallEnd) {
 		this.wallEnd = wallEnd;
 	}
+
+	public Point3D getFloorLocation()
+	{
+		return new Point3D(x, y, z);
+	}
 }

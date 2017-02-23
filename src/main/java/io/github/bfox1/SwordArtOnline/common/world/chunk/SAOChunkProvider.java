@@ -1,10 +1,9 @@
 package io.github.bfox1.SwordArtOnline.common.world.chunk;
 
-import io.github.bfox1.SwordArtOnline.common.util.Cuboid;
-import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
-import io.github.bfox1.SwordArtOnline.common.util.DungeonSchematic;
-import io.github.bfox1.SwordArtOnline.common.util.Point3D;
+import io.github.bfox1.SwordArtOnline.common.util.*;
 import io.github.bfox1.SwordArtOnline.common.world.SAODungeonBuilder;
+import io.github.bfox1.SwordArtOnline.common.world.biome.SAOBiomeGenerator;
+import io.github.bfox1.SwordArtOnline.init.BiomeInit;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
@@ -63,8 +62,7 @@ public class SAOChunkProvider implements IChunkGenerator
 	double[] minLimitRegion;
 	double[] maxLimitRegion;
 	double[] depthRegion;
-
-	private int[][] dungeonOriginChunks = new int[3][2];
+    private ArrayList<Point3D> dungeonSpots = new ArrayList<>();
 
 	public SAOChunkProvider(World worldIn, long seed, boolean mapFeaturesEnabledIn, String settings)
     {
@@ -118,27 +116,35 @@ public class SAOChunkProvider implements IChunkGenerator
 		this.depthNoise = ctx.getDepth();
 		this.forestNoise = ctx.getForest();
 
-		int counter = 0;
-		while(counter < 3)
-        {
-            int chunkX = rand.nextInt(126)-63;
-            int chunkZ = rand.nextInt(126)-63;
-            Point3D chunkCornerNW = new Point3D(chunkX*16, 70, chunkZ*16);
-            Point3D chunkCornerSE = new Point3D(chunkCornerNW.getX()+15, 70, chunkCornerNW.getZ()+15);
-            Point3D chunkCornerSW = new Point3D(chunkCornerNW.getX(), 70, chunkCornerNW.getZ()+15);
-            Point3D chunkCornerNE = new Point3D(chunkCornerNW.getX()+15, 70, chunkCornerNW.getZ());
-            if(DistanceHelper.distance2D(chunkCornerNW.getX(), chunkCornerNW.getZ()) <= 983
-                    && DistanceHelper.distance2D(chunkCornerSE.getX(), chunkCornerSE.getZ()) <= 983
-                    && DistanceHelper.distance2D(chunkCornerSW.getX(), chunkCornerSW.getZ()) <= 983
-                    && DistanceHelper.distance2D(chunkCornerNE.getX(), chunkCornerNE.getZ()) <= 983)
-            {
-                dungeonOriginChunks[counter][0] = chunkX;
-                dungeonOriginChunks[counter][1] = chunkZ;
-                counter++;
-            }
-        }
-        System.out.println("Origin Chunks: "+"[[ 0 - "+Arrays.toString(dungeonOriginChunks[0])+"], 1 - "+Arrays.toString(dungeonOriginChunks[1])+"], 2 - "+Arrays.toString(dungeonOriginChunks[2])+"]]");
+		fillDungeonSpots(1, 3);
 	}
+
+	private void fillDungeonSpots(int floorNumber, int dungeonsAmount)
+    {
+        this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, 0, 0, 16, 16);
+        SAOBiomeGenerator biome = BiomeInit.SAO_BIOME;
+
+        FloorPoint currentFloor = biome.getFloorPoint(floorNumber);
+        Point3D floorCenter = currentFloor.getFloorLocation();
+        int floorCenterX = floorCenter.getX();
+        int floorCenterZ = floorCenter.getZ();
+
+        int floorSize = currentFloor.getFloorRadius()-100;
+        double innerCircle = floorSize*0.3;
+        for(int i = 0; i < dungeonsAmount; i++)
+        {
+            double r2 = floorSize;
+            double t = 2*Math.PI*rand.nextDouble();
+            double u = rand.nextDouble()+rand.nextDouble();
+            double r = u > 1 ? 2-u : u;
+            r = r < r2 ? r2+r*((floorSize-innerCircle)/innerCircle) : r;
+            int coordX = (int)(r*Math.cos(t));
+            int coordZ = (int)(r*Math.sin(t));
+            Point3D point = new Point3D(coordX, 70, coordZ);
+            dungeonSpots.add(point);
+        }
+        System.out.println("Origin Points: "+Arrays.toString(dungeonSpots.toArray()));
+    }
 
 	public void replaceBiomeBlocks(int x, int z, ChunkPrimer primer, Biome[] biomesIn)
 	{
@@ -162,7 +168,6 @@ public class SAOChunkProvider implements IChunkGenerator
 		this.rand.setSeed((long)x * 341873128712L + (long)z * 132897987541L);
         ChunkPrimer chunkprimer = new ChunkPrimer();
         this.setBlocksInChunk(x, z, chunkprimer);
-		// OLD this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
 		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, x * 16, z * 16, 16, 16);
         this.replaceBiomeBlocks(x, z, chunkprimer, this.biomesForGeneration);
         Chunk chunk = new Chunk(this.worldObj, chunkprimer, x, z);
@@ -172,16 +177,25 @@ public class SAOChunkProvider implements IChunkGenerator
 			abyte[i] = (byte)Biome.getIdForBiome(this.biomesForGeneration[i]);
         }
 
-        for(int i = 0; i < dungeonOriginChunks.length; i++)
+        int coordY = chunk.getTopFilledSegment();
+
+        SAOBiomeGenerator biome = BiomeInit.SAO_BIOME;
+
+        int floorNumber = biome.getCurrentFloorNumber(x*16,z*16);
+        if(floorNumber == 1)
         {
-            int chunkX = dungeonOriginChunks[i][0];
-            int chunkZ = dungeonOriginChunks[i][1];
-            if(x == chunkX && z == chunkZ)
+            for(int i = 0; i < dungeonSpots.size(); i++)
             {
-                ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
-                pieceList.add(new DungeonSchematic("BasicCrossroads"));
-                SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new Cuboid(100, 100, 20 ),new Point3D(x*16, 70, z*16 ));
-                dungeonBuilder.buildDungeon(worldObj);
+                int coordX = dungeonSpots.get(i).getX();
+                int coordZ = dungeonSpots.get(i).getZ();
+
+                if(x == (coordX >> 4) && z == (coordZ >> 4))
+                {
+                    ArrayList<DungeonSchematic> pieceList = new ArrayList<>();
+                    pieceList.add(new DungeonSchematic("BasicCrossroads"));
+                    SAODungeonBuilder dungeonBuilder = new SAODungeonBuilder(pieceList, 10, new Cuboid(100, 100, 20 ),new Point3D(x*16, coordY, z*16 ));
+                    dungeonBuilder.buildDungeon(worldObj);
+                }
             }
         }
 

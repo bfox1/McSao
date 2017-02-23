@@ -43,4 +43,10 @@ public class DungeonBounds
                 (origin.getZ() <= otherBoundsMax.getZ() && boundsMax.getZ() >= otherBounds.getOrigin().getZ()) &&
                 (origin.getY() <= otherBoundsMax.getY() && boundsMax.getY() >= otherBounds.getOrigin().getY());
     }
+
+    @Override
+    public String toString()
+    {
+        return ""+origin+" - "+bounds;
+    }
 }

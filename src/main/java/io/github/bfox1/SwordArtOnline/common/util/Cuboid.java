@@ -46,4 +46,14 @@ public class Cuboid
     {
         return originPoint.isEqualOrLargerThan(otherOriginPoint) && this.maxBoundsPoint(originPoint).isLessThan(otherCuboid.maxBoundsPoint(otherOriginPoint));
     }
+
+    @Override
+    public String toString()
+    {
+        return "Cuboid{" +
+                "width=" + width +
+                ", length=" + length +
+                ", height=" + height +
+                '}';
+    }
 }

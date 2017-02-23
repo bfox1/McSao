@@ -2,6 +2,7 @@ package io.github.bfox1.SwordArtOnline.common.world.biome;
 
 import io.github.bfox1.SwordArtOnline.common.util.DistanceHelper;
 import io.github.bfox1.SwordArtOnline.common.util.FloorPoint;
+import io.github.bfox1.SwordArtOnline.common.util.Point3D;
 import io.github.bfox1.SwordArtOnline.init.BlockInit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -78,6 +79,17 @@ public class SAOBiomeGenerator extends Biome
 		
 		return centerPoints;
 	}
+
+	public FloorPoint getFloorPoint(int floorNumber)
+	{
+		return floorCenters.get(floorNumber);
+	}
+
+	public Point3D getFloorCenter(int floorNumber)
+	{
+		FloorPoint point = floorCenters.get(floorNumber);
+		return new Point3D(point.getX(), point.getY(), point.getZ());
+	}
 	
 	private void setFloorPointSize(int floorNumber, int radius, int wallThickness)
     {
@@ -137,7 +149,7 @@ public class SAOBiomeGenerator extends Biome
 		}
 	}
 	
-	private int getCurrentFloorNumber(int x, int z)
+	public int getCurrentFloorNumber(int x, int z)
     {
 		for(FloorPoint point : floorCenters) {
 			if(x >= point.getNegXBoundary() && x <= point.getPosXBoundary() && z >= point.getNegZBoundary() && z <= point.getPosZBoundary()) {
