@@ -2,6 +2,7 @@ package io.github.bfox1.SwordArtOnline.init;
 
 import io.github.bfox1.SwordArtOnline.api.item.ISaoItem;
 import io.github.bfox1.SwordArtOnline.common.items.SaoItemAbstract;
+import io.github.bfox1.SwordArtOnline.common.items.SaoSwordItem;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalAntidote;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalHealing;
 import io.github.bfox1.SwordArtOnline.common.items.crystals.SaoCrystalTeleport;
@@ -44,6 +45,9 @@ public class ItemInit
         registerItem(new SaoCrystalHealing(), "healing_crystal");
         registerItem(new SaoCrystalAntidote(), "antidote_crystal");
         registerItem(new SaoCrystalTeleport(), "teleport_crystal");
+        registerItem(new SaoSwordItem(), "AnnealBlade");
+        registerItem(new SaoSwordItem(), "DarkRepulser");
+        registerItem(new SaoSwordItem(), "Elucidator");
 	}
 
 
