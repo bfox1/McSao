@@ -27,9 +27,13 @@ LEGEND
 X = NOT DONE / ✓ = DONE
 ```
 X Reusing old textures of blocks are okay. Reusing vanilla blocks is the plan.
+
 X Basic town of beginnings
+
 X First Dungeon
+
 X Textures
+
 X Map
 
 
