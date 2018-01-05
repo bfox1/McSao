@@ -5,7 +5,7 @@ package io.github.bfox1.SwordArtOnline.common.util;
  */
 public class Cuboid
 {
-    int width, length, height;
+    public int width, length, height;
 
     public Cuboid(int width, int length, int height)
     {

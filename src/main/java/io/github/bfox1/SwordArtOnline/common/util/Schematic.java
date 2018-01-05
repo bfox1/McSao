@@ -16,8 +16,8 @@ public class Schematic
 {
     private int width, length, height;
 
-    private ArrayList<BlockData> blocks = new ArrayList<>();
-    private ArrayList<EntityData> entities = new ArrayList<>();
+    private ArrayList<BlockData> blocks;
+    private ArrayList<EntityData> entities;
 
     public Schematic(int width, int length, int height, ArrayList<BlockData> blocks, ArrayList<EntityData> entities)
     {

@@ -10,11 +10,11 @@ public class Connection
     /**
      * Three sizes, 5x5, 9x9, 15x15, for simplicity for now.
      */
-    int width;
+    public int width;
     /**
      * Just the cardinal directions, not up or down. That's what we have stairs for.
      */
-    EnumFacing direction;
+    public EnumFacing direction;
 
     public Connection(int width, EnumFacing direction)
     {
