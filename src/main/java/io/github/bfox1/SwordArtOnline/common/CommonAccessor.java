@@ -9,6 +9,9 @@ import java.util.HashMap;
 
 /**
  * Created by bfox1 on 2/9/2017.
+ *
+ * This is literally just a class to access static data anywhere in the Project.
+ * Do note to look for other non static accessors before referring to this class.
  */
 public class CommonAccessor
 {

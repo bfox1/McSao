@@ -29,24 +29,36 @@ public final class QuestManager
         scanQuests();
     }
 
+    /**
+     * Primary method to scan for all quests not currently loaded or already loaded to then load and update.
+     * @return
+     */
     public boolean scanQuests()
     {
-        try {
-            for (Quests quest : questTemplate.values()) {
-                for (QuestGlobals tempGlobal : quest.readScriptQuests()) {
+        System.out.println(tempGlobals.size());
+        try
+        {
+            for (Quests quest : questTemplate.values())
+            {
+                for (QuestGlobals tempGlobal : quest.readScriptQuests())
+                {
                     if (tempGlobal != null)
-                        if (tempGlobals.contains(tempGlobal)) {
+                        if (tempGlobals.contains(tempGlobal))
+                        {
                             LogHelper.error(tempGlobal.getQuestName() + " With the id " + tempGlobal.getQuestID() + " has already been registered!" +
                                     " Please check QuestsList for openSkillID");
-                        } else {
+                        } else
+                        {
                             System.out.println("loaded quest " + tempGlobal.getQuestName());
-                            tempGlobals.add(tempGlobal.getQuestID(), tempGlobal);
+                            tempGlobals.add(tempGlobal);
                         }
                 }
             }
+
             System.out.println(tempGlobals.size() + " Were registered Quests!");
             tempGlobals.clear();
             return true;
+
         }
         catch(Exception e)
         {
@@ -61,6 +73,14 @@ public final class QuestManager
         ///
     }
 
+    /**
+     * This method is the primary method to use to set a quest to player. This method will generate a UUID and tie
+     * the Quest to that individual player. No quests are ever stored to the player but rather the UUID of the quest.
+     * All active quest data are saved to the Quest Class.
+     * @param event
+     * @param questTemplate
+     * @param questName
+     */
     public void setPlayerQuest(AttachCapabilitiesEvent event, String questTemplate, String questName)
     {
         Quests quest = this.questTemplate.get(questTemplate);
@@ -74,6 +94,12 @@ public final class QuestManager
         }
     }
 
+    /**
+     * Everytime an event gets fired, this method will fire and look for any Active quests that are enabled by players.
+     * Each Quest has a Unique ID that cannot to triggered if the ID of the player does not match the Active quest id Assigned.
+     * @param event The event to test for
+     * @param property The Player capabilities
+     */
     public final void callActives(Event event, PlayerPropertyHandler property)
     {
         for(Quests quest : questTemplate.values())
@@ -86,6 +112,8 @@ public final class QuestManager
             });
         }
     }
+
+
 
 
 

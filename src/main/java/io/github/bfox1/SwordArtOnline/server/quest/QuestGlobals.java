@@ -1,5 +1,6 @@
 package io.github.bfox1.SwordArtOnline.server.quest;
 
+import io.github.bfox1.SwordArtOnline.api.quest.EventType;
 import io.github.bfox1.SwordArtOnline.common.util.ClassReference;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
@@ -26,8 +27,8 @@ public final class QuestGlobals
     {
         this.value = value;
         this.fileName = fileName;
-        questID = value.get("getObjectiveId").call().toint();
-        questName = value.get("getObjectiveName").call().toString();
+        questID = value.get("getQuestID").call().toint();
+        questName = value.get("getQuestName").call().toString();
         this.stepLocation = value.get("getStepLocation").call().toint();
         this.eventType = EventType.getType(value.get("getEventType").call().toString());
 
@@ -72,6 +73,11 @@ public final class QuestGlobals
         return eventType;
     }
 
+    /**
+     * After passing through QuestEventHandler, any active quests will then get fired and will come to this method.
+     * It will check the EventType of the current quest and call the function within the Quest and Fire the event.
+     * @param event
+     */
     void fireStepEvent(Event event)
     {
 
@@ -122,6 +128,11 @@ public final class QuestGlobals
     }
 
 
+    /**
+     * Simple method to fire said events.
+     * @param eventName The event name found inside of Quest(Lua file
+     * @param event The minecraft event being passed into the Lua event.
+     */
     private void doEvents(String eventName, Event event)
     {
         value.get(eventName).call(CoerceJavaToLua.coerce(event), CoerceJavaToLua.coerce(new ClassReference()));

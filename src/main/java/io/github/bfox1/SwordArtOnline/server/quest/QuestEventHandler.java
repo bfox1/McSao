@@ -22,6 +22,10 @@ public class QuestEventHandler
 
     private QuestManager manager = ServerProxy.server.getQuestManager();
 
+    /**
+     * onItemPickupEvent is mainly to look for quest data associated with the player
+     * @param event
+     */
     @SubscribeEvent
     public void onItemPickupEvent(PlayerEvent.ItemPickupEvent event)
     {
